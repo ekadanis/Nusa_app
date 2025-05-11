@@ -1,0 +1,1 @@
+{"routes":[{"name":null,"pathParams":[],"pageType":{"import":"package:hireka_mobile/features/feeds/views/feeds_page.dart","name":"FeedsPage","isNullable":false,"isRecordType":false},"className":"FeedsPage","parameters":[],"hasWrappedRoute":false,"hasConstConstructor":true,"deferredLoading":null}],"inputPath":"lib/features/feeds/views/feeds_page.dart","inputHash":0}
