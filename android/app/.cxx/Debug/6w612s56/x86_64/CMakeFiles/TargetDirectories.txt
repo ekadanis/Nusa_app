@@ -1,0 +1,2 @@
+C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/hireka_mobile/android/app/.cxx/Debug/6w612s56/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/hireka_mobile/android/app/.cxx/Debug/6w612s56/x86_64/CMakeFiles/rebuild_cache.dir

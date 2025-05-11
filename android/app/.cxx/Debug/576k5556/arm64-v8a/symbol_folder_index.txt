@@ -1,0 +1,1 @@
+C:\Flutter Project\hireka2\hireka_mobile\build\app\intermediates\cxx\Debug\576k5556\obj\arm64-v8a

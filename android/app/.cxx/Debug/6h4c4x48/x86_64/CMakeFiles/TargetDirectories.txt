@@ -1,0 +1,2 @@
+C:/Flutter Project/hireka_mobile/android/app/.cxx/Debug/6h4c4x48/x86_64/CMakeFiles/edit_cache.dir
+C:/Flutter Project/hireka_mobile/android/app/.cxx/Debug/6h4c4x48/x86_64/CMakeFiles/rebuild_cache.dir
