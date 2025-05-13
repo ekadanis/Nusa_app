@@ -1,2 +1,2 @@
-C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/hireka_mobile/android/app/.cxx/Debug/b535gi3e/x86_64/CMakeFiles/edit_cache.dir
-C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/hireka_mobile/android/app/.cxx/Debug/b535gi3e/x86_64/CMakeFiles/rebuild_cache.dir
+C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/nusa_app/android/app/.cxx/Debug/b535gi3e/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/nusa_app/android/app/.cxx/Debug/b535gi3e/x86_64/CMakeFiles/rebuild_cache.dir

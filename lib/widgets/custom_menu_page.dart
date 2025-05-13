@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hireka_mobile/core/app_colors.dart';
+import 'package:nusa_app/core/app_colors.dart';
 
 class CustomMenuPage extends StatelessWidget {
   final IconData icon;

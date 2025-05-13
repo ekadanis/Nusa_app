@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:hireka_mobile/features/onboarding/views/onboarding_page.dart';
+import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import '../features/pages.dart';
 
 part 'router.gr.dart';

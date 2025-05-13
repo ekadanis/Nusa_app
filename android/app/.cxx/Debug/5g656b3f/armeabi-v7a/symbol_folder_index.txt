@@ -1,1 +1,1 @@
-E:\FOLDER_SAIF\COLLEGE\Semester 4\Mobile\hireka_mobile\build\app\intermediates\cxx\Debug\5g656b3f\obj\armeabi-v7a
+E:\FOLDER_SAIF\COLLEGE\Semester 4\Mobile\nusa_app\build\app\intermediates\cxx\Debug\5g656b3f\obj\armeabi-v7a

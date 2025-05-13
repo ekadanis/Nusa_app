@@ -9,10 +9,10 @@
 -DCMAKE_ANDROID_NDK=C:\Users\julio\AppData\Local\Android\sdk\ndk\28.0.13004108
 -DCMAKE_TOOLCHAIN_FILE=C:\Users\julio\AppData\Local\Android\sdk\ndk\28.0.13004108\build\cmake\android.toolchain.cmake
 -DCMAKE_MAKE_PROGRAM=C:\Users\julio\AppData\Local\Android\sdk\cmake\3.22.1\bin\ninja.exe
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\julio\StudioProjects\hireka_mobile\build\app\intermediates\cxx\Debug\4m4f6y1s\obj\x86
--DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\julio\StudioProjects\hireka_mobile\build\app\intermediates\cxx\Debug\4m4f6y1s\obj\x86
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\julio\StudioProjects\nusa_app\build\app\intermediates\cxx\Debug\4m4f6y1s\obj\x86
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\julio\StudioProjects\nusa_app\build\app\intermediates\cxx\Debug\4m4f6y1s\obj\x86
 -DCMAKE_BUILD_TYPE=Debug
--BC:\Users\julio\StudioProjects\hireka_mobile\android\app\.cxx\Debug\4m4f6y1s\x86
+-BC:\Users\julio\StudioProjects\nusa_app\android\app\.cxx\Debug\4m4f6y1s\x86
 -GNinja
 -Wno-dev
 --no-warn-unused-cli

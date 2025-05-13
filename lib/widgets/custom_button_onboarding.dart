@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hireka_mobile/util/extensions.dart';
+import 'package:nusa_app/util/extensions.dart';
 import '../core/app_colors.dart';
 import '../core/styles.dart';
 
@@ -73,30 +73,18 @@ class _CustomButtonOnboardingState extends State<CustomButtonOnboarding> {
       child: Row(
         children: [
           if (widget.prefixIcon != null) ...[
-            Icon(
-              widget.prefixIcon, 
-              size: 18, 
-              color: iconColor
-            ),
-            const SizedBox(
-              width: Styles.xsSpacing
-            ),
+            Icon(widget.prefixIcon, size: 18, color: iconColor),
+            const SizedBox(width: Styles.xsSpacing),
           ],
-          Text(
-            widget.buttonText,
-            style: context.textTheme.titleSmall?.copyWith(
-              fontSize: widget.fontSize ?? 14,
-              fontWeight: FontWeight.bold,
-              color: textColor,
-            )
-          ),
+          Text(widget.buttonText,
+              style: context.textTheme.titleSmall?.copyWith(
+                fontSize: widget.fontSize ?? 14,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              )),
           if (widget.suffixIcon != null) ...[
             const SizedBox(width: Styles.xsSpacing),
-            Icon(
-              widget.suffixIcon, 
-              size: 18, 
-              color: iconColor
-            ),
+            Icon(widget.suffixIcon, size: 18, color: iconColor),
           ],
         ],
       ),

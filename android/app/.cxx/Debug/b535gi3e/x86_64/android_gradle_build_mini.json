@@ -6,14 +6,14 @@
     [
       "C:\\Users\\rangg\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
       "-C",
-      "C:\\Users\\rangg\\OneDrive\\Documents\\collage\\PDBL\\hireka\\hireka_mobile\\android\\app\\.cxx\\Debug\\b535gi3e\\x86_64",
+      "C:\\Users\\rangg\\OneDrive\\Documents\\collage\\PDBL\\hireka\\nusa_app\\android\\app\\.cxx\\Debug\\b535gi3e\\x86_64",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
     "C:\\Users\\rangg\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
     "-C",
-    "C:\\Users\\rangg\\OneDrive\\Documents\\collage\\PDBL\\hireka\\hireka_mobile\\android\\app\\.cxx\\Debug\\b535gi3e\\x86_64",
+    "C:\\Users\\rangg\\OneDrive\\Documents\\collage\\PDBL\\hireka\\nusa_app\\android\\app\\.cxx\\Debug\\b535gi3e\\x86_64",
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {}

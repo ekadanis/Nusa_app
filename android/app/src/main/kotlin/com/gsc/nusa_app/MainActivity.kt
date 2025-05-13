@@ -1,4 +1,4 @@
-package com.b2.hireka_mobile
+package com.gsc.nusa_app
 
 import io.flutter.embedding.android.FlutterActivity
 

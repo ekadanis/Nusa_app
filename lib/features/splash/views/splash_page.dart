@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:hireka_mobile/core/app_colors.dart';
-import 'package:hireka_mobile/core/styles.dart';
-import 'package:hireka_mobile/database/shared_preferences_service.dart';
-import 'package:hireka_mobile/l10n/l10n.dart';
-import 'package:hireka_mobile/routes/router.dart';
-import 'package:hireka_mobile/util/extensions.dart';
+import 'package:nusa_app/core/app_colors.dart';
+import 'package:nusa_app/core/styles.dart';
+import 'package:nusa_app/database/shared_preferences_service.dart';
+import 'package:nusa_app/l10n/l10n.dart';
+import 'package:nusa_app/routes/router.dart';
+import 'package:nusa_app/util/extensions.dart';
 import 'package:sizer/sizer.dart';
 
 @RoutePage()

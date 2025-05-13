@@ -1,2 +1,2 @@
-C:/Users/Sarah/Documents/Projects/Hireka/hireka_mobile/android/app/.cxx/Debug/3z522z6d/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Users/Sarah/Documents/Projects/Hireka/hireka_mobile/android/app/.cxx/Debug/3z522z6d/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+C:/Users/Sarah/Documents/Projects/Hireka/nusa_app/android/app/.cxx/Debug/3z522z6d/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Sarah/Documents/Projects/Hireka/nusa_app/android/app/.cxx/Debug/3z522z6d/armeabi-v7a/CMakeFiles/rebuild_cache.dir

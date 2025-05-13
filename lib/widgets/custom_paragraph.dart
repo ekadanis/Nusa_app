@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hireka_mobile/core/app_colors.dart';
-import 'package:hireka_mobile/util/extensions.dart';
+import 'package:nusa_app/core/app_colors.dart';
+import 'package:nusa_app/util/extensions.dart';
 
 import '../core/styles.dart';
 
 class CustomParagraph extends StatelessWidget {
-  const CustomParagraph({
-    super.key,
-    required this.title,
-    required this.content,
-    this.titleStyle
-  });
+  const CustomParagraph(
+      {super.key, required this.title, required this.content, this.titleStyle});
 
   final String title;
   final Widget content;
@@ -22,8 +18,9 @@ class CustomParagraph extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title,
-            style: titleStyle ?? context.textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.bold, color: AppColors.grey90)),
+            style: titleStyle ??
+                context.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.bold, color: AppColors.grey90)),
         SizedBox(
           height: Styles.xxsPadding,
         ),
