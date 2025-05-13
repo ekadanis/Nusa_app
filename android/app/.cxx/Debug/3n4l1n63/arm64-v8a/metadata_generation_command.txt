@@ -9,10 +9,10 @@
 -DCMAKE_ANDROID_NDK=C:\Users\ASUS\AppData\Local\Android\sdk\ndk\28.0.13004108
 -DCMAKE_TOOLCHAIN_FILE=C:\Users\ASUS\AppData\Local\Android\sdk\ndk\28.0.13004108\build\cmake\android.toolchain.cmake
 -DCMAKE_MAKE_PROGRAM=C:\Users\ASUS\AppData\Local\Android\sdk\cmake\3.22.1\bin\ninja.exe
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=E:\FOLDER_SAIF\COLLEGE\Semester 4\PDBL\hireka_mobile\build\app\intermediates\cxx\Debug\3n4l1n63\obj\arm64-v8a
--DCMAKE_RUNTIME_OUTPUT_DIRECTORY=E:\FOLDER_SAIF\COLLEGE\Semester 4\PDBL\hireka_mobile\build\app\intermediates\cxx\Debug\3n4l1n63\obj\arm64-v8a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=E:\FOLDER_SAIF\COLLEGE\Semester 4\PDBL\nusa_app\build\app\intermediates\cxx\Debug\3n4l1n63\obj\arm64-v8a
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=E:\FOLDER_SAIF\COLLEGE\Semester 4\PDBL\nusa_app\build\app\intermediates\cxx\Debug\3n4l1n63\obj\arm64-v8a
 -DCMAKE_BUILD_TYPE=Debug
--BE:\FOLDER_SAIF\COLLEGE\Semester 4\PDBL\hireka_mobile\android\app\.cxx\Debug\3n4l1n63\arm64-v8a
+-BE:\FOLDER_SAIF\COLLEGE\Semester 4\PDBL\nusa_app\android\app\.cxx\Debug\3n4l1n63\arm64-v8a
 -GNinja
 -Wno-dev
 --no-warn-unused-cli

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hireka_mobile/util/extensions.dart';
+import 'package:nusa_app/util/extensions.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import '../core/app_colors.dart';
 import '../core/styles.dart';

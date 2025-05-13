@@ -1,4 +1,4 @@
-name: hireka_mobile
+name: nusa_app
 description: "A new Flutter project."
 publish_to: "none"
 version: 1.0.0+1
@@ -37,7 +37,7 @@ dependencies:
   google_generative_ai: ^0.4.7
   mime: ^2.0.0
   hive: ^2.2.3
-  isar_flutter_libs: ^3.1.0+1
+  # isar_flutter_libs: ^3.1.0+1
   path_provider: ^2.1.5
 
 dev_dependencies:
@@ -53,7 +53,7 @@ dev_dependencies:
   very_good_analysis: ^6.0.0
   flutter_lints: ^5.0.0
   syncfusion_flutter_charts: ^29.1.38
-  flutter_document_picker: ^5.2.3
+  # flutter_document_picker: ^5.2.3
 
 flutter:
   generate: true

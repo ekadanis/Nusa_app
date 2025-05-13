@@ -23,7 +23,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = C:\Users\indra\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SC:\src\flutter\packages\flutter_tools\gradle\src\main\groovy -B"C:\Flutter Project\hireka2\hireka_mobile\android\app\.cxx\Debug\576k5556\x86"
+  command = C:\Users\indra\AppData\Local\Android\Sdk\cmake\3.22.1\bin\cmake.exe --regenerate-during-build -SC:\src\flutter\packages\flutter_tools\gradle\src\main\groovy -B"C:\Flutter Project\hireka2\nusa_app\android\app\.cxx\Debug\576k5556\x86"
   description = Re-running CMake...
   generator = 1
 

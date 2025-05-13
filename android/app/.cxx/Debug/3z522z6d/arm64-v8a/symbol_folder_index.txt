@@ -1,1 +1,1 @@
-C:\Users\Sarah\Documents\Projects\Hireka\hireka_mobile\build\app\intermediates\cxx\Debug\3z522z6d\obj\arm64-v8a
+C:\Users\Sarah\Documents\Projects\Hireka\nusa_app\build\app\intermediates\cxx\Debug\3z522z6d\obj\arm64-v8a

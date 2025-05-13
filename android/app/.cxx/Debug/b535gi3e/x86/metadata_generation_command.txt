@@ -9,10 +9,10 @@
 -DCMAKE_ANDROID_NDK=C:\Users\rangg\AppData\Local\Android\sdk\ndk\28.0.13004108
 -DCMAKE_TOOLCHAIN_FILE=C:\Users\rangg\AppData\Local\Android\sdk\ndk\28.0.13004108\build\cmake\android.toolchain.cmake
 -DCMAKE_MAKE_PROGRAM=C:\Users\rangg\AppData\Local\Android\sdk\cmake\3.22.1\bin\ninja.exe
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\rangg\OneDrive\Documents\collage\PDBL\hireka\hireka_mobile\build\app\intermediates\cxx\Debug\b535gi3e\obj\x86
--DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\rangg\OneDrive\Documents\collage\PDBL\hireka\hireka_mobile\build\app\intermediates\cxx\Debug\b535gi3e\obj\x86
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\rangg\OneDrive\Documents\collage\PDBL\hireka\nusa_app\build\app\intermediates\cxx\Debug\b535gi3e\obj\x86
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\rangg\OneDrive\Documents\collage\PDBL\hireka\nusa_app\build\app\intermediates\cxx\Debug\b535gi3e\obj\x86
 -DCMAKE_BUILD_TYPE=Debug
--BC:\Users\rangg\OneDrive\Documents\collage\PDBL\hireka\hireka_mobile\android\app\.cxx\Debug\b535gi3e\x86
+-BC:\Users\rangg\OneDrive\Documents\collage\PDBL\hireka\nusa_app\android\app\.cxx\Debug\b535gi3e\x86
 -GNinja
 -Wno-dev
 --no-warn-unused-cli

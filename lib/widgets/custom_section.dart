@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hireka_mobile/core/app_colors.dart';
-import 'package:hireka_mobile/util/extensions.dart';
+import 'package:nusa_app/core/app_colors.dart';
+import 'package:nusa_app/util/extensions.dart';
 
 import '../core/styles.dart';
 

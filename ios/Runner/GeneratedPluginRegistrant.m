@@ -6,22 +6,10 @@
 
 #import "GeneratedPluginRegistrant.h"
 
-#if __has_include(<flutter_document_picker/FlutterDocumentPickerPlugin.h>)
-#import <flutter_document_picker/FlutterDocumentPickerPlugin.h>
-#else
-@import flutter_document_picker;
-#endif
-
 #if __has_include(<flutter_native_splash/FlutterNativeSplashPlugin.h>)
 #import <flutter_native_splash/FlutterNativeSplashPlugin.h>
 #else
 @import flutter_native_splash;
-#endif
-
-#if __has_include(<isar_flutter_libs/IsarFlutterLibsPlugin.h>)
-#import <isar_flutter_libs/IsarFlutterLibsPlugin.h>
-#else
-@import isar_flutter_libs;
 #endif
 
 #if __has_include(<path_provider_foundation/PathProviderPlugin.h>)
@@ -51,9 +39,7 @@
 @implementation GeneratedPluginRegistrant
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
-  [FlutterDocumentPickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterDocumentPickerPlugin"]];
   [FlutterNativeSplashPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNativeSplashPlugin"]];
-  [IsarFlutterLibsPlugin registerWithRegistrar:[registry registrarForPlugin:@"IsarFlutterLibsPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];

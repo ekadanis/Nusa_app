@@ -9,10 +9,10 @@
 -DCMAKE_ANDROID_NDK=C:\Users\Sarah\AppData\Local\Android\sdk\ndk\28.0.13004108
 -DCMAKE_TOOLCHAIN_FILE=C:\Users\Sarah\AppData\Local\Android\sdk\ndk\28.0.13004108\build\cmake\android.toolchain.cmake
 -DCMAKE_MAKE_PROGRAM=C:\Users\Sarah\AppData\Local\Android\sdk\cmake\3.22.1\bin\ninja.exe
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\Sarah\Documents\Projects\Hireka\hireka_mobile\build\app\intermediates\cxx\Debug\3z522z6d\obj\x86_64
--DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\Sarah\Documents\Projects\Hireka\hireka_mobile\build\app\intermediates\cxx\Debug\3z522z6d\obj\x86_64
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\Sarah\Documents\Projects\Hireka\nusa_app\build\app\intermediates\cxx\Debug\3z522z6d\obj\x86_64
+-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=C:\Users\Sarah\Documents\Projects\Hireka\nusa_app\build\app\intermediates\cxx\Debug\3z522z6d\obj\x86_64
 -DCMAKE_BUILD_TYPE=Debug
--BC:\Users\Sarah\Documents\Projects\Hireka\hireka_mobile\android\app\.cxx\Debug\3z522z6d\x86_64
+-BC:\Users\Sarah\Documents\Projects\Hireka\nusa_app\android\app\.cxx\Debug\3z522z6d\x86_64
 -GNinja
 -Wno-dev
 --no-warn-unused-cli
