@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/core/app_colors.dart';
 import 'package:nusa_app/core/styles.dart';
+import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/l10n/l10n.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:nusa_app/routes/router.dart';
@@ -16,10 +17,9 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   @override
-  Widget build(BuildContext context) {
-    return AutoTabsScaffold(
+  Widget build(BuildContext context) {    return AutoTabsScaffold(
         routes: [
-          InfoCenterRoute(),
+          HomeRoute(),
           NusaBotRoute(),
           ImageAnalyzerRoute(),
           FeedsRoute(),
@@ -39,7 +39,7 @@ class _DashboardPageState extends State<DashboardPage> {
               destinations: [
                 NavigationDestination(
                   icon: const Icon(IconsaxPlusBold.home),
-                  label: 'Info Center',
+                  label: 'HomePage',
                 ),
                 NavigationDestination(
                   icon: const Icon(IconsaxPlusBold.airdrop),

@@ -67,6 +67,25 @@ class FeedsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HomePage]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomePage();
+    },
+  );
+}
+
+/// generated route for
 /// [ImageAnalyzerPage]
 class ImageAnalyzerRoute extends PageRouteInfo<void> {
   const ImageAnalyzerRoute({List<PageRouteInfo>? children})
@@ -81,25 +100,6 @@ class ImageAnalyzerRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const ImageAnalyzerPage();
-    },
-  );
-}
-
-/// generated route for
-/// [InfoCenterPage]
-class InfoCenterRoute extends PageRouteInfo<void> {
-  const InfoCenterRoute({List<PageRouteInfo>? children})
-      : super(
-          InfoCenterRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'InfoCenterRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const InfoCenterPage();
     },
   );
 }

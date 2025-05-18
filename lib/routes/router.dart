@@ -29,9 +29,8 @@ class AppRouter extends RootStackRouter {
             transitionsBuilder: TransitionsBuilders.fadeIn,
             durationInMilliseconds: 300,
             children: [
-              CustomRoute<void>(
-                page: InfoCenterRoute.page,
-                path: '-info-center',
+              CustomRoute<void>(                page: HomeRoute.page,
+                path: '-homepage',
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
               CustomRoute<void>(
