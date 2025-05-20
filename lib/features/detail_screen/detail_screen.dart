@@ -1,0 +1,1 @@
+export 'views/detail_screen.dart';
