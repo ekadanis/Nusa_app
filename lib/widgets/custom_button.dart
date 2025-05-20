@@ -4,17 +4,18 @@ import '../core/app_colors.dart';
 import '../core/styles.dart';
 
 class CustomButton extends StatefulWidget {
-  const CustomButton({
-    required this.buttonText,
-    super.key,
-    this.onPressed,
-    this.backgroundColor = AppColors.primary50,
-    this.isOutlinedButton = false,
-    this.isWhiteButton = false,
-    this.fontSize,
-    this.prefixIcon,
-    this.suffixIcon,
-  });
+  const CustomButton(
+      {required this.buttonText,
+      super.key,
+      this.onPressed,
+      this.backgroundColor = AppColors.primary50,
+      this.isOutlinedButton = false,
+      this.isWhiteButton = false,
+      this.fontSize,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.borderColor,
+      this.textColor});
 
   final VoidCallback? onPressed;
   final String buttonText;
@@ -24,6 +25,8 @@ class CustomButton extends StatefulWidget {
   final IconData? prefixIcon;
   final IconData? suffixIcon;
   final Color backgroundColor;
+  final Color? borderColor;
+  final Color? textColor;
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -37,16 +40,22 @@ class _CustomButtonState extends State<CustomButton> {
       style: ElevatedButton.styleFrom(
         minimumSize: const Size(double.infinity, 48),
         elevation: 0,
-        backgroundColor:
-            widget.isWhiteButton || widget.isOutlinedButton ? Colors.white : widget.backgroundColor,
+        backgroundColor: widget.isWhiteButton || widget.isOutlinedButton
+            ? Colors.white
+            : widget.backgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Styles.mdRadius),
           side: BorderSide(
             color: widget.isWhiteButton || widget.isOutlinedButton
-                ? widget.isWhiteButton ? AppColors.grey20 : AppColors.primary50
-                : widget.onPressed == null ? AppColors.grey10 : AppColors.white,
+                ? widget.isWhiteButton
+                    ? AppColors.grey20
+                    : widget.borderColor!
+                : widget.onPressed == null
+                    ? AppColors.grey10
+                    : AppColors.white,
           ),
         ),
+        iconColor: widget.textColor,
       ),
       child: FittedBox(
         child: Row(
@@ -55,7 +64,11 @@ class _CustomButtonState extends State<CustomButton> {
               Icon(
                 widget.prefixIcon,
                 size: 18,
-                color: widget.isWhiteButton ? AppColors.grey90 : widget.onPressed == null ? AppColors.grey30 : AppColors.white,
+                color: widget.isWhiteButton
+                    ? AppColors.grey90
+                    : widget.onPressed == null
+                        ? AppColors.grey30
+                        : AppColors.white,
               ),
             if (widget.prefixIcon != null)
               const SizedBox(width: Styles.xsSpacing),
@@ -64,8 +77,12 @@ class _CustomButtonState extends State<CustomButton> {
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontSize: widget.fontSize ?? 14,
                     color: widget.isWhiteButton || widget.isOutlinedButton
-                        ? widget.isWhiteButton ? AppColors.grey90 : AppColors.primary50
-                        : widget.onPressed == null ? AppColors.grey30 : AppColors.white,
+                        ? widget.isWhiteButton
+                            ? AppColors.grey90
+                            : widget.textColor!
+                        : widget.onPressed == null
+                            ? AppColors.grey30
+                            : AppColors.white,
                   ),
             ),
             if (widget.suffixIcon != null)
@@ -74,7 +91,11 @@ class _CustomButtonState extends State<CustomButton> {
               Icon(
                 widget.suffixIcon,
                 size: 18,
-                color: widget.isWhiteButton ? AppColors.grey90 : widget.onPressed == null ? AppColors.grey30 : AppColors.white,
+                color: widget.isWhiteButton
+                    ? AppColors.grey90
+                    : widget.onPressed == null
+                        ? AppColors.grey30
+                        : AppColors.white,
               ),
           ],
         ),
