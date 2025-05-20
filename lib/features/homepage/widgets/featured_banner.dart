@@ -4,14 +4,14 @@ import '../../../../core/styles.dart';
 
 class FeaturedBanner extends StatelessWidget {
   final String title;
-  final String imageUrl;
+  final String image;
   final Function()? onTap;
   final String? buttonText;
 
   const FeaturedBanner({
     Key? key,
     required this.title,
-    required this.imageUrl,
+    required this.image,
     this.onTap,
     this.buttonText,
   }) : super(key: key);
@@ -27,7 +27,7 @@ class FeaturedBanner extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Styles.mdRadius),
         image: DecorationImage(
-          image: NetworkImage(imageUrl),
+          image: AssetImage(image),
           fit: BoxFit.cover,
         ),
         boxShadow: Styles.defaultShadow,
@@ -35,15 +35,6 @@ class FeaturedBanner extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Styles.mdRadius),
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Colors.black.withOpacity(0.6),
-              Colors.black.withOpacity(0.3),
-              Colors.black.withOpacity(0.1),
-            ],
-          ),
         ),
         padding: const EdgeInsets.all(Styles.mdPadding),
         child: Row(
@@ -67,20 +58,33 @@ class FeaturedBanner extends StatelessWidget {
               ),
             ),
             if (buttonText != null)
-              ElevatedButton(
-                onPressed: onTap,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.warning50,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Styles.mdPadding,
-                    vertical: Styles.smPadding,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.warning50.withValues(alpha : 0.9),
+                      offset: Offset(0, 0),
+                      blurRadius: 23,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(6),
                 ),
-                child: Text(buttonText!),
+                child: ElevatedButton(
+                  onPressed: onTap,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.warning50,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Styles.mdPadding,
+                      vertical: Styles.smPadding,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  child: Text(buttonText!),
+                ),
               ),
           ],
         ),

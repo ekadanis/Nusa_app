@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../core/app_colors.dart';
-import '../core/styles.dart';
 
 class SearchWidget extends StatelessWidget {
   final String hintText;
@@ -18,32 +19,74 @@ class SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController textController =
+        controller ?? TextEditingController();
+
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: Styles.mdPadding,
-        vertical: Styles.smPadding,
-      ),
-      decoration: BoxDecoration(
+      width: double.infinity,
+      height: 7.h,
+      decoration: ShapeDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(Styles.mdRadius),
-        boxShadow: Styles.defaultShadow,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        shadows: const [
+          BoxShadow(
+            color: Color(0x3F000000),
+            blurRadius: 2,
+            offset: Offset(0, 0),
+            spreadRadius: 0,
+          )
+        ],
       ),
-      child: TextField(
-        controller: controller,
-        onTap: onTap,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: AppColors.grey40,
-              ),
-          prefixIcon: const Icon(
-            Icons.search,
-            color: AppColors.grey50,
-            size: Styles.mdIcon,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+        child: Container(
+          width: double.infinity,
+          decoration: ShapeDecoration(
+            color: AppColors.grey10.withValues(alpha: 0.8),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
           ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 12.0, right: 8.0),
+                child: Icon(
+                  IconsaxPlusLinear.search_normal_1,
+                  color: AppColors.grey50,
+                  size: 16,
+                ),
+              ),
+              Expanded(
+                child: TextField(
+                  controller: textController,
+                  onTap: onTap,
+                  onChanged: onChanged,
+                  textAlignVertical: TextAlignVertical.center,
+                  style: const TextStyle(
+                    color: AppColors.grey70,
+                    fontSize: 12,
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w400,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: hintText.toLowerCase(),
+                    hintStyle: const TextStyle(
+                      color: AppColors.grey50,
+                      fontSize: 10,
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w400,
+                      height: 1.0,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
+                    isDense: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

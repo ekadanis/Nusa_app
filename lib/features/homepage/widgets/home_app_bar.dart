@@ -9,15 +9,18 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 20.h + 15, // Tambahan space untuk kontainer putih bawah
+    return Container(
+      height: 22.h,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Background AppBar dengan banner
           Container(
             height: 20.h,
-            padding: const EdgeInsets.all(Styles.mdPadding),
+            width: 100.w,
+            padding: EdgeInsets.symmetric(
+              horizontal: Styles.mdPadding,
+              vertical: 2.h,
+            ),
             decoration: BoxDecoration(
               color: AppColors.primary50,
               image: DecorationImage(
@@ -29,89 +32,90 @@ class HomeAppBar extends StatelessWidget {
                 ),
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only( bottom: 80),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Avatar
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: Image.asset(
-                      'assets/avatar/avatar-1.png',
-                      width: 48,
-                      height: 48,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(width: Styles.mdSpacing), // Increased from smSpacing for better spacing
-
-                  Expanded( // Wrapped in Expanded to ensure proper text layout
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Zhafran Arise !",
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold, // Added bold for better visibility
-                              ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: Image.asset(
+                          'assets/avatar/avatar-1.png',
+                          width: 12.w,
+                          height: 12.w,
+                          fit: BoxFit.cover,
                         ),
-                        const SizedBox(height: 2), // Added small consistent spacing
-                        Row(
+                      ),
+                      SizedBox(width: 3.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              "Welcome Back",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: Colors.white.withOpacity(0.8),
+                              "Zhafran Arise !",
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
                                   ),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                            const SizedBox(width: 4),
-                            const Text("👋", style: TextStyle(fontSize: 14)),
+                            SizedBox(height: 0.5.h),
+                            Row(
+                              children: [
+                                Text(
+                                  "Welcome Back",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Colors.white.withValues(alpha: 0.8),
+                                      ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(width: 1.w),
+                                const Text("👋", style: TextStyle(fontSize: 14)),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: EdgeInsets.all(2.w),
+                        child: Icon(
+                          IconsaxPlusBold.notification,
+                          color: Colors.white,
+                          size: 6.w,
+                        ),
+                      ),
+                    ],
                   ),
-                  
-                  // Notification icon with proper alignment
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: const Icon(
-                     IconsaxPlusBold.notification,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(height: 3.h),
+              ],
             ),
           ),
+
           Positioned(
-            bottom: 10,
+            bottom: 0,
             left: 0,
             right: 0,
-            child: Center(
-              child: Container(
-                width: double.infinity,
-                height: 33,
-                clipBehavior: Clip.antiAlias,
-                decoration: const ShapeDecoration(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(Styles.lgRadius),
-                      topRight: Radius.circular(Styles.lgRadius),
-                    ),
+            child: Container(
+              width: 100.w,
+              height: 4.h,
+              clipBehavior: Clip.antiAlias,
+              decoration: const ShapeDecoration(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(Styles.lgRadius),
+                    topRight: Radius.circular(Styles.lgRadius),
                   ),
                 ),
               ),

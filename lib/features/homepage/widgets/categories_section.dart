@@ -1,60 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/styles.dart';
+import '../../../../core/app_colors.dart';
 import 'category_item.dart';
 
 class CategoriesSection extends StatelessWidget {
-  const CategoriesSection({Key? key}) : super(key: key);
+  const CategoriesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Define the category items
-    final List<Map<String, dynamic>> categories = [
-      {
-        "title": "Cultural Sites",
-        "icon": "assets/category/Cultural.svg",
-      },
-      {
-        "title": "Arts & Culture",
-        "icon": "assets/category/Cultural-1.svg",
-      },
-      {
-        "title": "Folk Instruments",
-        "icon": "assets/category/Cultural-2.svg",
-      },
-      {
-        "title": "Traditional Wear",
-        "icon": "assets/category/Cultural-3.svg",
-      },
-      {
-        "title": "Crafts & Artifacts",
-        "icon": "assets/category/Cultural-4.svg",
-      },
-      {
-        "title": "Local Foods",
-        "icon": "assets/category/Cultural-5.svg",
-      },
-    ];
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
+      padding: const EdgeInsets.all(Styles.mdPadding),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(Styles.mdRadius),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.grey20.withValues(alpha: 0.8),
+            blurRadius: 1,
+            offset: const Offset(0, 0),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCategoriesGrid(),
+        ],
+      ),
+    );
+  }
 
+  Widget _buildCategoriesGrid() {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        childAspectRatio: 0.9, // Adjusted for better proportion
-        crossAxisSpacing: 10.0, // Increased spacing between columns
-        mainAxisSpacing: 6.0, // Adjusted for better vertical spacing
-        mainAxisExtent: 85, // Reduced from 90 for better fit
+        childAspectRatio: 0.9,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 6.0,
+        mainAxisExtent: 85,
       ),
-      itemCount: categories.length,
+      itemCount: _categories.length,
       itemBuilder: (context, index) {
+        final category = _categories[index];
         return CategoryItem(
-          title: categories[index]["title"],
-          icon: SvgPicture.asset(categories[index]["icon"]),
+          title: category["title"] as String,
+          iconPath: category["icon"] as String,
+          colorHex: category["colorHex"] as String,
           onTap: () {},
         );
       },
     );
   }
+
+  static const _categories = [
+    {
+      "title": "Cultural Sites",
+      "icon": "assets/category/cultural_sites.svg",
+      "colorHex": "E6EEF9",
+    },
+    {
+      "title": "Arts & Culture",
+      "icon": "assets/category/art_culture.svg",
+      "colorHex": "FCD8CA",
+    },
+    {
+      "title": "Folk Instruments",
+      "icon": "assets/category/folk_instruments.svg",
+      "colorHex": "D9EDE1",
+    },
+    {
+      "title": "Traditional Wear",
+      "icon": "assets/category/traditional_wear.svg",
+      "colorHex": "F5EDD1",
+    },
+    {
+      "title": "Crafts & Artifacts",
+      "icon": "assets/category/craft_artifacts.svg",
+      "colorHex": "F8CECE",
+    },
+    {
+      "title": "Local Foods",
+      "icon": "assets/category/local_foods.svg",
+      "colorHex": "DFD0FC",
+    },
+  ];
 }
