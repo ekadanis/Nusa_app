@@ -1,0 +1,2 @@
+D:/MYSTUDY/STUDY_PENS/Semester4/GSC/Nusa_app/android/app/.cxx/Debug/5m5c5a2g/x86_64/CMakeFiles/edit_cache.dir
+D:/MYSTUDY/STUDY_PENS/Semester4/GSC/Nusa_app/android/app/.cxx/Debug/5m5c5a2g/x86_64/CMakeFiles/rebuild_cache.dir
