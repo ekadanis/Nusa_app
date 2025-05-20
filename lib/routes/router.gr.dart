@@ -86,6 +86,98 @@ class ImageAnalyzerRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ImageConfirmationPage]
+class ImageConfirmationRoute extends PageRouteInfo<ImageConfirmationRouteArgs> {
+  ImageConfirmationRoute({
+    Key? key,
+    required XFile pickedImage,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ImageConfirmationRoute.name,
+          args: ImageConfirmationRouteArgs(
+            key: key,
+            pickedImage: pickedImage,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ImageConfirmationRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ImageConfirmationRouteArgs>();
+      return ImageConfirmationPage(
+        key: args.key,
+        pickedImage: args.pickedImage,
+      );
+    },
+  );
+}
+
+class ImageConfirmationRouteArgs {
+  const ImageConfirmationRouteArgs({
+    this.key,
+    required this.pickedImage,
+  });
+
+  final Key? key;
+
+  final XFile pickedImage;
+
+  @override
+  String toString() {
+    return 'ImageConfirmationRouteArgs{key: $key, pickedImage: $pickedImage}';
+  }
+}
+
+/// generated route for
+/// [ImageResultPage]
+class ImageResultRoute extends PageRouteInfo<ImageResultRouteArgs> {
+  ImageResultRoute({
+    Key? key,
+    required XFile image,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ImageResultRoute.name,
+          args: ImageResultRouteArgs(
+            key: key,
+            image: image,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ImageResultRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ImageResultRouteArgs>();
+      return ImageResultPage(
+        key: args.key,
+        image: args.image,
+      );
+    },
+  );
+}
+
+class ImageResultRouteArgs {
+  const ImageResultRouteArgs({
+    this.key,
+    required this.image,
+  });
+
+  final Key? key;
+
+  final XFile image;
+
+  @override
+  String toString() {
+    return 'ImageResultRouteArgs{key: $key, image: $image}';
+  }
+}
+
+/// generated route for
 /// [InfoCenterPage]
 class InfoCenterRoute extends PageRouteInfo<void> {
   const InfoCenterRoute({List<PageRouteInfo>? children})

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import '../features/pages.dart';
-
+import 'package:camera/camera.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -54,6 +54,21 @@ class AppRouter extends RootStackRouter {
                 path: '-account',
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
-            ])
+            ]),
+        CustomRoute<void>(
+          page: ImageAnalyzerRoute.page,
+          path: '/image-analyzer',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: ImageConfirmationRoute.page,
+          path: '/iamge-confirmation',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: ImageResultRoute.page,
+          path: '/image-result',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
       ];
 }

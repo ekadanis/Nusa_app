@@ -29,15 +29,15 @@ class CustomSection extends StatelessWidget {
         horizontal: Styles.xlPadding,
       ),
       decoration: BoxDecoration(
-        color: AppColors.white,
-        boxShadow: Styles.defaultShadow,
-      ),
+          color: AppColors.primary20,
+          boxShadow: Styles.defaultShadow,
+          borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            decoration: BoxDecoration(color: AppColors.white),
+            // decoration: BoxDecoration(color: AppColors.primary20),
             child: Row(
               children: [
                 Icon(
