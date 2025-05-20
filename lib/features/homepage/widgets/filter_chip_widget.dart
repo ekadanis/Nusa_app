@@ -4,7 +4,7 @@ import '../../../../core/app_colors.dart';
 class FilterChipWidget extends StatelessWidget {
   final String label;
   final bool isSelected;
-  final Function()? onTap;
+  final VoidCallback? onTap;
 
   const FilterChipWidget({
     Key? key,
@@ -19,16 +19,19 @@ class FilterChipWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.only(right: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary10 : AppColors.grey10,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: isSelected ? AppColors.primary50 : AppColors.grey70,
-              ),
+        child: Center(
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: isSelected ? AppColors.primary50 : AppColors.grey70,
+                ),
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
     );

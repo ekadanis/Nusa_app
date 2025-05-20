@@ -9,6 +9,8 @@ class SiteCard extends StatelessWidget {
   final Function()? onTap;
   final Function()? onFavorite;
   final bool isFavorite;
+  final Widget? locationIcon;
+  final String buttonText;
 
   const SiteCard({
     Key? key,
@@ -18,6 +20,8 @@ class SiteCard extends StatelessWidget {
     this.onTap,
     this.onFavorite,
     this.isFavorite = false,
+    this.locationIcon,
+    this.buttonText = "Kategori",
   }) : super(key: key);
 
   @override
@@ -26,10 +30,18 @@ class SiteCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 160,
+        height: 220,
+        margin: const EdgeInsets.only(bottom: 4),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(Styles.mdRadius),
-          boxShadow: Styles.defaultShadow,
+          boxShadow: [
+           BoxShadow(
+            color: AppColors.grey20.withValues(alpha: 0.8),
+            blurRadius: 1,
+            offset: const Offset(0, 0),
+          ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,13 +72,10 @@ class SiteCard extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        isFavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border,
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
                         size: Styles.mdIcon,
-                        color: isFavorite
-                            ? AppColors.danger50
-                            : AppColors.grey40,
+                        color:
+                            isFavorite ? AppColors.danger50 : AppColors.grey40,
                       ),
                     ),
                   ),
@@ -87,18 +96,20 @@ class SiteCard extends StatelessWidget {
                   const SizedBox(height: Styles.xxsSpacing),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_on,
-                        size: 12,
-                        color: AppColors.grey50,
-                      ),
+                      locationIcon ??
+                          const Icon(
+                            Icons.location_on,
+                            size: 12,
+                            color: AppColors.grey50,
+                          ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           location,
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                color: AppColors.grey50,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: AppColors.grey50,
+                                  ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -112,14 +123,15 @@ class SiteCard extends StatelessWidget {
                       backgroundColor: AppColors.primary50,
                       foregroundColor: AppColors.white,
                       minimumSize: const Size(60, 28),
+                      elevation: 0,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(Styles.lgRadius),
                       ),
                     ),
-                    child: const Text(
-                      "Explore",
-                      style: TextStyle(fontSize: 12),
+                    child: Text(
+                      buttonText,
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ],

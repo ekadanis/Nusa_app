@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/styles.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class LocationBanner extends StatelessWidget {
   final String title;
@@ -32,10 +33,19 @@ class LocationBanner extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(
-                Icons.star,
-                color: Colors.white,
-                size: Styles.lgIcon,
+              Container(
+                width: 40,
+                height: 40,
+                padding: const EdgeInsets.all(Styles.xsPadding),
+                decoration: BoxDecoration(
+                  color: AppColors.grey20.withValues(alpha: 0.30),
+                  borderRadius: BorderRadius.circular(Styles.mdRadius),
+                ),
+                child: const Icon(
+                  IconsaxPlusBold.magic_star,
+                  color: Colors.white,
+                  size: Styles.lgIcon,
+                ),
               ),
               const SizedBox(width: Styles.xsSpacing),
               Text(
@@ -51,7 +61,7 @@ class LocationBanner extends StatelessWidget {
           Text(
             subtitle,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                 ),
           ),
           const SizedBox(height: Styles.mdSpacing),
@@ -59,13 +69,20 @@ class LocationBanner extends StatelessWidget {
             onPressed: onTap,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
-              foregroundColor: AppColors.primary50,
               minimumSize: const Size(double.infinity, 44),
+              elevation: 2,
+              shadowColor: Colors.black.withValues(alpha: 0.3),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text("Turn On Location"),
+            child: const Text(
+              "Turn On Location",
+              style: TextStyle(
+                color: Color(0xFF4286EF),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),

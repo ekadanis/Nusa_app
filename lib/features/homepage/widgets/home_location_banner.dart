@@ -6,10 +6,13 @@ class HomeLocationBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const LocationBanner(
+    return LocationBanner(
       title: "Explore Culture With Nusa",
       subtitle: "Bring Your Cultural Journey from Your Location",
-      onTap: null,
+      onTap: () {
+        // Handle location permission request here
+        debugPrint('Location button pressed');
+      },
     );
   }
 }

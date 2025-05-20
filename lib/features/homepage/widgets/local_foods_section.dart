@@ -6,8 +6,8 @@ import '../../../../widgets/site_card.dart';
 import 'section_header.dart';
 import 'filter_chip_widget.dart';
 
-class CulturalSitesSection extends StatelessWidget {
-  const CulturalSitesSection({Key? key}) : super(key: key);
+class LocalFoodsSection extends StatelessWidget {
+  const LocalFoodsSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class CulturalSitesSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: "Cultural Sites",
+          title: "Local Foods",
           onSeeAll: () {},
         ),
         const SizedBox(height: Styles.xsSpacing),
