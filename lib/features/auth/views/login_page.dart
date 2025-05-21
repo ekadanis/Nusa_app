@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
               "Let's Get You Started With Nusa",
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     color: AppColors.grey400,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w100,
                   ),
             ),
             SizedBox(
@@ -37,7 +37,6 @@ class LoginPage extends StatelessWidget {
               child: _socialLoginButton(
                 context: context,
                 onPressed: () {
-                  print('object');
                   context.router.push(DashboardRoute());
                 },
                 text: "Sign In Using Google Account",
