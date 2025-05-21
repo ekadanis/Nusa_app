@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:nusa_app/features/community/views/community_page.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import '../features/pages.dart';
 
@@ -16,6 +17,11 @@ class AppRouter extends RootStackRouter {
           page: SplashRoute.page,
           path: '/splash',
           initial: true,
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: LoginRoute.page,
+          path: '/login',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(

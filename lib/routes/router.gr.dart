@@ -29,6 +29,25 @@ class AccountRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [CommunityPage]
+class CommunityRoute extends PageRouteInfo<void> {
+  const CommunityRoute({List<PageRouteInfo>? children})
+      : super(
+          CommunityRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'CommunityRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CommunityPage();
+    },
+  );
+}
+
+/// generated route for
 /// [DashboardPage]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})
@@ -100,6 +119,25 @@ class InfoCenterRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const InfoCenterPage();
+    },
+  );
+}
+
+/// generated route for
+/// [LoginPage]
+class LoginRoute extends PageRouteInfo<void> {
+  const LoginRoute({List<PageRouteInfo>? children})
+      : super(
+          LoginRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoginRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const LoginPage();
     },
   );
 }

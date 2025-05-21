@@ -5,3 +5,5 @@ export 'feeds/feeds.dart';
 export 'image_analyzer/image_analyzer.dart';
 export 'info_center/info_center.dart';
 export 'nusabot/nusabot.dart';
+export 'auth/auth.dart';
+export 'community/community.dart';
