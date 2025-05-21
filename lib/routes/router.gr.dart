@@ -67,6 +67,25 @@ class FeedsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [HomePage]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomePage();
+    },
+  );
+}
+
+/// generated route for
 /// [ImageAnalyzerPage]
 class ImageAnalyzerRoute extends PageRouteInfo<void> {
   const ImageAnalyzerRoute({List<PageRouteInfo>? children})
@@ -86,6 +105,7 @@ class ImageAnalyzerRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+<<<<<<< HEAD
 /// [ImageConfirmationPage]
 class ImageConfirmationRoute extends PageRouteInfo<ImageConfirmationRouteArgs> {
   ImageConfirmationRoute({
@@ -183,17 +203,52 @@ class InfoCenterRoute extends PageRouteInfo<void> {
   const InfoCenterRoute({List<PageRouteInfo>? children})
       : super(
           InfoCenterRoute.name,
+=======
+/// [KatalogProdukPage]
+class KatalogProdukRoute extends PageRouteInfo<KatalogProdukRouteArgs> {
+  KatalogProdukRoute({
+    Key? key,
+    String? categoryName,
+    List<PageRouteInfo>? children,
+  }) : super(
+          KatalogProdukRoute.name,
+          args: KatalogProdukRouteArgs(
+            key: key,
+            categoryName: categoryName,
+          ),
+>>>>>>> homepage
           initialChildren: children,
         );
 
-  static const String name = 'InfoCenterRoute';
+  static const String name = 'KatalogProdukRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const InfoCenterPage();
+      final args = data.argsAs<KatalogProdukRouteArgs>(
+          orElse: () => const KatalogProdukRouteArgs());
+      return KatalogProdukPage(
+        key: args.key,
+        categoryName: args.categoryName,
+      );
     },
   );
+}
+
+class KatalogProdukRouteArgs {
+  const KatalogProdukRouteArgs({
+    this.key,
+    this.categoryName,
+  });
+
+  final Key? key;
+
+  final String? categoryName;
+
+  @override
+  String toString() {
+    return 'KatalogProdukRouteArgs{key: $key, categoryName: $categoryName}';
+  }
 }
 
 /// generated route for

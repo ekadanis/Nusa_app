@@ -2,6 +2,7 @@ C/C++ Structured LogO
 M
 KC:\src\flutter\packages\flutter_tools\gradle\src\main\groovy\CMakeLists.txtC
 A
+<<<<<<< HEAD
 ?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	µÑ¡öî2§ æ‹”ÛÓ2w
 u
 sD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\additional_project_files.txt	¶Ñ¡öî2 Ï³öî2t
@@ -26,3 +27,29 @@ k
 iD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\prefab_config.json	¶Ñ¡öî2( †´öî2r
 p
 nD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\symbol_folder_index.txt	¶Ñ¡öî2e †´öî2
+=======
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	¬‰“ï2§ æ‹”ÛÓ2w
+u
+sD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\additional_project_files.txt	¬‰“ï2 ‹®öî2t
+r
+pD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\android_gradle_build.json	¬‰“ï2Ç ®öî2y
+w
+uD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\android_gradle_build_mini.json	¬‰“ï2¤ ®öî2f
+d
+bD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\build.ninja	¬‰“ï2ªÔ ŠŽ®öî2j
+h
+fD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\build.ninja.txt	¬‰“ï2o
+m
+kD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\build_file_index.txt	¬‰“ï2K ’®öî2p
+n
+lD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\compile_commands.json	¬‰“ï2	t
+r
+pD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\compile_commands.json.bin	¬‰“ï2
+z
+x
+vD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\metadata_generation_command.txt	¬‰“ï2ã ®öî2m
+k
+iD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\prefab_config.json	¬‰“ï2( ‘®öî2r
+p
+nD:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app\android\app\.cxx\Debug\5m5c5a2g\arm64-v8a\symbol_folder_index.txt	¬‰“ï2e ‘®öî2
+>>>>>>> homepage

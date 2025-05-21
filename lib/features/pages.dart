@@ -3,5 +3,6 @@ export 'dashboard/dashboard.dart';
 export 'account/account.dart';
 export 'feeds/feeds.dart';
 export 'image_analyzer/image_analyzer.dart';
-export 'info_center/info_center.dart';
+export 'homepage/homepage.dart';
 export 'nusabot/nusabot.dart';
+export 'katalog_produk/katalog_produk.dart';

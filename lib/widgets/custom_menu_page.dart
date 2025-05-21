@@ -23,7 +23,7 @@ class CustomMenuPage extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.grey10, // Outline tipis abu-abu
+          color: AppColors.grey10,
           width: 1,
         ),
       ),

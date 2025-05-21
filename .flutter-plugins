@@ -1,4 +1,5 @@
 # This is a generated file; do not edit or check into version control.
+<<<<<<< HEAD
 camera=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\camera-0.11.1\\
 camera_android_camerax=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\camera_android_camerax-0.6.17\\
 camera_avfoundation=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\camera_avfoundation-0.9.19\\
@@ -15,6 +16,9 @@ image_picker_ios=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\i
 image_picker_linux=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\image_picker_linux-0.2.1+2\\
 image_picker_macos=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\image_picker_macos-0.2.1+2\\
 image_picker_windows=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\image_picker_windows-0.2.1+1\\
+=======
+flutter_native_splash=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\flutter_native_splash-2.4.4\\
+>>>>>>> homepage
 path_provider=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider-2.1.5\\
 path_provider_android=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_android-2.2.17\\
 path_provider_foundation=C:\\Users\\ACER\\AppData\\Local\\Pub\\Cache\\hosted\\pub.dev\\path_provider_foundation-2.4.1\\
