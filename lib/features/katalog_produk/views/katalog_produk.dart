@@ -3,7 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:sizer/sizer.dart';
 import '../../../core/styles.dart';
 import '../../../widgets/custom_search.dart';
-import '../widgets/HomeAppBar_KatalogScreen.dart';
+import '../widgets/home_appbar_katalog_screen.dart';
 import '../widgets/product_grid_section.dart';
 
 @RoutePage()
@@ -268,44 +268,27 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
     _searchController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(22.h),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Column(
-              children: [
-                HomeAppBar(
-                  categoryName: _selectedCategory["category"],
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: Styles.mdSpacing),
-                        ProductGridSection(
-                          products: _productsList,
-                          customFilters: List<String>.from(_selectedCategory["subcategories"]),
-                        ),
-                        const SizedBox(height: Styles.mdSpacing),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            HomeAppBar(
+              categoryName: _selectedCategory["category"],
             ),
             Positioned(
-              top: 15.h,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
+              top: 15.5.h,
+              left: Styles.mdPadding,
+              right: Styles.mdPadding,
+              child: Material(
+                elevation: 10,
+                shadowColor: Colors.black.withOpacity(0.2), 
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
                   child: SearchWidget(
                     hintText: "Find Your Culture",
                     controller: _searchController,
@@ -313,6 +296,30 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
                       debugPrint('Search text: $text');
                     },
                   ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            // SizedBox(height: searchHeight / 4),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: Styles.xsSpacing),
+                    ProductGridSection(
+                      products: _productsList,
+                      customFilters: List<String>.from(_selectedCategory["subcategories"]),
+                    ),
+                    const SizedBox(height: Styles.mdSpacing),
+                  ],
                 ),
               ),
             ),

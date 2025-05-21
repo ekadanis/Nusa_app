@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:auto_route/auto_route.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/styles.dart';
 import '../../../../widgets/site_card.dart';
 import '../../../features/katalog_produk/views/katalog_produk.dart';
+import '../../../routes/router.dart';
 import 'section_header.dart';
 import 'filter_chip_widget.dart';
 
@@ -17,13 +18,14 @@ class CulturalSitesSection extends StatefulWidget {
 
 class _CulturalSitesSectionState extends State<CulturalSitesSection> {
   String _selectedFilter = "Discover";
-  
+
   // Data section dengan properti likes dan recommendation score
   final List<Map<String, dynamic>> _siteItems = [
     {
       "title": "Candi Borobudur",
       "location": "Magelang, Central Java",
-      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "imageUrl":
+          "https://images.unsplash.com/photo-1565967511849-76a60a516170",
       "isFavorite": false,
       "likes": 200,
       "recommendation": 9.5,
@@ -32,7 +34,8 @@ class _CulturalSitesSectionState extends State<CulturalSitesSection> {
     {
       "title": "Keraton Yogyakarta",
       "location": "Yogyakarta, DIY",
-      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "imageUrl":
+          "https://images.unsplash.com/photo-1565967511849-76a60a516170",
       "isFavorite": true,
       "likes": 160,
       "recommendation": 8.3,
@@ -41,26 +44,27 @@ class _CulturalSitesSectionState extends State<CulturalSitesSection> {
     {
       "title": "Candi Prambanan",
       "location": "Yogyakarta, DIY",
-      "imageUrl": "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272",
+      "imageUrl":
+          "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272",
       "isFavorite": false,
       "likes": 180,
       "recommendation": 9.0,
       "kategori": "Temple",
     },
   ];
-  
+
   List<Map<String, dynamic>> _filteredItems = [];
-  
+
   @override
   void initState() {
     super.initState();
     _filterItems(_selectedFilter);
   }
-  
+
   void _filterItems(String filter) {
     setState(() {
       _selectedFilter = filter;
-      
+
       // Filter items berdasarkan kriteria
       switch (filter) {
         case "Most Like":
@@ -71,7 +75,8 @@ class _CulturalSitesSectionState extends State<CulturalSitesSection> {
         case "Recommended":
           // Urutkan berdasarkan skor rekomendasi (tertinggi ke terendah)
           _filteredItems = List.from(_siteItems)
-            ..sort((a, b) => (b["recommendation"] as double).compareTo(a["recommendation"] as double));
+            ..sort((a, b) => (b["recommendation"] as double)
+                .compareTo(a["recommendation"] as double));
           break;
         case "Discover":
         default:
@@ -91,17 +96,10 @@ class _CulturalSitesSectionState extends State<CulturalSitesSection> {
           title: "Cultural Sites",
           onSeeAll: () {
             debugPrint('Navigating to Katalog with category: Cultural Sites');
-            
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 400),
-                child: KatalogProdukPage(
-                  categoryName: "Cultural Sites",
-                ),
-              ),
-            );
+
+            // Using AutoRouter for navigation
+            context.router
+                .push(KatalogProdukRoute(categoryName: "Cultural Sites"));
           },
         ),
         const SizedBox(height: Styles.xsSpacing),
@@ -112,7 +110,7 @@ class _CulturalSitesSectionState extends State<CulturalSitesSection> {
             padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
             children: [
               FilterChipWidget(
-                label: "Discover", 
+                label: "Discover",
                 isSelected: _selectedFilter == "Discover",
                 onTap: () {
                   _filterItems("Discover");

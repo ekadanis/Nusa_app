@@ -106,10 +106,17 @@ class ImageAnalyzerRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [KatalogProdukPage]
-class KatalogProdukRoute extends PageRouteInfo<void> {
-  const KatalogProdukRoute({List<PageRouteInfo>? children})
-      : super(
+class KatalogProdukRoute extends PageRouteInfo<KatalogProdukRouteArgs> {
+  KatalogProdukRoute({
+    Key? key,
+    String? categoryName,
+    List<PageRouteInfo>? children,
+  }) : super(
           KatalogProdukRoute.name,
+          args: KatalogProdukRouteArgs(
+            key: key,
+            categoryName: categoryName,
+          ),
           initialChildren: children,
         );
 
@@ -118,9 +125,30 @@ class KatalogProdukRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const KatalogProdukPage();
+      final args = data.argsAs<KatalogProdukRouteArgs>(
+          orElse: () => const KatalogProdukRouteArgs());
+      return KatalogProdukPage(
+        key: args.key,
+        categoryName: args.categoryName,
+      );
     },
   );
+}
+
+class KatalogProdukRouteArgs {
+  const KatalogProdukRouteArgs({
+    this.key,
+    this.categoryName,
+  });
+
+  final Key? key;
+
+  final String? categoryName;
+
+  @override
+  String toString() {
+    return 'KatalogProdukRouteArgs{key: $key, categoryName: $categoryName}';
+  }
 }
 
 /// generated route for

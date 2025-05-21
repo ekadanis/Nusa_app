@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:auto_route/auto_route.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/styles.dart';
 import '../../../../widgets/site_card.dart';
 import '../../../features/katalog_produk/views/katalog_produk.dart';
+import '../../../routes/router.dart';
 import 'section_header.dart';
 import 'filter_chip_widget.dart';
 
@@ -17,13 +18,14 @@ class CraftsArtifactsSection extends StatefulWidget {
 
 class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
   String _selectedFilter = "Discover";
-  
+
   // Data section dengan properti likes dan recommendation score
   final List<Map<String, dynamic>> _artifactItems = [
     {
       "title": "Wayang Kulit",
       "location": "Java",
-      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "imageUrl":
+          "https://images.unsplash.com/photo-1565967511849-76a60a516170",
       "isFavorite": false,
       "likes": 110,
       "recommendation": 8.6,
@@ -32,7 +34,8 @@ class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
     {
       "title": "Keris",
       "location": "Central Java",
-      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "imageUrl":
+          "https://images.unsplash.com/photo-1565967511849-76a60a516170",
       "isFavorite": true,
       "likes": 175,
       "recommendation": 7.9,
@@ -41,26 +44,27 @@ class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
     {
       "title": "Pottery from Lombok",
       "location": "Lombok, West Nusa Tenggara",
-      "imageUrl": "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272",
+      "imageUrl":
+          "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272",
       "isFavorite": false,
       "likes": 95,
       "recommendation": 9.1,
       "kategori": "Pottery",
     },
   ];
-  
+
   List<Map<String, dynamic>> _filteredItems = [];
-  
+
   @override
   void initState() {
     super.initState();
     _filterItems(_selectedFilter);
   }
-  
+
   void _filterItems(String filter) {
     setState(() {
       _selectedFilter = filter;
-      
+
       // Filter items berdasarkan kriteria
       switch (filter) {
         case "Most Like":
@@ -71,7 +75,8 @@ class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
         case "Recommended":
           // Urutkan berdasarkan skor rekomendasi (tertinggi ke terendah)
           _filteredItems = List.from(_artifactItems)
-            ..sort((a, b) => (b["recommendation"] as double).compareTo(a["recommendation"] as double));
+            ..sort((a, b) => (b["recommendation"] as double)
+                .compareTo(a["recommendation"] as double));
           break;
         case "Discover":
         default:
@@ -90,18 +95,12 @@ class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
         SectionHeader(
           title: "Crafts & Artifacts",
           onSeeAll: () {
-            debugPrint('Navigating to Katalog with category: Crafts & Artifacts');
-            
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 300),
-                child: KatalogProdukPage(
-                  categoryName: "Crafts & Artifacts",
-                ),
-              ),
-            );
+            debugPrint(
+                'Navigating to Katalog with category: Crafts & Artifacts');
+
+            // Using AutoRouter for navigation
+            context.router
+                .push(KatalogProdukRoute(categoryName: "Crafts & Artifacts"));
           },
         ),
         const SizedBox(height: Styles.xsSpacing),
@@ -112,7 +111,7 @@ class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
             padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
             children: [
               FilterChipWidget(
-                label: "Discover", 
+                label: "Discover",
                 isSelected: _selectedFilter == "Discover",
                 onTap: () {
                   _filterItems("Discover");
@@ -147,7 +146,8 @@ class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
               children: _filteredItems.map((artifact) {
                 return Padding(
                   padding: EdgeInsets.only(
-                    right: artifact == _filteredItems.last ? 0 : Styles.mdSpacing,
+                    right:
+                        artifact == _filteredItems.last ? 0 : Styles.mdSpacing,
                   ),
                   child: SiteCard(
                     title: artifact["title"],
@@ -157,7 +157,8 @@ class _CraftsArtifactsSectionState extends State<CraftsArtifactsSection> {
                     onFavorite: () {
                       // Implement favorite toggle here
                       setState(() {
-                        artifact["isFavorite"] = !(artifact["isFavorite"] as bool);
+                        artifact["isFavorite"] =
+                            !(artifact["isFavorite"] as bool);
                       });
                     },
                     isFavorite: artifact["isFavorite"] as bool,

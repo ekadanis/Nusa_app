@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax_plus/iconsax_plus.dart';
 import '../core/app_colors.dart';
 import '../core/styles.dart';
 import 'package:sizer/sizer.dart';
@@ -32,8 +31,7 @@ class SiteCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: 45.w,
-        height:
-            25.h,
+        height: 25.h,
         margin: EdgeInsets.only(bottom: 0.5.h),
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -63,6 +61,18 @@ class SiteCard extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(Styles.mdRadius),
+                    topRight: Radius.circular(Styles.mdRadius),
+                  ),
+                  child: Container(
+                    width: 45.w,
+                    height: 13.h,
+                    color: Colors.black
+                        .withOpacity(0.3),
+                  ),
+                ),
                 Positioned(
                   top: Styles.xsPadding,
                   right: Styles.xsPadding,
@@ -71,7 +81,7 @@ class SiteCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(Styles.xxsPadding),
                       decoration: const BoxDecoration(
-                        color: Colors.white,
+                        color: Color.fromARGB(217, 234, 229, 229),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -86,8 +96,7 @@ class SiteCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding:
-                  EdgeInsets.all(1.5.w),
+              padding: EdgeInsets.all(1.5.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -99,14 +108,14 @@ class SiteCard extends StatelessWidget {
                   ),
                   const SizedBox(height: Styles.xxsSpacing),
                   Row(
-                    children: [                      locationIcon ??
+                    children: [
+                      locationIcon ??
                           Icon(
-                            IconsaxPlusBold.location,
+                            Icons.location_on,
                             size: 1.5.h,
                             color: AppColors.success50,
                           ),
-                      SizedBox(
-                          width: 1.w),
+                      SizedBox(width: 1.w),
                       Expanded(
                         child: Text(
                           location,
@@ -134,8 +143,7 @@ class SiteCard extends StatelessWidget {
                       kategori,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: AppColors.primary50,
-                            fontSize:
-                                12.sp,
+                            fontSize: 12.sp,
                           ),
                     ),
                   ),

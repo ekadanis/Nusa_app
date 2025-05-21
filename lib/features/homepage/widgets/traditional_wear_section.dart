@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:auto_route/auto_route.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/styles.dart';
 import '../../../../widgets/site_card.dart';
 import '../../../features/katalog_produk/views/katalog_produk.dart';
+import '../../../routes/router.dart';
 import 'section_header.dart';
 import 'filter_chip_widget.dart';
 
@@ -95,22 +96,13 @@ class _TraditionalWearSectionState extends State<TraditionalWearSection> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SectionHeader(
+      children: [        SectionHeader(
           title: "Traditional Wear",
           onSeeAll: () {
             debugPrint('Navigating to Katalog with category: Traditional Wear');
             
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 300),
-                child: KatalogProdukPage(
-                  categoryName: "Traditional Wear",
-                ),
-              ),
-            );
+            // Using AutoRouter for navigation
+            context.router.push(KatalogProdukRoute(categoryName: "Traditional Wear"));
           },
         ),
         const SizedBox(height: Styles.xsSpacing),

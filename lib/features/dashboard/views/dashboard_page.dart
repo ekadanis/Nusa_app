@@ -21,7 +21,6 @@ class _DashboardPageState extends State<DashboardPage> {  @override
           ImageAnalyzerRoute(),
           FeedsRoute(),
           AccountRoute(),
-          KatalogProdukRoute()
         ],
         bottomNavigationBuilder: (_, tabsRouter) {
           return Container(

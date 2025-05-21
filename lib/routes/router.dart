@@ -34,18 +34,12 @@ class AppRouter extends RootStackRouter {
             page: DashboardRoute.page,
             path: '/dashboard',
             transitionsBuilder: TransitionsBuilders.fadeIn,
-            durationInMilliseconds: 300,            children: [
+            durationInMilliseconds: 300,
+            children: [
               CustomRoute<void>(
                 page: HomeRoute.page,
                 path: '-homepage',
                 transitionsBuilder: TransitionsBuilders.fadeIn,
-                children: [
-                  CustomRoute<void>(
-                    page: KatalogProdukRoute.page,
-                    path: 'katalog-produk',
-                    transitionsBuilder: TransitionsBuilders.fadeIn,
-                  ),
-                ],
               ),
               CustomRoute<void>(
                 page: NusaBotRoute.page,

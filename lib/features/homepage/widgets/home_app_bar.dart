@@ -4,8 +4,11 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../../../core/app_colors.dart';
 import '../../../../core/styles.dart';
 
-class HomeAppBar extends StatelessWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({Key? key}) : super(key: key);
+
+  @override
+  Size get preferredSize => Size.fromHeight(22.h);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +59,10 @@ class HomeAppBar extends StatelessWidget {
                           children: [
                             Text(
                               "Zhafran Arise !",
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -71,12 +77,14 @@ class HomeAppBar extends StatelessWidget {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                        color: Colors.white.withValues(alpha: 0.8),
+                                        color:
+                                            Colors.white.withValues(alpha: 0.8),
                                       ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 SizedBox(width: 1.w),
-                                const Text("👋", style: TextStyle(fontSize: 14)),
+                                const Text("👋",
+                                    style: TextStyle(fontSize: 14)),
                               ],
                             ),
                           ],
@@ -101,7 +109,6 @@ class HomeAppBar extends StatelessWidget {
               ],
             ),
           ),
-
           Positioned(
             bottom: 0,
             left: 0,

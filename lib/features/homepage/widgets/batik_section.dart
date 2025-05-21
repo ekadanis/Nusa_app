@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../../core/styles.dart';
 import '../../../core/app_colors.dart';
 import '../../../../widgets/site_card.dart';
-import '../../../features/katalog_produk/views/katalog_produk.dart';
+import '../../../features/katalog_produk/katalog_produk.dart';
+import '../../../routes/router.dart';
 import 'section_header.dart';
 import 'filter_chip_widget.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:auto_route/auto_route.dart';
 
 class BatikSection extends StatefulWidget {
   const BatikSection({Key? key}) : super(key: key);
@@ -95,22 +96,13 @@ class _BatikSectionState extends State<BatikSection> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SectionHeader(
+      children: [        SectionHeader(
           title: "Arts & Culture",
           onSeeAll: () {
             debugPrint('Navigating to Katalog with category: Arts & Culture');
             
-            Navigator.push(
-              context,
-              PageTransition(
-                type: PageTransitionType.fade,
-                duration: const Duration(milliseconds: 300),
-                child: KatalogProdukPage(
-                  categoryName: "Arts & Culture",
-                ),
-              ),
-            );
+            // Using AutoRouter for navigation
+            context.router.push(KatalogProdukRoute(categoryName: "Arts & Culture"));
           },
         ),
         const SizedBox(height: Styles.xsSpacing),

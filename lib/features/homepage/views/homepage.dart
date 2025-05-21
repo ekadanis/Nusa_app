@@ -24,60 +24,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(22.h),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            Column(
-              children: [
-                const HomeAppBar(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: Styles.mdSpacing),
-                        const CategoriesSection(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const HomeFeaturedBanner(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const HomeLocationBanner(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const CulturalSitesSection(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const BatikSection(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const FolkInstrumentsSection(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const TraditionalWearSection(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const CraftsArtifactsSection(),
-                        const SizedBox(height: Styles.smSpacing),
-                        const LocalFoodsSection(),
-                        const SizedBox(height: Styles.xlSpacing),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            const HomeAppBar(),
             Positioned(
-              top: 15.h,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
+              top: 16.5.h,
+              left: Styles.mdPadding,
+              right: Styles.mdPadding,
+              child: Material(
+                elevation: 10,
+                shadowColor: Colors.black.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
                   child: SearchWidget(
                     hintText: "Find your culture",
                     controller: _searchController,
@@ -86,6 +57,42 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            SizedBox(height: Styles.lgSpacing),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.only(bottom: 24),
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  SizedBox(height: Styles.xsSpacing),
+                  const CategoriesSection(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const HomeFeaturedBanner(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const HomeLocationBanner(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const CulturalSitesSection(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const BatikSection(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const FolkInstrumentsSection(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const TraditionalWearSection(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const CraftsArtifactsSection(),
+                  const SizedBox(height: Styles.smSpacing),
+                  const LocalFoodsSection(),
+                  const SizedBox(height: Styles.xlSpacing),
+                ],
               ),
             ),
           ],
