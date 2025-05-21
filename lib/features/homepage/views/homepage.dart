@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
     _searchController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

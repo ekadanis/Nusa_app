@@ -105,6 +105,25 @@ class ImageAnalyzerRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [KatalogProdukPage]
+class KatalogProdukRoute extends PageRouteInfo<void> {
+  const KatalogProdukRoute({List<PageRouteInfo>? children})
+      : super(
+          KatalogProdukRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'KatalogProdukRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const KatalogProdukPage();
+    },
+  );
+}
+
+/// generated route for
 /// [NusaBotPage]
 class NusaBotRoute extends PageRouteInfo<void> {
   const NusaBotRoute({List<PageRouteInfo>? children})

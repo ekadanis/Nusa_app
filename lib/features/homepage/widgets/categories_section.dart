@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/styles.dart';
 import '../../../../core/app_colors.dart';
+import '../../../features/katalog_produk/views/katalog_produk.dart';
 import 'category_item.dart';
+// Add the import for page_transition package
+import 'package:page_transition/page_transition.dart';
 
-class CategoriesSection extends StatelessWidget {
+class CategoriesSection extends StatefulWidget {
   const CategoriesSection({super.key});
 
+  @override
+  State<CategoriesSection> createState() => _CategoriesSectionState();
+}
+
+class _CategoriesSectionState extends State<CategoriesSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,7 +24,7 @@ class CategoriesSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(Styles.mdRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.grey20.withValues(alpha: 0.8),
+            color: AppColors.grey20.withOpacity(0.8),
             blurRadius: 1,
             offset: const Offset(0, 0),
           ),
@@ -26,13 +33,13 @@ class CategoriesSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildCategoriesGrid(),
+          _buildCategoriesGrid(context),
         ],
       ),
     );
   }
 
-  Widget _buildCategoriesGrid() {
+  Widget _buildCategoriesGrid(BuildContext context) {
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -51,7 +58,21 @@ class CategoriesSection extends StatelessWidget {
           title: category["title"] as String,
           iconPath: category["icon"] as String,
           colorHex: category["colorHex"] as String,
-          onTap: () {},
+          onTap: () {
+            // Use PageTransition for smoother transitions
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.fade,
+                duration: const Duration(milliseconds: 400),
+                child: KatalogProdukPage(
+                  categoryName: category["title"] as String,
+                ),
+                childCurrent: widget, // Reference to current widget for smoother transition
+                curve: Curves.easeInOut, // Smooth curve
+              ),
+            );
+          },
         );
       },
     );

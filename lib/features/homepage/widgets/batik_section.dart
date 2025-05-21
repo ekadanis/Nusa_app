@@ -2,12 +2,94 @@ import 'package:flutter/material.dart';
 import '../../../../core/styles.dart';
 import '../../../core/app_colors.dart';
 import '../../../../widgets/site_card.dart';
+import '../../../features/katalog_produk/views/katalog_produk.dart';
 import 'section_header.dart';
 import 'filter_chip_widget.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:page_transition/page_transition.dart';
 
-class BatikSection extends StatelessWidget {
+class BatikSection extends StatefulWidget {
   const BatikSection({Key? key}) : super(key: key);
+
+  @override
+  State<BatikSection> createState() => _BatikSectionState();
+}
+
+class _BatikSectionState extends State<BatikSection> {
+  String _selectedFilter = "Discover";
+  
+  // Data section dengan properti likes dan recommendation score
+  final List<Map<String, dynamic>> _batikItems = [
+    {
+      "title": "Batik Parang",
+      "location": "Solo, Central Java",
+      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "isFavorite": false,
+      "likes": 120,
+      "recommendation": 8.5,
+      "kategori": "Hand-drawn batik",
+    },
+    {
+      "title": "Batik Mega Mendung",
+      "location": "Cirebon, West Java",
+      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "isFavorite": true,
+      "likes": 185,
+      "recommendation": 7.8,
+      "kategori": "Hand-drawn batik",
+    },
+    {
+      "title": "Songket Palembang",
+      "location": "Palembang, South Sumatra",
+      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "isFavorite": false,
+      "likes": 90,
+      "recommendation": 9.2,
+      "kategori": "Songket",
+    },
+    {
+      "title": "Tenun Ikat Sumba",
+      "location": "Sumba, East Nusa Tenggara",
+      "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+      "isFavorite": true,
+      "likes": 150,
+      "recommendation": 8.9,
+      "kategori": "Woven fabrics",
+    },
+  ];
+  
+  List<Map<String, dynamic>> _filteredItems = [];
+  
+  @override
+  void initState() {
+    super.initState();
+    _filterItems(_selectedFilter);
+  }
+  
+  void _filterItems(String filter) {
+    setState(() {
+      _selectedFilter = filter;
+      
+      // Filter items berdasarkan kriteria
+      switch (filter) {
+        case "Most Like":
+          // Urutkan berdasarkan jumlah likes (tertinggi ke terendah)
+          _filteredItems = List.from(_batikItems)
+            ..sort((a, b) => (b["likes"] as int).compareTo(a["likes"] as int));
+          break;
+        case "Recommended":
+          // Urutkan berdasarkan skor rekomendasi (tertinggi ke terendah)
+          _filteredItems = List.from(_batikItems)
+            ..sort((a, b) => (b["recommendation"] as double).compareTo(a["recommendation"] as double));
+          break;
+        case "Discover":
+        default:
+          // Tampilkan semua tanpa urutan khusus
+          _filteredItems = List.from(_batikItems);
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +97,21 @@ class BatikSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          title: "Batik & Textiles",
-          onSeeAll: () {},
+          title: "Arts & Culture",
+          onSeeAll: () {
+            debugPrint('Navigating to Katalog with category: Arts & Culture');
+            
+            Navigator.push(
+              context,
+              PageTransition(
+                type: PageTransitionType.fade,
+                duration: const Duration(milliseconds: 300),
+                child: KatalogProdukPage(
+                  categoryName: "Arts & Culture",
+                ),
+              ),
+            );
+          },
         ),
         const SizedBox(height: Styles.xsSpacing),
         SizedBox(
@@ -24,16 +119,30 @@ class BatikSection extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
-            children: const [
+            children: [
               FilterChipWidget(
-                label: "Discover",
-                isSelected: true,
+                label: "Discover", 
+                isSelected: _selectedFilter == "Discover",
+                onTap: () {
+                  _filterItems("Discover");
+                  debugPrint('Filter Discover terpilih');
+                },
               ),
               FilterChipWidget(
                 label: "Most Like",
+                isSelected: _selectedFilter == "Most Like",
+                onTap: () {
+                  _filterItems("Most Like");
+                  debugPrint('Filter Most Like terpilih');
+                },
               ),
               FilterChipWidget(
                 label: "Recommended",
+                isSelected: _selectedFilter == "Recommended",
+                onTap: () {
+                  _filterItems("Recommended");
+                  debugPrint('Filter Recommended terpilih');
+                },
               ),
             ],
           ),
@@ -44,33 +153,32 @@ class BatikSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
           child: IntrinsicHeight(
             child: Row(
-              children: [
-                SiteCard(
-                  title: "Batik Parang",
-                  location: "Solo, Central Java",
-                  imageUrl: "https://images.unsplash.com/photo-1565967511849-76a60a516170",
-                  locationIcon: Icon(
-                    IconsaxPlusBold.location,
-                    color: AppColors.success50,
-                    size: 16,
+              children: _filteredItems.map((batik) {
+                return Padding(
+                  padding: EdgeInsets.only(
+                    right: batik == _filteredItems.last ? 0 : Styles.mdSpacing,
                   ),
-                  onTap: () {},
-                  onFavorite: () {},
-                ),
-                const SizedBox(width: Styles.mdSpacing),
-                SiteCard(
-                  title: "Batik Mega Mendung",
-                  location: "Cirebon, West Java",
-                  imageUrl: "https://images.unsplash.com/photo-1565967511849-76a60a516170",
-                  locationIcon: Icon(
-                    IconsaxPlusBold.location,
-                    color: AppColors.success50,
-                    size: 16,
+                  child: SiteCard(
+                    title: batik["title"],
+                    location: batik["location"],
+                    imageUrl: batik["imageUrl"],
+                    onTap: () {},
+                    onFavorite: () {
+                      // Implement favorite toggle here
+                      setState(() {
+                        batik["isFavorite"] = !(batik["isFavorite"] as bool);
+                      });
+                    },
+                    isFavorite: batik["isFavorite"] as bool,
+                    kategori: batik["kategori"],
+                    locationIcon: Icon(
+                      IconsaxPlusBold.location,
+                      color: AppColors.success50,
+                      size: 16,
+                    ),
                   ),
-                  onTap: () {},
-                  onFavorite: () {},
-                ),
-              ],
+                );
+              }).toList(),
             ),
           ),
         ),

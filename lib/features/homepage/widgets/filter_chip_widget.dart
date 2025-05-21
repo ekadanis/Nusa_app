@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nusa_app/core/styles.dart';
 import '../../../../core/app_colors.dart';
 
 class FilterChipWidget extends StatelessWidget {
@@ -21,14 +22,14 @@ class FilterChipWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary10 : AppColors.grey10,
-          borderRadius: BorderRadius.circular(20),
+          color: isSelected ? AppColors.primary50 : AppColors.grey10,
+          borderRadius: BorderRadius.circular(Styles.lgRadius),
         ),
         child: Center(
           child: Text(
             label,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: isSelected ? AppColors.primary50 : AppColors.grey70,
+                  color: isSelected ? AppColors.primary10 : AppColors.grey70,
                 ),
             textAlign: TextAlign.center,
           ),

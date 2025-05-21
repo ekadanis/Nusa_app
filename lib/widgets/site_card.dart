@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../core/app_colors.dart';
 import '../core/styles.dart';
+import 'package:sizer/sizer.dart';
 
 class SiteCard extends StatelessWidget {
   final String title;
@@ -10,7 +12,7 @@ class SiteCard extends StatelessWidget {
   final Function()? onFavorite;
   final bool isFavorite;
   final Widget? locationIcon;
-  final String buttonText;
+  final String kategori;
 
   const SiteCard({
     Key? key,
@@ -21,7 +23,7 @@ class SiteCard extends StatelessWidget {
     this.onFavorite,
     this.isFavorite = false,
     this.locationIcon,
-    this.buttonText = "Kategori",
+    this.kategori = "Kategori",
   }) : super(key: key);
 
   @override
@@ -29,18 +31,19 @@ class SiteCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 160,
-        height: 220,
-        margin: const EdgeInsets.only(bottom: 4),
+        width: 45.w,
+        height:
+            25.h,
+        margin: EdgeInsets.only(bottom: 0.5.h),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(Styles.mdRadius),
           boxShadow: [
-           BoxShadow(
-            color: AppColors.grey20.withValues(alpha: 0.8),
-            blurRadius: 1,
-            offset: const Offset(0, 0),
-          ),
+            BoxShadow(
+              color: AppColors.grey20.withValues(alpha: 0.8),
+              blurRadius: 1,
+              offset: const Offset(0, 0),
+            ),
           ],
         ),
         child: Column(
@@ -55,8 +58,8 @@ class SiteCard extends StatelessWidget {
                   ),
                   child: Image.network(
                     imageUrl,
-                    width: 160,
-                    height: 100,
+                    width: 45.w,
+                    height: 13.h,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -83,7 +86,8 @@ class SiteCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(Styles.smPadding),
+              padding:
+                  EdgeInsets.all(1.5.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -95,14 +99,14 @@ class SiteCard extends StatelessWidget {
                   ),
                   const SizedBox(height: Styles.xxsSpacing),
                   Row(
-                    children: [
-                      locationIcon ??
-                          const Icon(
-                            Icons.location_on,
-                            size: 12,
-                            color: AppColors.grey50,
+                    children: [                      locationIcon ??
+                          Icon(
+                            IconsaxPlusBold.location,
+                            size: 1.5.h,
+                            color: AppColors.success50,
                           ),
-                      const SizedBox(width: 4),
+                      SizedBox(
+                          width: 1.w),
                       Expanded(
                         child: Text(
                           location,
@@ -116,22 +120,23 @@ class SiteCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: Styles.xsSpacing),
-                  ElevatedButton(
-                    onPressed: onTap,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary50,
-                      foregroundColor: AppColors.white,
-                      minimumSize: const Size(60, 28),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(Styles.lgRadius),
-                      ),
+                  SizedBox(height: 1.h),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 2.w,
+                      vertical: 0.5.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary10,
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      buttonText,
-                      style: const TextStyle(fontSize: 12),
+                      kategori,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: AppColors.primary50,
+                            fontSize:
+                                12.sp,
+                          ),
                     ),
                   ),
                 ],
