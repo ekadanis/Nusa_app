@@ -1,2 +1,0 @@
-C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/nusa_app/android/app/.cxx/Debug/6w612s56/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Users/rangg/OneDrive/Documents/collage/PDBL/hireka/nusa_app/android/app/.cxx/Debug/6w612s56/armeabi-v7a/CMakeFiles/rebuild_cache.dir

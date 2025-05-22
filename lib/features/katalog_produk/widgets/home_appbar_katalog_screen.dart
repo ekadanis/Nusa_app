@@ -16,30 +16,58 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(22.h);
-
   @override
   Widget build(BuildContext context) {
     final isCultureSite = categoryName?.toLowerCase() == "cultural sites";
     final bannerImage = isCultureSite
         ? 'assets/banner/banner_cultural_sites.jpg'
         : 'assets/banner/banner.png';
-        
+
     return SizedBox(
       height: 22.h,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
+          Positioned.fill(
+            bottom: 4.h,
+            child: Image.asset(
+              bannerImage,
+              fit: BoxFit.cover,
+              frameBuilder: (BuildContext context, Widget child, int? frame,
+                  bool wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded || frame != null) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  opacity: 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: child,
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                // Return fallback color when image fails to load
+                return Container(color: AppColors.primary50);
+              },
+            ),
+          ),
+          
+          // Overlay with blue tint
+          Container(
+            height: 20.h,
+            width: 100.w,
+            decoration: BoxDecoration(
+              color: AppColors.primary50.withOpacity(0.6),
+            ),
+          ),
+          
+          // Content container with padding (including back button)
           Container(
             height: 20.h,
             width: 100.w,
             padding: EdgeInsets.symmetric(
               horizontal: Styles.mdPadding,
               vertical: 2.h,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.primary50,
-            ),
-            child: Column(
+            ),            child: Column(
               children: [
                 Expanded(
                   child: Row(
@@ -76,32 +104,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 SizedBox(height: 3.h),
               ],
-            ),
-            foregroundDecoration: BoxDecoration(
-              color: AppColors.primary50.withOpacity(0.6),
-              backgroundBlendMode: BlendMode.multiply,
-            ),
-          ),
-          // Banner image positioned behind the container
-          Positioned.fill(
-            bottom: 4.h, // To account for the rounded white overlay
-            child: Image.asset(
-              bannerImage,
-              fit: BoxFit.cover,
-              frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
-                if (wasSynchronouslyLoaded || frame != null) {
-                  return child;
-                }
-                return AnimatedOpacity(
-                  opacity: 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  child: child,
-                );
-              },
-              errorBuilder: (context, error, stackTrace) {
-                // Return fallback color when image fails to load
-                return Container(color: AppColors.primary50);
-              },
             ),
           ),
           Positioned(

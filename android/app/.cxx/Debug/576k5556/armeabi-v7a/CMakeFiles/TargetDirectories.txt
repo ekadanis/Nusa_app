@@ -1,2 +1,0 @@
-C:/Flutter Project/hireka2/nusa_app/android/app/.cxx/Debug/576k5556/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Flutter Project/hireka2/nusa_app/android/app/.cxx/Debug/576k5556/armeabi-v7a/CMakeFiles/rebuild_cache.dir

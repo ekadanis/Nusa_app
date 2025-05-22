@@ -25,8 +25,7 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
   void initState() {
     super.initState();
     _initializeData();
-  }
-    void _initializeData() {
+  }    void _initializeData() {
     // Find the selected category from the categories list
     // Debug print to check what category name is being passed
     debugPrint('Searching for category: ${widget.categoryName}');
@@ -34,10 +33,12 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
     // List all available categories for debugging
     debugPrint('Available categories: ${_categories.map((c) => c["category"]).toList()}');
     
+    // Use null coalescing to set a default category if none is provided
+    String defaultCategory = "Cultural Sites";
     _selectedCategory = _categories.firstWhere(
       (category) {
         debugPrint('Checking against: ${category["category"]}');
-        return category["category"] == (widget.categoryName ?? "Cultural Sites");
+        return category["category"] == (widget.categoryName ?? defaultCategory);
       },
       orElse: () {
         debugPrint('No matching category found, using first category');
@@ -286,7 +287,7 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
               right: Styles.mdPadding,
               child: Material(
                 elevation: 10,
-                shadowColor: Colors.black.withOpacity(0.2), 
+                shadowColor: Colors.black.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(12),
                 child: SizedBox(
                   child: SearchWidget(

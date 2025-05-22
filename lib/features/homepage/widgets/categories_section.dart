@@ -3,7 +3,6 @@ import '../../../../core/styles.dart';
 import '../../../../core/app_colors.dart';
 import '../../../features/katalog_produk/views/katalog_produk.dart';
 import 'category_item.dart';
-// Add the import for page_transition package
 import 'package:page_transition/page_transition.dart';
 
 class CategoriesSection extends StatefulWidget {

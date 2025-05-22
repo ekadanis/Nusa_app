@@ -5,6 +5,7 @@ import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/features/katalog_produk/katalog_produk.dart';
 import '../features/pages.dart';
 import 'package:camera/camera.dart';
+import '../features/homepage/views/homepage_dynamic.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')

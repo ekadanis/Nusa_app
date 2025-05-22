@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -13,10 +14,7 @@ part of 'router.dart';
 /// [AccountPage]
 class AccountRoute extends PageRouteInfo<void> {
   const AccountRoute({List<PageRouteInfo>? children})
-      : super(
-          AccountRoute.name,
-          initialChildren: children,
-        );
+    : super(AccountRoute.name, initialChildren: children);
 
   static const String name = 'AccountRoute';
 
@@ -32,10 +30,7 @@ class AccountRoute extends PageRouteInfo<void> {
 /// [DashboardPage]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})
-      : super(
-          DashboardRoute.name,
-          initialChildren: children,
-        );
+    : super(DashboardRoute.name, initialChildren: children);
 
   static const String name = 'DashboardRoute';
 
@@ -51,10 +46,7 @@ class DashboardRoute extends PageRouteInfo<void> {
 /// [FeedsPage]
 class FeedsRoute extends PageRouteInfo<void> {
   const FeedsRoute({List<PageRouteInfo>? children})
-      : super(
-          FeedsRoute.name,
-          initialChildren: children,
-        );
+    : super(FeedsRoute.name, initialChildren: children);
 
   static const String name = 'FeedsRoute';
 
@@ -70,10 +62,7 @@ class FeedsRoute extends PageRouteInfo<void> {
 /// [HomePage]
 class HomeRoute extends PageRouteInfo<void> {
   const HomeRoute({List<PageRouteInfo>? children})
-      : super(
-          HomeRoute.name,
-          initialChildren: children,
-        );
+    : super(HomeRoute.name, initialChildren: children);
 
   static const String name = 'HomeRoute';
 
@@ -89,10 +78,7 @@ class HomeRoute extends PageRouteInfo<void> {
 /// [ImageAnalyzerPage]
 class ImageAnalyzerRoute extends PageRouteInfo<void> {
   const ImageAnalyzerRoute({List<PageRouteInfo>? children})
-      : super(
-          ImageAnalyzerRoute.name,
-          initialChildren: children,
-        );
+    : super(ImageAnalyzerRoute.name, initialChildren: children);
 
   static const String name = 'ImageAnalyzerRoute';
 
@@ -105,7 +91,6 @@ class ImageAnalyzerRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-<<<<<<< HEAD
 /// [ImageConfirmationPage]
 class ImageConfirmationRoute extends PageRouteInfo<ImageConfirmationRouteArgs> {
   ImageConfirmationRoute({
@@ -113,13 +98,10 @@ class ImageConfirmationRoute extends PageRouteInfo<ImageConfirmationRouteArgs> {
     required XFile pickedImage,
     List<PageRouteInfo>? children,
   }) : super(
-          ImageConfirmationRoute.name,
-          args: ImageConfirmationRouteArgs(
-            key: key,
-            pickedImage: pickedImage,
-          ),
-          initialChildren: children,
-        );
+         ImageConfirmationRoute.name,
+         args: ImageConfirmationRouteArgs(key: key, pickedImage: pickedImage),
+         initialChildren: children,
+       );
 
   static const String name = 'ImageConfirmationRoute';
 
@@ -136,10 +118,7 @@ class ImageConfirmationRoute extends PageRouteInfo<ImageConfirmationRouteArgs> {
 }
 
 class ImageConfirmationRouteArgs {
-  const ImageConfirmationRouteArgs({
-    this.key,
-    required this.pickedImage,
-  });
+  const ImageConfirmationRouteArgs({this.key, required this.pickedImage});
 
   final Key? key;
 
@@ -159,13 +138,10 @@ class ImageResultRoute extends PageRouteInfo<ImageResultRouteArgs> {
     required XFile image,
     List<PageRouteInfo>? children,
   }) : super(
-          ImageResultRoute.name,
-          args: ImageResultRouteArgs(
-            key: key,
-            image: image,
-          ),
-          initialChildren: children,
-        );
+         ImageResultRoute.name,
+         args: ImageResultRouteArgs(key: key, image: image),
+         initialChildren: children,
+       );
 
   static const String name = 'ImageResultRoute';
 
@@ -173,19 +149,13 @@ class ImageResultRoute extends PageRouteInfo<ImageResultRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ImageResultRouteArgs>();
-      return ImageResultPage(
-        key: args.key,
-        image: args.image,
-      );
+      return ImageResultPage(key: args.key, image: args.image);
     },
   );
 }
 
 class ImageResultRouteArgs {
-  const ImageResultRouteArgs({
-    this.key,
-    required this.image,
-  });
+  const ImageResultRouteArgs({this.key, required this.image});
 
   final Key? key;
 
@@ -198,12 +168,6 @@ class ImageResultRouteArgs {
 }
 
 /// generated route for
-/// [InfoCenterPage]
-class InfoCenterRoute extends PageRouteInfo<void> {
-  const InfoCenterRoute({List<PageRouteInfo>? children})
-      : super(
-          InfoCenterRoute.name,
-=======
 /// [KatalogProdukPage]
 class KatalogProdukRoute extends PageRouteInfo<KatalogProdukRouteArgs> {
   KatalogProdukRoute({
@@ -211,14 +175,10 @@ class KatalogProdukRoute extends PageRouteInfo<KatalogProdukRouteArgs> {
     String? categoryName,
     List<PageRouteInfo>? children,
   }) : super(
-          KatalogProdukRoute.name,
-          args: KatalogProdukRouteArgs(
-            key: key,
-            categoryName: categoryName,
-          ),
->>>>>>> homepage
-          initialChildren: children,
-        );
+         KatalogProdukRoute.name,
+         args: KatalogProdukRouteArgs(key: key, categoryName: categoryName),
+         initialChildren: children,
+       );
 
   static const String name = 'KatalogProdukRoute';
 
@@ -226,20 +186,15 @@ class KatalogProdukRoute extends PageRouteInfo<KatalogProdukRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<KatalogProdukRouteArgs>(
-          orElse: () => const KatalogProdukRouteArgs());
-      return KatalogProdukPage(
-        key: args.key,
-        categoryName: args.categoryName,
+        orElse: () => const KatalogProdukRouteArgs(),
       );
+      return KatalogProdukPage(key: args.key, categoryName: args.categoryName);
     },
   );
 }
 
 class KatalogProdukRouteArgs {
-  const KatalogProdukRouteArgs({
-    this.key,
-    this.categoryName,
-  });
+  const KatalogProdukRouteArgs({this.key, this.categoryName});
 
   final Key? key;
 
@@ -255,10 +210,7 @@ class KatalogProdukRouteArgs {
 /// [NusaBotPage]
 class NusaBotRoute extends PageRouteInfo<void> {
   const NusaBotRoute({List<PageRouteInfo>? children})
-      : super(
-          NusaBotRoute.name,
-          initialChildren: children,
-        );
+    : super(NusaBotRoute.name, initialChildren: children);
 
   static const String name = 'NusaBotRoute';
 
@@ -274,10 +226,7 @@ class NusaBotRoute extends PageRouteInfo<void> {
 /// [OnboardingPage]
 class OnboardingRoute extends PageRouteInfo<void> {
   const OnboardingRoute({List<PageRouteInfo>? children})
-      : super(
-          OnboardingRoute.name,
-          initialChildren: children,
-        );
+    : super(OnboardingRoute.name, initialChildren: children);
 
   static const String name = 'OnboardingRoute';
 
@@ -293,10 +242,7 @@ class OnboardingRoute extends PageRouteInfo<void> {
 /// [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
-      : super(
-          SplashRoute.name,
-          initialChildren: children,
-        );
+    : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
