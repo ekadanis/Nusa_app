@@ -5,6 +5,7 @@ class AppColors {
   static const black = Color(0xFF000000);
   static const background = Color(0xFFFAFAFA);
 
+  static const nusa90 = Color(0xFF007dfc);
   static const primary90 = Color(0xFF070d18);
   static const primary80 = Color(0xFF1a3660);
   static const primary70 = Color(0xFF28508f);
@@ -24,9 +25,13 @@ class AppColors {
   static const grey80 = Color(0xFF262728);
   static const grey70 = Color(0xFF393B3D);
   static const grey60 = Color(0xFF4C4E51);
+  static const grey500 = Color(0xFF777676);
   static const grey50 = Color(0xFF5F6265);
+  static const grey400 = Color(0xFF59606E);
   static const grey40 = Color(0xFF7F8184);
+  static const grey300 = Color(0xFF6D6D6D);
   static const grey30 = Color(0xFF9FA1A3);
+  static const grey200 = Color(0xFFE0E0E0);
   static const grey20 = Color(0xFFBFC0C1);
   static const grey10 = Color(0xFFDFE0E0);
 
@@ -80,7 +85,6 @@ class AppColors {
   static const purple20 = Color(0xFFd0b9ff);
   static const purple10 = Color(0xFFf3edff);
 
-  static const boxShadow = Color(0x3F000000);
   static Color lighten(Color c, [int percent = 10]) {
     assert(1 <= percent && percent <= 100);
     final p = percent / 100;

@@ -30,7 +30,7 @@ class _SplashPageState extends State<SplashPage> {
     if (isFirstTime) {
       context.router.replace(const OnboardingRoute());
     } else {
-      context.router.replace(const DashboardRoute());
+      context.router.replace(const LoginRoute());
     }
   }
 

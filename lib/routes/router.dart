@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:nusa_app/features/auth/views/login_page.dart';
+import 'package:nusa_app/features/feeds/views/forum_detail_page.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/features/katalog_produk/katalog_produk.dart';
@@ -29,6 +31,16 @@ class AppRouter extends RootStackRouter {
         CustomRoute<void>(
           page: KatalogProdukRoute.page,
           path: '/katalog-produk',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: LoginRoute.page,
+          path: '/login',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: ForumDetailRoute.page,
+          path: '/forum-detail',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(
