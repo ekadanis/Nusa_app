@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/core/app_colors.dart';
 import 'package:nusa_app/core/styles.dart';
 import 'package:nusa_app/l10n/l10n.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:nusa_app/routes/router.dart';
+import 'package:intl/intl.dart';
 
 @RoutePage()
 class FeedsPage extends StatefulWidget {
@@ -19,6 +21,9 @@ class _FeedsPageState extends State<FeedsPage>
   late TabController _tabController;
   int _currentIndex = 0;
   final TextEditingController _postController = TextEditingController();
+
+  final CollectionReference myFeeds =
+      FirebaseFirestore.instance.collection('feeds');
 
   @override
   void initState() {
@@ -157,9 +162,141 @@ class _FeedsPageState extends State<FeedsPage>
   }
 
   Widget _buildForumContent() {
-    return ListView.builder(
-      itemCount: 3,
-      itemBuilder: (context, index) => _buildForumPost(index),
+    return StreamBuilder(
+      stream: myFeeds.snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapShot) {
+        if (streamSnapShot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (streamSnapShot.hasError) {
+          print('Firestore Error: ${streamSnapShot.error}');
+          return Center(
+            child: Text(
+              'Error: ${streamSnapShot.error}',
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
+
+        final docs = streamSnapShot.data?.docs ?? [];
+
+        if (docs.isEmpty) {
+          return const Center(child: Text('No posts found.'));
+        }
+
+        return ListView.builder(
+          itemCount: docs.length,
+          itemBuilder: (context, index) {
+            final doc = docs[index];
+            final data = doc.data() as Map<String, dynamic>;
+            final content = data['content'] ?? '';
+            final timestamp = data['date'] as Timestamp?;
+            final like = data['like'] ?? 0;
+
+            // Format tanggal
+            final dateStr = timestamp != null
+                ? DateFormat('EEEE, d MMMM yyyy', 'id_ID')
+                    .format(timestamp.toDate())
+                : 'Unknown date';
+
+            return InkWell(
+              onTap: () => context.router.push(const ForumDetailRoute()),
+              child: Card(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header: Avatar & Author & Date
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.grey[400],
+                                child: const Text('S',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                              const SizedBox(width: 6),
+                              const Text(
+                                'Saif Desur',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            dateStr,
+                            style: TextStyle(
+                              color: AppColors.grey300,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Content
+                      Text(
+                        content,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Likes & Comments Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.favorite_border,
+                                  color: AppColors.primary50, size: 20),
+                              const SizedBox(width: 4),
+                              Text('$like',
+                                  style: const TextStyle(fontSize: 13)),
+                              const SizedBox(width: 16),
+                              const Icon(Icons.comment_outlined,
+                                  color: AppColors.primary50, size: 20),
+                              const SizedBox(width: 4),
+                              const Text('300',
+                                  style:
+                                      TextStyle(fontSize: 13)), // placeholder
+                            ],
+                          ),
+                          Row(
+                            children: const [
+                              Text(
+                                'Lihat Selengkapnya',
+                                style:
+                                    TextStyle(color: Colors.blue, fontSize: 13),
+                              ),
+                              SizedBox(width: 4),
+                              Icon(Icons.chevron_right,
+                                  color: Colors.blue, size: 18),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -206,99 +343,6 @@ class _FeedsPageState extends State<FeedsPage>
             _buildCategoryChip("Food & Recipes"),
             _buildCategoryChip("Traditional Wear"),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildForumPost(int index) {
-    return InkWell(
-      onTap: () => context.router.push(const ForumDetailRoute()),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.grey[400],
-                        child: const Text('S',
-                            style: TextStyle(color: Colors.white)),
-                      ),
-                      SizedBox(
-                        width: 6,
-                      ),
-                      const Text(
-                        'Saif Desur',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Senin, ${20 + index} Maret 2024',
-                        style: TextStyle(
-                          color: AppColors.grey300,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'Batik is a traditional fabric known for its detailed patterns and handmade dyeing process. Each design tells a unique cultural story.',
-                style: TextStyle(fontSize: 14),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.favorite_border,
-                          color: AppColors.primary50, size: 20),
-                      const SizedBox(width: 4),
-                      const Text('12rb', style: TextStyle(fontSize: 13)),
-                      const SizedBox(width: 16),
-                      Icon(Icons.comment_outlined,
-                          color: AppColors.primary50, size: 20),
-                      const SizedBox(width: 4),
-                      const Text('300', style: TextStyle(fontSize: 13)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Lihat Selengkapnya',
-                        style: TextStyle(color: Colors.blue, fontSize: 13),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right,
-                          color: Colors.blue, size: 18),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );

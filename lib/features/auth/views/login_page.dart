@@ -37,7 +37,9 @@ class LoginPage extends StatelessWidget {
               child: _socialLoginButton(
                 context: context,
                 onPressed: () {
+                  print('yo');
                   context.router.push(DashboardRoute());
+                  print('ya');
                 },
                 text: "Sign In Using Google Account",
                 icon: Image.asset(
