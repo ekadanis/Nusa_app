@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:nusa_app/features/community/views/community_page.dart';
+import 'package:nusa_app/features/feeds/views/forum_detail_page.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import '../features/pages.dart';
 
@@ -60,6 +61,11 @@ class AppRouter extends RootStackRouter {
                 path: '-account',
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
-            ])
+            ]),
+        CustomRoute<void>(
+          page: ForumDetailRoute.page,
+          path: '/forum-detail',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
       ];
 }

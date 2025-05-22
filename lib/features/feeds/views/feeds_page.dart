@@ -45,20 +45,13 @@ class _FeedsPageState extends State<FeedsPage>
       body: SafeArea(
         child: Column(
           children: [
-            // Blue Header - stays consistent across tabs
             _buildHeader(),
-
-            // Tab Bar - also stays consistent
             _buildTabBar(),
-
-            // Tab Content - changes based on selected tab
             Expanded(
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  // Forum Tab
                   _buildForumContent(),
-                  // Article Tab
                   _buildArticleContent(),
                 ],
               ),
@@ -67,10 +60,24 @@ class _FeedsPageState extends State<FeedsPage>
         ),
       ),
       floatingActionButton: _currentIndex == 0
-          ? FloatingActionButton(
-              onPressed: () => _showCreatePostDialog(context),
-              backgroundColor: Colors.blue,
-              child: const Icon(Icons.add, color: Colors.white),
+          ? Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.4),
+                    spreadRadius: 4,
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: FloatingActionButton(
+                onPressed: () => _showCreatePostDialog(context),
+                backgroundColor: AppColors.primary50,
+                shape: const CircleBorder(),
+                child: const Icon(Icons.add, color: Colors.white),
+              ),
             )
           : null,
     );
@@ -82,7 +89,6 @@ class _FeedsPageState extends State<FeedsPage>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         children: [
-          // Back button and title
           Row(
             children: [
               Container(
@@ -107,8 +113,6 @@ class _FeedsPageState extends State<FeedsPage>
               ),
             ],
           ),
-
-          // Search bar (only show in forum tab)
           if (_currentIndex == 0)
             Padding(
               padding: const EdgeInsets.only(top: 16),
@@ -162,13 +166,8 @@ class _FeedsPageState extends State<FeedsPage>
   Widget _buildArticleContent() {
     return Column(
       children: [
-        // Featured Cards
         _buildFeaturedCardsSection(),
-
-        // Category chips
         _buildCategoryChipsSection(),
-
-        // Article Content
         Expanded(
           child: ListView.builder(
             itemCount: 4,
@@ -214,9 +213,9 @@ class _FeedsPageState extends State<FeedsPage>
 
   Widget _buildForumPost(int index) {
     return InkWell(
-      onTap: () => _showForumDetailPage(context),
+      onTap: () => context.router.push(const ForumDetailRoute()),
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         elevation: 1,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -226,18 +225,19 @@ class _FeedsPageState extends State<FeedsPage>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // User info
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.grey[400],
-                    child:
-                        const Text('S', style: TextStyle(color: Colors.white)),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey[400],
+                        child: const Text('S',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      SizedBox(
+                        width: 6,
+                      ),
                       const Text(
                         'Saif Desur',
                         style: TextStyle(
@@ -245,10 +245,16 @@ class _FeedsPageState extends State<FeedsPage>
                           fontSize: 16,
                         ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
                         'Senin, ${20 + index} Maret 2024',
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: AppColors.grey300,
                           fontSize: 13,
                         ),
                       ),
@@ -256,38 +262,28 @@ class _FeedsPageState extends State<FeedsPage>
                   ),
                 ],
               ),
-
               const SizedBox(height: 12),
-
-              // Post content
               const Text(
                 'Batik is a traditional fabric known for its detailed patterns and handmade dyeing process. Each design tells a unique cultural story.',
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 14),
               ),
-
               const SizedBox(height: 12),
-
-              // Interaction buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Like & Comment
                   Row(
                     children: [
                       const Icon(Icons.favorite_border,
-                          color: Colors.blue, size: 20),
+                          color: AppColors.primary50, size: 20),
                       const SizedBox(width: 4),
                       const Text('12rb', style: TextStyle(fontSize: 13)),
                       const SizedBox(width: 16),
-                      // Comment icon & count
                       Icon(Icons.comment_outlined,
-                          color: Colors.amber[600], size: 20),
+                          color: AppColors.primary50, size: 20),
                       const SizedBox(width: 4),
                       const Text('300', style: TextStyle(fontSize: 13)),
                     ],
                   ),
-
-                  // See more
                   Row(
                     children: [
                       const Text(
@@ -331,11 +327,9 @@ class _FeedsPageState extends State<FeedsPage>
             right: 10,
             child: Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Colors.white,
+                  ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
@@ -366,15 +360,12 @@ class _FeedsPageState extends State<FeedsPage>
 
   Widget _buildArticleItem() {
     return InkWell(
-      onTap: () {
-        // Navigate to article detail
-      },
+      onTap: () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Thumbnail
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Container(
@@ -384,13 +375,10 @@ class _FeedsPageState extends State<FeedsPage>
               ),
             ),
             const SizedBox(width: 12),
-
-            // Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Category tag
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -404,8 +392,6 @@ class _FeedsPageState extends State<FeedsPage>
                     ),
                   ),
                   const SizedBox(height: 6),
-
-                  // Title
                   const Text(
                     'Tahu Tek: A Flavorful Fusion of Tofu, Peanut Sauce, and Crunch',
                     style: TextStyle(
@@ -414,8 +400,6 @@ class _FeedsPageState extends State<FeedsPage>
                     ),
                   ),
                   const SizedBox(height: 4),
-
-                  // Date
                   Text(
                     'Selasa, 20 Maret 2024',
                     style: TextStyle(
@@ -432,12 +416,14 @@ class _FeedsPageState extends State<FeedsPage>
     );
   }
 
-  // Show create post dialog
   void _showCreatePostDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -450,10 +436,11 @@ class _FeedsPageState extends State<FeedsPage>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Share your message to the forum!',
-                      style: TextStyle(
-                        fontSize: 14,
+                    Expanded(
+                      child: Text(
+                        'Share your message to the forum!',
+                        style: Theme.of(context).textTheme.titleLarge,
+                        overflow: TextOverflow.fade,
                       ),
                     ),
                     IconButton(
@@ -469,16 +456,22 @@ class _FeedsPageState extends State<FeedsPage>
                 Container(
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.grey200, width: 1.5),
                   ),
                   child: TextField(
                     controller: _postController,
                     maxLines: 5,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Write your message here...',
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(12),
+                      hintStyle:
+                          Theme.of(context).textTheme.labelLarge?.copyWith(
+                                fontSize: 13,
+                                color: AppColors.grey500,
+                              ),
                     ),
                   ),
                 ),
@@ -487,18 +480,24 @@ class _FeedsPageState extends State<FeedsPage>
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: AppColors.primary50,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: () {
-                      // Post the message
                       Navigator.of(context).pop();
                       _postController.clear();
                     },
-                    child: const Text('Share'),
+                    child: Text(
+                      'Share',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                    ),
                   ),
                 ),
               ],
@@ -507,343 +506,5 @@ class _FeedsPageState extends State<FeedsPage>
         );
       },
     );
-  }
-
-  // Show forum detail page with comments
-  void _showForumDetailPage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ForumDetailPage(),
-      ),
-    );
-  }
-}
-
-// Forum Detail Page
-class ForumDetailPage extends StatefulWidget {
-  const ForumDetailPage({super.key});
-
-  @override
-  State<ForumDetailPage> createState() => _ForumDetailPageState();
-}
-
-class _ForumDetailPageState extends State<ForumDetailPage> {
-  final TextEditingController _commentController = TextEditingController();
-
-  @override
-  void dispose() {
-    _commentController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: _buildAppBar(),
-      body: Column(
-        children: [
-          // Post content
-          _buildPostContent(),
-
-          // Divider and Comments label
-          const Divider(),
-          _buildCommentsHeader(),
-
-          // Comments section
-          Expanded(
-            child: _buildCommentsList(),
-          ),
-
-          // Comment input field
-          _buildCommentInput(),
-        ],
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      leading: IconButton(
-        icon: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.arrow_back, size: 16),
-        ),
-        onPressed: () => Navigator.of(context).pop(),
-      ),
-      title: Row(
-        children: [
-          const Text(
-            'Saif Desur',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: Colors.blue[100],
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Icon(
-              Icons.verified,
-              size: 16,
-              color: Colors.blue,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPostContent() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Batik is a traditional fabric known for its detailed patterns and handmade dyeing process. Each design tells a unique cultural story.',
-            style: TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.favorite_border,
-                      color: Colors.blue, size: 18),
-                  const SizedBox(width: 4),
-                  const Text('12rb', style: TextStyle(fontSize: 13)),
-                ],
-              ),
-              const SizedBox(width: 16),
-              Row(
-                children: [
-                  Icon(Icons.comment_outlined,
-                      color: Colors.amber[600], size: 18),
-                  const SizedBox(width: 4),
-                  const Text('300', style: TextStyle(fontSize: 13)),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCommentsHeader() {
-    return const Padding(
-      padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          'Komentar',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCommentsList() {
-    final comments = [
-      {
-        'name': 'Andi Pratama',
-        'text':
-            'Batik is a traditional fabric known for its detailed designs and unique hand-dyeing process. Each pattern has its own cultural story behind it.',
-        'time': '1 jam yang lalu',
-      },
-      {
-        'name': 'Ricky Hidayat',
-        'text':
-            'Making batik involves applying hot wax to fabric and then dyeing it in natural dye. It\'s a labor intensive process to get all these intricate designs.',
-        'time': '2 jam yang lalu',
-      },
-      {
-        'name': 'Hikista Uzumaki',
-        'text':
-            'Batik is such an important part of our heritage, often tied to various animals, or even historical events. So it\'s more than just clothing - it\'s a way to tell a story.',
-        'time': '3 jam yang lalu',
-      },
-      {
-        'name': 'Bayu Ramadhan',
-        'text':
-            'Batik is a major part of Indonesian culture and was even recognized by UNESCO as an intangible cultural heritage. Different regions have their own styles like Pekalongan or Yogyakarta.',
-        'time': '3 jam yang lalu',
-      },
-      {
-        'name': 'Sakura Hando',
-        'text':
-            'Batik fabric is usually made from cotton or silk, making it comfy to wear. Silk batik is often used for fancy occasions, while cotton is great for everyday use.',
-        'time': '3 jam yang lalu',
-      },
-      {
-        'name': 'Mikaza Jaeger',
-        'text':
-            'Nowadays, batik is getting a modern twist, and people from all over the world are wearing it. It\'s cool to see how it\'s evolving!',
-        'time': '3 jam yang lalu',
-      },
-    ];
-
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: comments.length,
-      itemBuilder: (context, index) => _buildComment(
-        comments[index]['name']!,
-        comments[index]['text']!,
-        comments[index]['time']!,
-      ),
-    );
-  }
-
-  Widget _buildCommentInput() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, -1),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            radius: 16,
-            backgroundColor: Colors.purple,
-            child: Text('T', style: TextStyle(color: Colors.white)),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: TextField(
-                controller: _commentController,
-                decoration: const InputDecoration(
-                  hintText: 'Type your message here...',
-                  hintStyle: TextStyle(fontSize: 14),
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Container(
-            height: 36,
-            width: 36,
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: const Icon(
-              Icons.send,
-              color: Colors.white,
-              size: 18,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildComment(String name, String text, String time) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildCommentAvatar(name),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      time,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  text,
-                  style: const TextStyle(fontSize: 14),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCommentAvatar(String name) {
-    // Assign avatar color based on first letter of name
-    final Color avatarColor = _getAvatarColor(name);
-
-    return CircleAvatar(
-      radius: 16,
-      backgroundColor: avatarColor,
-      child: Text(
-        name[0],
-        style: const TextStyle(color: Colors.white, fontSize: 14),
-      ),
-    );
-  }
-
-  Color _getAvatarColor(String name) {
-    final firstLetter = name[0].toUpperCase();
-
-    switch (firstLetter) {
-      case 'A':
-        return Colors.black;
-      case 'R':
-        return Colors.black;
-      case 'H':
-        return Colors.green;
-      case 'B':
-        return Colors.brown;
-      case 'S':
-        return Colors.orange;
-      case 'M':
-        return Colors.blue;
-      default:
-        return Colors.purple;
-    }
   }
 }

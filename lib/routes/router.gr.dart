@@ -86,6 +86,25 @@ class FeedsRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ForumDetailPage]
+class ForumDetailRoute extends PageRouteInfo<void> {
+  const ForumDetailRoute({List<PageRouteInfo>? children})
+      : super(
+          ForumDetailRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ForumDetailRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ForumDetailPage();
+    },
+  );
+}
+
+/// generated route for
 /// [ImageAnalyzerPage]
 class ImageAnalyzerRoute extends PageRouteInfo<void> {
   const ImageAnalyzerRoute({List<PageRouteInfo>? children})

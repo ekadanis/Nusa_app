@@ -24,9 +24,9 @@ class LoginPage extends StatelessWidget {
             ),
             Text(
               "Let's Get You Started With Nusa",
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.grey400,
-                    fontWeight: FontWeight.w100,
+                    fontWeight: FontWeight.w500,
                   ),
             ),
             SizedBox(
@@ -42,7 +42,7 @@ class LoginPage extends StatelessWidget {
                 text: "Sign In Using Google Account",
                 icon: Image.asset(
                   // 'assets/icons/google.svg',
-                  'assets/core/logo.png',
+                  'assets/icons/google.png',
                   height: 40,
                   width: 40,
                 ),
