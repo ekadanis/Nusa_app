@@ -7,6 +7,7 @@ import '../../../widgets/site_card.dart';
 import '../../../routes/router.dart';
 import 'section_header.dart';
 import 'filter_chip_widget.dart';
+import 'package:sizer/sizer.dart';
 
 class GenericSection extends StatefulWidget {
   final String title;
@@ -36,6 +37,16 @@ class _GenericSectionState extends State<GenericSection> {
     _filteredItems = List.from(widget.items);
   }
 
+  @override
+  void didUpdateWidget(GenericSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update filtered items when widget items change (e.g., from Firebase)
+    if (oldWidget.items != widget.items) {
+      _filteredItems = List.from(widget.items);
+      _filterItems(_selectedFilter); // Re-apply current filter
+    }
+  }
+
   void _filterItems(String filter) {
     setState(() {
       _selectedFilter = filter;
@@ -44,15 +55,33 @@ class _GenericSectionState extends State<GenericSection> {
       _filteredItems = List.from(widget.items);
       
       if (filter == "Most Like") {
-        _filteredItems.sort((a, b) => (b["likes"] ?? 0).compareTo(a["likes"] ?? 0));
+        _filteredItems.sort((a, b) {
+          int likesA = (a["likes"] ?? 0) is int ? a["likes"] : int.tryParse(a["likes"].toString()) ?? 0;
+          int likesB = (b["likes"] ?? 0) is int ? b["likes"] : int.tryParse(b["likes"].toString()) ?? 0;
+          return likesB.compareTo(likesA);
+        });
       } else if (filter == "Recommended") {
-        _filteredItems.sort((a, b) => (b["recommendation"] ?? 0).compareTo(a["recommendation"] ?? 0));
+        _filteredItems.sort((a, b) {
+          double recA = (a["recommendation"] ?? 0.0) is double 
+              ? a["recommendation"] 
+              : double.tryParse(a["recommendation"].toString()) ?? 0.0;
+          double recB = (b["recommendation"] ?? 0.0) is double 
+              ? b["recommendation"] 
+              : double.tryParse(b["recommendation"].toString()) ?? 0.0;
+          return recB.compareTo(recA);
+        });
       }
+      // "Discover" filter keeps original order
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Don't show section if no items
+    if (widget.items.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,6 +94,8 @@ class _GenericSectionState extends State<GenericSection> {
           },
         ),
         const SizedBox(height: Styles.xsSpacing),
+        
+        // Filter chips
         SizedBox(
           height: 40,
           child: ListView(
@@ -99,40 +130,87 @@ class _GenericSectionState extends State<GenericSection> {
           ),
         ),
         const SizedBox(height: Styles.smSpacing),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
-          child: IntrinsicHeight(
-            child: Row(
-              children: _filteredItems.map((item) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                    right: item == _filteredItems.last ? 0 : Styles.mdSpacing,
+        
+        // Items list
+        if (_filteredItems.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 3.h, horizontal: 4.w),
+              decoration: BoxDecoration(
+                color: AppColors.grey10.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.grey30.withOpacity(0.3),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    IconsaxPlusLinear.document,
+                    color: AppColors.grey50,
+                    size: 48,
                   ),
-                  child: SiteCard(
-                    title: item["title"],
-                    location: item["location"],
-                    imageUrl: item["imageUrl"],
-                    onTap: () {},
-                    onFavorite: () {
-                      // Implement favorite toggle here
-                      setState(() {
-                        item["isFavorite"] = !(item["isFavorite"] as bool);
-                      });
-                    },
-                    isFavorite: item["isFavorite"] as bool,
-                    kategori: item["kategori"],
-                    locationIcon: widget.locationIcon ?? Icon(
-                      IconsaxPlusBold.location,
-                      color: AppColors.success50,
-                      size: 16,
+                  SizedBox(height: 1.h),
+                  Text(
+                    'No ${widget.title.toLowerCase()} available',
+                    style: TextStyle(
+                      color: AppColors.grey50,
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                );
-              }).toList(),
+                  SizedBox(height: 0.5.h),
+                  Text(
+                    'Check back later for new content',
+                    style: TextStyle(
+                      color: AppColors.grey40,
+                      fontSize: 10.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
+            child: IntrinsicHeight(
+              child: Row(
+                children: _filteredItems.map((item) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: item == _filteredItems.last ? 0 : Styles.mdSpacing,
+                    ),
+                    child: SiteCard(
+                      title: item["title"] ?? "Unknown Title",
+                      location: item["location"] ?? "Unknown Location",
+                      imageUrl: item["imageUrl"] ?? "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+                      onTap: () {
+                        // Handle item tap - could navigate to detail page
+                        debugPrint('Tapped on: ${item["title"]}');
+                      },
+                      onFavorite: () {
+                        // Implement favorite toggle here
+                        setState(() {
+                          item["isFavorite"] = !(item["isFavorite"] as bool? ?? false);
+                        });
+                        debugPrint('Favorite toggled for: ${item["title"]}');
+                      },
+                      isFavorite: item["isFavorite"] as bool? ?? false,
+                      kategori: item["kategori"] ?? item["category"] ?? "General",
+                      locationIcon: widget.locationIcon ?? Icon(
+                        IconsaxPlusBold.location,
+                        color: AppColors.success50,
+                        size: 16,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
             ),
           ),
-        ),
         const SizedBox(height: 16),
       ],
     );

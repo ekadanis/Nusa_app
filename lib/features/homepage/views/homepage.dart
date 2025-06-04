@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:sizer/sizer.dart';
@@ -21,9 +22,114 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
+  final CollectionReference categoriesCollection =
+      FirebaseFirestore.instance.collection('categories');
+  final CollectionReference destinationsCollection =
+      FirebaseFirestore.instance.collection('destinations');
 
-  // List of all categories to be displayed
-  final List<Map<String, String>> _categories = [
+  // Loading state and Firebase data
+  bool _isLoading = true;
+  List<Map<String, dynamic>> _categoriesData = [];
+  Map<String, List<Map<String, dynamic>>> _destinationsByCategory = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchFirebaseData();
+  }
+
+  // Fetch data from Firebase
+  Future<void> _fetchFirebaseData() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      // Fetch categories first
+      QuerySnapshot categoriesSnapshot = await categoriesCollection.get();
+
+      List<Map<String, dynamic>> fetchedCategories = [];
+
+      for (var doc in categoriesSnapshot.docs) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        fetchedCategories.add({
+          'id': doc.id,
+          'categoryName': data['categoryName'] ?? '',
+          'title': data['title'] ?? data['categoryName'] ?? '',
+          ...data,
+        });
+      }
+
+      // Fetch destinations for each category
+      Map<String, List<Map<String, dynamic>>> destinationsByCategory = {};
+
+      for (var category in fetchedCategories) {
+        String categoryId = category['id'];
+
+        // Query destinations where categoryId matches
+        QuerySnapshot destinationsSnapshot = await destinationsCollection
+            .where('categoryId', isEqualTo: categoryId)
+            .get();
+
+        List<Map<String, dynamic>> destinations = [];
+
+        for (var destDoc in destinationsSnapshot.docs) {
+          Map<String, dynamic> destData =
+              destDoc.data() as Map<String, dynamic>;
+          destinations.add({
+            'id': destDoc.id,
+            'title': destData['title'] ?? 'Unknown',
+            'location': destData['location'] ?? 'Unknown Location',
+            'imageUrl': destData['imageUrl'] ??
+                'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+            'isFavorite': destData['isFavorite'] ?? false,
+            'category': destData['category'] ?? category['title'],
+            'categoryId': categoryId,
+            'likes': destData['likes'] ?? 0,
+            'recommendation': destData['recommendation'] ?? 0.0,
+            'kategori':
+                destData['kategori'] ?? destData['category'] ?? 'General',
+            ...destData,
+          });
+        }
+
+        destinationsByCategory[category['categoryName']] = destinations;
+      }
+
+      setState(() {
+        _categoriesData = fetchedCategories;
+        _destinationsByCategory = destinationsByCategory;
+        _isLoading = false;
+      });
+
+      // Debug print to see what we got from Firebase
+      print(
+          '🔥 Firebase Categories Fetched: ${_categoriesData.length} categories');
+      for (var category in _categoriesData) {
+        String categoryName = category['categoryName'];
+        int destinationCount =
+            _destinationsByCategory[categoryName]?.length ?? 0;
+        print('- ${category['title']}: $destinationCount destinations');
+      }
+    } catch (e) {
+      print('❌ Error fetching Firebase data: $e');
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error loading data: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  // Default categories structure (fallback)
+  final List<Map<String, String>> _defaultCategories = [
     {"title": "Cultural Sites", "categoryName": "Cultural Sites"},
     {"title": "Arts & Culture", "categoryName": "Arts & Culture"},
     {"title": "Folk Instruments", "categoryName": "Folk Instruments"},
@@ -32,15 +138,41 @@ class _HomePageState extends State<HomePage> {
     {"title": "Local Foods", "categoryName": "Local Foods"},
   ];
 
-  // Sample data function - will be replaced with API call later
+  // Get categories - Firebase data or default
+  List<Map<String, String>> _getCategories() {
+    if (_categoriesData.isNotEmpty) {
+      return _categoriesData.map((category) {
+        return {
+          "title":
+              (category['title'] ?? category['categoryName'] ?? '').toString(),
+          "categoryName": (category['categoryName'] ?? '').toString(),
+        };
+      }).toList();
+    }
+    return _defaultCategories;
+  }
+
+  // Get data for each section - Firebase data or sample data
+  List<Map<String, dynamic>> _getDataForSection(String categoryName) {
+    // First try to get from Firebase destinations
+    if (_destinationsByCategory.containsKey(categoryName) &&
+        _destinationsByCategory[categoryName]!.isNotEmpty) {
+      return _destinationsByCategory[categoryName]!;
+    }
+
+    // Fallback to sample data
+    return _getSampleData(categoryName);
+  }
+
+  // Sample data function - fallback when Firebase data is not available
   List<Map<String, dynamic>> _getSampleData(String category) {
-    // This will be replaced with API calls in the future
     if (category == "Cultural Sites") {
       return [
         {
           "title": "Candi Borobudur",
           "location": "Magelang, Central Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 200,
           "recommendation": 9.5,
@@ -49,7 +181,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Keraton Yogyakarta",
           "location": "Yogyakarta, DIY",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": true,
           "likes": 160,
           "recommendation": 8.3,
@@ -58,7 +191,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Candi Prambanan",
           "location": "Yogyakarta, DIY",
-          "imageUrl": "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272",
           "isFavorite": false,
           "likes": 180,
           "recommendation": 9.0,
@@ -70,7 +204,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Batik Parang",
           "location": "Solo, Central Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 120,
           "recommendation": 8.5,
@@ -79,7 +214,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Batik Mega Mendung",
           "location": "Cirebon, West Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": true,
           "likes": 185,
           "recommendation": 7.8,
@@ -88,7 +224,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Songket Palembang",
           "location": "Palembang, South Sumatra",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 90,
           "recommendation": 9.2,
@@ -100,7 +237,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Angklung",
           "location": "Bandung, West Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 150,
           "recommendation": 8.7,
@@ -109,7 +247,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Gamelan",
           "location": "Yogyakarta, DIY",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": true,
           "likes": 230,
           "recommendation": 9.4,
@@ -118,7 +257,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Sasando",
           "location": "NTT",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 80,
           "recommendation": 7.5,
@@ -130,7 +270,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Kebaya",
           "location": "Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 170,
           "recommendation": 8.9,
@@ -139,7 +280,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Beskap",
           "location": "Central Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": true,
           "likes": 110,
           "recommendation": 7.6,
@@ -148,7 +290,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Baju Bodo",
           "location": "South Sulawesi",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 95,
           "recommendation": 8.1,
@@ -160,7 +303,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Wayang Kulit Jawa",
           "location": "Solo, Central Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 130,
           "recommendation": 8.3,
@@ -169,7 +313,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Ukiran Jepara",
           "location": "Jepara, Central Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": true,
           "likes": 145,
           "recommendation": 8.7,
@@ -178,7 +323,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Keris Surakarta",
           "location": "Solo, Central Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 115,
           "recommendation": 9.0,
@@ -190,7 +336,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Rendang",
           "location": "West Sumatra",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 220,
           "recommendation": 9.7,
@@ -199,7 +346,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Nasi Gudeg",
           "location": "Yogyakarta",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": true,
           "likes": 175,
           "recommendation": 8.5,
@@ -208,7 +356,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Klepon",
           "location": "Java",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 125,
           "recommendation": 7.8,
@@ -221,7 +370,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Sample Item 1 for $category",
           "location": "Sample Location 1",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 120,
           "recommendation": 8.5,
@@ -230,7 +380,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Sample Item 2 for $category",
           "location": "Sample Location 2",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": true,
           "likes": 185,
           "recommendation": 7.8,
@@ -239,7 +390,8 @@ class _HomePageState extends State<HomePage> {
         {
           "title": "Sample Item 3 for $category",
           "location": "Sample Location 3",
-          "imageUrl": "https://images.unsplash.com/photo-1565967511849-76a60a516170",
+          "imageUrl":
+              "https://images.unsplash.com/photo-1565967511849-76a60a516170",
           "isFavorite": false,
           "likes": 90,
           "recommendation": 9.2,
@@ -257,6 +409,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final categories = _getCategories();
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(22.h),
@@ -292,36 +446,120 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             SizedBox(height: Styles.lgSpacing),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: 24),
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  SizedBox(height: Styles.xsSpacing),
-                  const CategoriesSection(),
-                  const SizedBox(height: Styles.smSpacing),
-                  const HomeFeaturedBanner(),
-                  const SizedBox(height: Styles.smSpacing),
-                  const HomeLocationBanner(),
-                  const SizedBox(height: Styles.smSpacing),
-                  
-                  // Loop through all categories and create GenericSection widgets
-                  for (var category in _categories) ...[
-                    GenericSection(
-                      title: category["title"]!,
-                      categoryName: category["categoryName"]!,
-                      items: _getSampleData(category["categoryName"]!),
-                      locationIcon: Icon(
-                        IconsaxPlusBold.location,
-                        color: AppColors.success50,
-                        size: 16,
+
+            // Show loading indicator
+            if (_isLoading)
+              Padding(
+                padding: EdgeInsets.all(2.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primary50,
                       ),
                     ),
-                    const SizedBox(height: Styles.smSpacing),
+                    SizedBox(width: 2.w),
+                    Text(
+                      'Loading cultural data...',
+                      style: TextStyle(
+                        color: AppColors.primary50,
+                        fontSize: 10.sp,
+                      ),
+                    ),
                   ],
-                  
-                  const SizedBox(height: Styles.xlSpacing),
-                ],
+                ),
+              ),
+
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _fetchFirebaseData,
+                color: AppColors.primary50,
+                child: ListView(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    SizedBox(height: Styles.xsSpacing),
+                    const CategoriesSection(),
+                    const SizedBox(height: Styles.smSpacing),
+                    const HomeFeaturedBanner(),
+                    const SizedBox(height: Styles.smSpacing),
+                    const HomeLocationBanner(),
+                    const SizedBox(height: Styles.smSpacing),
+
+                    // Firebase Data Status (for debugging)
+                    if (!_isLoading) ...[
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: Styles.mdPadding),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 3.w, vertical: 1.h),
+                          decoration: BoxDecoration(
+                            color: _categoriesData.isNotEmpty
+                                ? AppColors.success50.withOpacity(0.1)
+                                : AppColors.danger50.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: _categoriesData.isNotEmpty
+                                  ? AppColors.success50.withOpacity(0.3)
+                                  : AppColors.danger50.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                _categoriesData.isNotEmpty
+                                    ? IconsaxPlusBold.tick_circle
+                                    : IconsaxPlusBold.close_circle,
+                                color: _categoriesData.isNotEmpty
+                                    ? AppColors.success50
+                                    : AppColors.danger50,
+                                size: 16,
+                              ),
+                              SizedBox(width: 2.w),
+                              Expanded(
+                                child: Text(
+                                  _categoriesData.isNotEmpty
+                                      ? '🔥 Firebase: ${_categoriesData.length} categories loaded'
+                                      : '📦 Using sample data (Firebase empty)',
+                                  style: TextStyle(
+                                    color: _categoriesData.isNotEmpty
+                                        ? AppColors.success50
+                                        : AppColors.danger50,
+                                    fontSize: 9.sp,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: Styles.smSpacing),
+                    ],
+
+                    // Loop through all categories and create GenericSection widgets
+                    for (var category in categories) ...[
+                      GenericSection(
+                        title: category["title"]!,
+                        categoryName: category["categoryName"]!,
+                        items: _getDataForSection(category["categoryName"]!),
+                        locationIcon: Icon(
+                          IconsaxPlusBold.location,
+                          color: AppColors.success50,
+                          size: 16,
+                        ),
+                      ),
+                      const SizedBox(height: Styles.smSpacing),
+                    ],
+
+                    const SizedBox(height: Styles.xlSpacing),
+                  ],
+                ),
               ),
             ),
           ],
