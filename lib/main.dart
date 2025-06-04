@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nusa_app/firebase_options.dart';
 import 'app/view/app.dart';
 import 'bootstrap.dart';
@@ -19,5 +20,7 @@ Future<void> setup() async {
   );
 
   await SharedPreferencesService.init();
-  // await dotenv.load();
+
+  // ✅ Tambahkan ini untuk load .env khusus NusaBot
+  //await dotenv.load(fileName: '.env');
 }

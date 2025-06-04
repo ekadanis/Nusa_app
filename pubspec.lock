@@ -327,7 +327,7 @@ packages:
     source: hosted
     version: "1.19.1"
   convert:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: convert
       sha256: b30acd5944035672bc15c6b7a8b47d773e41e2f17de064350988c5d02adb1c68
@@ -539,6 +539,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.4.1"
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      sha256: b7c7be5cd9f6ef7a78429cabd2774d3c4af50e79cb2b7593e3d5d763ef95c61b
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -560,6 +568,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_markdown:
+    dependency: "direct main"
+    description:
+      name: flutter_markdown
+      sha256: "08fb8315236099ff8e90cb87bb2b935e0a724a3af1623000a9cec930468e0f27"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.7+1"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -597,6 +613,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_tts:
+    dependency: "direct main"
+    description:
+      name: flutter_tts
+      sha256: bdf2fc4483e74450dc9fc6fe6a9b6a5663e108d4d0dad3324a22c8e26bf48af4
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.3"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -683,7 +707,7 @@ packages:
     source: hosted
     version: "0.15.6"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "2c11f3f94c687ee9bad77c171151672986360b2b001d109814ee7140b2cf261b"
@@ -890,6 +914,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.3-main.0"
+  markdown:
+    dependency: transitive
+    description:
+      name: markdown
+      sha256: "935e23e1ff3bc02d390bad4d4be001208ee92cc217cb5b5a6c19bc14aaa318c1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.3.0"
   matcher:
     dependency: transitive
     description:
@@ -1034,6 +1066,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  pedantic:
+    dependency: transitive
+    description:
+      name: pedantic
+      sha256: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.11.1"
   petitparser:
     dependency: transitive
     description:
@@ -1263,6 +1303,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.1"
+  speech_to_text:
+    dependency: "direct main"
+    description:
+      name: speech_to_text
+      sha256: "6cf8f284997490ebef1d68f8707bef57dcf083f43c0f915cc285428520bfe6be"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
+  speech_to_text_platform_interface:
+    dependency: transitive
+    description:
+      name: speech_to_text_platform_interface
+      sha256: a1935847704e41ee468aad83181ddd2423d0833abe55d769c59afca07adb5114
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   sprintf:
     dependency: transitive
     description:
@@ -1515,10 +1571,10 @@ packages:
     dependency: transitive
     description:
       name: vector_graphics_compiler
-      sha256: "1b4b9e706a10294258727674a340ae0d6e64a7231980f9f9a3d12e4b42407aad"
+      sha256: "557a315b7d2a6dbb0aaaff84d857967ce6bdc96a63dc6ee2a57ce5a6ee5d3331"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.16"
+    version: "1.1.17"
   vector_math:
     dependency: transitive
     description:
