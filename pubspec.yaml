@@ -69,3 +69,5 @@ flutter:
   assets:
     - assets/
     - assets/core/
+    - assets/banner/banner.png
+    - assets/images/nusabot_logo.png

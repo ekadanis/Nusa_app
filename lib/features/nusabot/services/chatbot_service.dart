@@ -13,7 +13,9 @@ class ChatbotService {
   bool _isLoading = false;
   bool _hasError = false;
   String? _errorMessage;
+  bool _isRecording = false;
 
+  bool get isRecording => _isRecording;
   List<ChatMessage> get messages => _message;
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
@@ -30,7 +32,7 @@ class ChatbotService {
     } catch (e) {
       _setError("Failed to process message: $e");
       _message.add(ChatMessage(text: "Error occurred", isUser: false));
-    } finally{
+    } finally {
       _setLoading(false);
     }
   }
@@ -38,13 +40,18 @@ class ChatbotService {
 //=================================//
 
   Future<String> _sendToGemini(String inputText) async {
-    final apiKey = dotenv.env['GEMINI_API_KEY'];
+    final apiKey = "AIzaSyDmCT0apoGo8DirEKrkGMzY3G-QGuqi9P0";
+    print('🔑 API Key: $apiKey');
     if (apiKey == null || apiKey.isEmpty) {
       throw Exception("apiKey is not found in .env file");
     }
 
     final url =
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key= $apiKey';
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=$apiKey';
+
+    print('🌐 Sending request to Gemini...');
+    print('➡️ Prompt: $inputText');
+    print('➡️ URL: $url');
 
     final conditionedPrompt = '''
     Your name is NusaBot. Your task is to answer questions related to Indonesian culture or history.
@@ -70,6 +77,9 @@ class ChatbotService {
       }),
     );
 
+    print('🟡 Status Code: ${response.statusCode}');
+    print('🟡 Response Body: ${response.body}');
+
     if (response.statusCode == 503) {
       throw Exception("Nusabot is busy");
     }
@@ -79,50 +89,74 @@ class ChatbotService {
     }
 
     final json = jsonDecode(response.body);
-    return json['candidate']?[0]['content']?['parts']?[0]['text'] ??
+    return json['candidates']?[0]['content']?['parts']?[0]['text'] ??
         '(NO Response)';
   }
 
   Future<void> sendVoiceMessage() async {
+    _isRecording = true;
     _setLoading(true);
 
-    try{
+    try {
       bool available = await _speechToText.initialize();
-      if(!available) throw Exception("SpeechToText is not available");
-      
+      if (!available) throw Exception("SpeechToText is not available");
+
       String finalResult = '';
 
       await _speechToText.listen(
         // ignore: deprecated_member_use
         listenMode: stt.ListenMode.confirmation,
         onResult: (result) {
-          if(result.finalResult){
+          if (result.finalResult) {
             finalResult = result.recognizedWords;
           }
-        });
+        },
+      );
 
-        while(_speechToText.isListening){
-          await Future.delayed(const Duration(milliseconds: 100));
-        }
+      // Tunggu sampai user selesai bicara
+      while (_speechToText.isListening) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
 
-        if (finalResult.isEmpty) throw Exception("No sound detected");
+      // 🔴 Stop efek recording setelah rekaman selesai
+      await stopVoiceRecording();
 
-        _message.add(ChatMessage(text: finalResult, isUser: true));
-        final reply = await _sendToGemini(finalResult);
-        _message.add(ChatMessage(text: reply, isUser: false));
+      // Jika tidak ada suara dikenali, jangan lanjut
+      if (finalResult.isEmpty) return;
 
-        await _speak(reply);
-        _clearError();
-    }catch(e){
-      _setError("An error occurred while recording sound: $e");
+      // Tambahkan ke chat
+      _message.add(ChatMessage(text: finalResult, isUser: true));
+
+      // Kirim ke Gemini
+      final reply = await _sendToGemini(finalResult);
+
+      _message.add(ChatMessage(text: reply, isUser: false));
+      await _speak(reply);
+      _clearError();
+    } catch (e) {
+      _setError("An error occurred while recording: $e");
       _message.add(ChatMessage(text: "Error occurred", isUser: false));
-
+      await stopVoiceRecording(); // ⛔ pastikan berhenti juga saat error
     }
   }
 
   Future<void> _speak(String text) async {
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.speak(text);
+    try {
+      await _flutterTts.setLanguage("en-US");
+      await _flutterTts.speak(text);
+      print("[TTS] Speaking: $text"); // ✅ Log untuk cek
+    } catch (e) {
+      print("[TTS ERROR] $e");
+    }
+  }
+
+  Future<void> stopVoiceRecording() async {
+    if (_speechToText.isListening) {
+      await _speechToText.stop();
+    }
+    _isRecording = false;
+    _setLoading(false); // supaya isRecording jadi false
+    
   }
 
 // STATE HELPER //
