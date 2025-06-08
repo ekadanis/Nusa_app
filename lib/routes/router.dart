@@ -4,10 +4,10 @@ import 'package:nusa_app/features/auth/views/login_page.dart';
 import 'package:nusa_app/features/feeds/views/forum_detail_page.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import 'package:nusa_app/features/homepage/homepage.dart';
-import 'package:nusa_app/features/katalog_produk/katalog_produk.dart';
+import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
 import '../features/pages.dart';
+import '../models/destination_model.dart';
 import 'package:camera/camera.dart';
-import '../features/homepage/views/homepage_dynamic.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -84,10 +84,13 @@ class AppRouter extends RootStackRouter {
           page: ImageConfirmationRoute.page,
           path: '/iamge-confirmation',
           transitionsBuilder: TransitionsBuilders.fadeIn,
-        ),
-        CustomRoute<void>(
+        ),        CustomRoute<void>(
           page: ImageResultRoute.page,
           path: '/image-result',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),        CustomRoute<void>(
+          page: DetailRouteDestination.page,
+          path: '/detail-destination',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
       ];

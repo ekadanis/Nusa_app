@@ -48,6 +48,52 @@ class DashboardRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [DetailScreenDestination]
+class DetailRouteDestination extends PageRouteInfo<DetailRouteDestinationArgs> {
+  DetailRouteDestination({
+    Key? key,
+    required DestinationModel destination,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailRouteDestination.name,
+          args: DetailRouteDestinationArgs(
+            key: key,
+            destination: destination,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailRouteDestination';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<DetailRouteDestinationArgs>();
+      return DetailScreenDestination(
+        key: args.key,
+        destination: args.destination,
+      );
+    },
+  );
+}
+
+class DetailRouteDestinationArgs {
+  const DetailRouteDestinationArgs({
+    this.key,
+    required this.destination,
+  });
+
+  final Key? key;
+
+  final DestinationModel destination;
+
+  @override
+  String toString() {
+    return 'DetailRouteDestinationArgs{key: $key, destination: $destination}';
+  }
+}
+
+/// generated route for
 /// [FeedsPage]
 class FeedsRoute extends PageRouteInfo<void> {
   const FeedsRoute({List<PageRouteInfo>? children})

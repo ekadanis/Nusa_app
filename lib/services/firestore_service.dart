@@ -1,0 +1,248 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/models.dart';
+import '../seeders/seeders.dart';
+
+class FirestoreService {
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Collection references
+  static CollectionReference get usersCollection => _firestore.collection('users');
+  static CollectionReference get categoriesCollection => _firestore.collection('categories');
+  static CollectionReference get destinationsCollection => _firestore.collection('destinations');
+  static CollectionReference get articlesCollection => _firestore.collection('articles');
+  static CollectionReference get forumsCollection => _firestore.collection('forums');
+
+  // User subcollections
+  static CollectionReference getUserLikedDestinations(String userId) {
+    return usersCollection.doc(userId).collection('likedDestinations');
+  }
+
+  static CollectionReference getUserLikedArticles(String userId) {
+    return usersCollection.doc(userId).collection('likedArticles');
+  }
+
+  static CollectionReference getUserLikedForumPosts(String userId) {
+    return usersCollection.doc(userId).collection('likedForumPosts');
+  }  // Inisialisasi database dengan seeding lengkap
+  static Future<void> initializeDatabase() async {
+    try {
+      // Inisialisasi database Nusa Indonesia
+      await MainSeeder.seedAll();
+      // Database berhasil diinisialisasi
+    } catch (e) {
+      // Error saat inisialisasi database
+      rethrow;
+    }
+  }
+  // Inisialisasi koleksi spesifik (untuk seeding yang ditargetkan)
+  static Future<void> initializeCollection(String collection) async {
+    try {
+      // Inisialisasi koleksi tertentu
+      await MainSeeder.seedSpecificCollection(collection);
+      // Koleksi berhasil diinisialisasi
+    } catch (e) {
+      // Error saat inisialisasi koleksi
+      rethrow;
+    }
+  }
+
+  // Helper methods for CRUD operations
+  // Operasi user
+  static Future<UserModel?> getUserById(String userId) async {
+    try {
+      final doc = await usersCollection.doc(userId).get();
+      if (doc.exists) {
+        return UserModel.fromFirestore(doc);
+      }
+      return null;
+    } catch (e) {
+      // Error saat mengambil data user
+      return null;
+    }
+  }
+  static Future<UserModel?> getUserByEmail(String email) async {
+    try {
+      final query = await usersCollection.where('email', isEqualTo: email).get();
+      if (query.docs.isNotEmpty) {
+        return UserModel.fromFirestore(query.docs.first);
+      }
+      return null;
+    } catch (e) {
+      // Error saat mengambil user berdasarkan email
+      return null;
+    }
+  }
+  // Operasi like
+  static Future<void> toggleDestinationLike(String userId, String destinationId) async {
+    try {
+      final likedDestinationsRef = getUserLikedDestinations(userId);
+      final doc = await likedDestinationsRef.doc(destinationId).get();
+
+      if (doc.exists) {
+        // Hapus like
+        await likedDestinationsRef.doc(destinationId).delete();
+        // Kurangi jumlah like di koleksi destinations
+        await _decrementLikeCount('destinations', destinationId);
+      } else {
+        // Tambah like
+        await likedDestinationsRef.doc(destinationId).set({'isFavorite': true});
+        // Tambah jumlah like di koleksi destinations
+        await _incrementLikeCount('destinations', destinationId);
+      }
+    } catch (e) {
+      // Error saat toggle like destination
+    }
+  }
+  static Future<void> toggleArticleLike(String userId, String articleId) async {
+    try {
+      final likedArticlesRef = getUserLikedArticles(userId);
+      final doc = await likedArticlesRef.doc(articleId).get();
+
+      if (doc.exists) {
+        await likedArticlesRef.doc(articleId).delete();
+        await _decrementLikeCount('articles', articleId);
+      } else {
+        await likedArticlesRef.doc(articleId).set({'isFavorite': true});
+        await _incrementLikeCount('articles', articleId);
+      }
+    } catch (e) {
+      // Error saat toggle like artikel
+    }
+  }
+  static Future<void> toggleForumLike(String userId, String forumId) async {
+    try {
+      final likedForumPostsRef = getUserLikedForumPosts(userId);
+      final doc = await likedForumPostsRef.doc(forumId).get();
+
+      if (doc.exists) {
+        await likedForumPostsRef.doc(forumId).delete();
+        await _decrementLikeCount('forum', forumId);
+      } else {
+        await likedForumPostsRef.doc(forumId).set({'isFavorite': true});
+        await _incrementLikeCount('forum', forumId);
+      }
+    } catch (e) {
+      // Error saat toggle like forum
+    }
+  }
+  static Future<void> _incrementLikeCount(String collection, String docId) async {
+    try {
+      await _firestore.collection(collection).doc(docId).update({
+        'like': FieldValue.increment(1),
+      });
+    } catch (e) {
+      // Error saat menambah jumlah like
+    }
+  }
+  static Future<void> _decrementLikeCount(String collection, String docId) async {
+    try {
+      await _firestore.collection(collection).doc(docId).update({
+        'like': FieldValue.increment(-1),
+      });
+    } catch (e) {
+      // Error saat mengurangi jumlah like
+    }
+  }
+  // Periksa apakah user menyukai item
+  static Future<bool> hasUserLikedDestination(String userId, String destinationId) async {
+    try {
+      final doc = await getUserLikedDestinations(userId).doc(destinationId).get();
+      return doc.exists;
+    } catch (e) {
+      // Error saat memeriksa like destination
+      return false;
+    }
+  }
+  static Future<bool> hasUserLikedArticle(String userId, String articleId) async {
+    try {
+      final doc = await getUserLikedArticles(userId).doc(articleId).get();
+      return doc.exists;
+    } catch (e) {
+      // Error saat memeriksa like artikel
+      return false;
+    }
+  }  static Future<bool> hasUserLikedForumPost(String userId, String forumId) async {
+    try {
+      final doc = await getUserLikedForumPosts(userId).doc(forumId).get();
+      return doc.exists;
+    } catch (e) {
+      // Error saat memeriksa like forum
+      return false;
+    }
+  }
+  // Metode pengambilan data
+  static Future<List<CategoryModel>> getCategories() async {
+    try {
+      final snapshot = await categoriesCollection.get();
+      return snapshot.docs.map((doc) => CategoryModel.fromFirestore(doc)).toList();
+    } catch (e) {
+      // Error saat mengambil data kategori
+      return [];
+    }
+  }
+  static Future<List<DestinationModel>> getDestinationsByCategory(String categoryId, {int limit = 5}) async {
+    try {
+      final snapshot = await destinationsCollection
+          .where('categoryId', isEqualTo: categoryId)
+          .limit(limit)
+          .get();
+      return snapshot.docs.map((doc) => DestinationModel.fromFirestore(doc)).toList();
+    } catch (e) {
+      // Error saat mengambil destinasi berdasarkan kategori
+      return [];
+    }
+  }
+  static Future<List<ArticleModel>> getArticles({int limit = 10}) async {
+    try {
+      final snapshot = await articlesCollection.limit(limit).get();
+      return snapshot.docs.map((doc) => ArticleModel.fromFirestore(doc)).toList();
+    } catch (e) {
+      // Error saat mengambil data artikel
+      return [];
+    }
+  }
+  static Future<List<ForumModel>> getForumPosts({int limit = 15}) async {
+    try {
+      final snapshot = await forumsCollection.limit(limit).get();
+      return snapshot.docs.map((doc) => ForumModel.fromFirestore(doc)).toList();
+    } catch (e) {
+      // Error saat mengambil data forum
+      return [];
+    }
+  }  // Metode pengambilan data dengan preferensi user
+  static Future<List<DestinationModel>> getDestinationsByCategoryWithUserPrefs(String categoryId, String userId, {int limit = 5}) async {
+    try {
+      final destinations = await getDestinationsByCategory(categoryId, limit: limit);
+      
+      // Catatan: Dalam implementasi nyata, Anda bisa memperluas DestinationModel 
+      // untuk menyertakan field 'isFavorite' atau mengembalikan model yang berbeda
+      // Untuk saat ini, GenericSection akan menangani status favorit secara terpisah
+      
+      return destinations;
+    } catch (e) {
+      // Error saat mengambil destinasi dengan preferensi user
+      return [];
+    }
+  }
+  // Dapatkan destinasi dengan dukungan paginasi
+  static Future<List<DestinationModel>> getDestinationsByCategoryPaginated(
+    String categoryId, 
+    {int limit = 10, 
+    DocumentSnapshot? lastDocument}
+  ) async {
+    try {
+      Query query = destinationsCollection
+          .where('categoryId', isEqualTo: categoryId)
+          .limit(limit);
+          
+      if (lastDocument != null) {
+        query = query.startAfterDocument(lastDocument);
+      }
+        final snapshot = await query.get();
+      return snapshot.docs.map((doc) => DestinationModel.fromFirestore(doc)).toList();
+    } catch (e) {
+      // Error saat mengambil destinasi dengan paginasi
+      return [];
+    }
+  }
+}

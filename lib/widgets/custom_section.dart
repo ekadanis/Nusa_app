@@ -29,7 +29,7 @@ class CustomSection extends StatelessWidget {
         horizontal: Styles.xlPadding,
       ),
       decoration: BoxDecoration(
-          color: AppColors.primary20,
+          color: AppColors.primary10,
           boxShadow: Styles.defaultShadow,
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Column(
@@ -37,13 +37,19 @@ class CustomSection extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            // decoration: BoxDecoration(color: AppColors.primary20),
             child: Row(
               children: [
-                Icon(
-                  icon,
-                  color: AppColors.primary50,
-                  size: Styles.mdIcon,
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary20,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: AppColors.primary50,
+                    size: Styles.mdIcon,
+                  ),
                 ),
                 SizedBox(width: Styles.smSpacing),
                 Expanded(
