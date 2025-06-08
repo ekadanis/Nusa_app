@@ -1,8 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import '../features/pages.dart';
-import 'package:camera/camera.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -62,7 +62,7 @@ class AppRouter extends RootStackRouter {
         ),
         CustomRoute<void>(
           page: ImageConfirmationRoute.page,
-          path: '/iamge-confirmation',
+          path: '/image-confirmation',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(

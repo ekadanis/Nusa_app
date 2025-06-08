@@ -90,13 +90,15 @@ class ImageAnalyzerRoute extends PageRouteInfo<void> {
 class ImageConfirmationRoute extends PageRouteInfo<ImageConfirmationRouteArgs> {
   ImageConfirmationRoute({
     Key? key,
-    required XFile pickedImage,
+    required File pickedImage,
+    bool? isNotValid,
     List<PageRouteInfo>? children,
   }) : super(
           ImageConfirmationRoute.name,
           args: ImageConfirmationRouteArgs(
             key: key,
             pickedImage: pickedImage,
+            isNotValid: isNotValid,
           ),
           initialChildren: children,
         );
@@ -110,6 +112,7 @@ class ImageConfirmationRoute extends PageRouteInfo<ImageConfirmationRouteArgs> {
       return ImageConfirmationPage(
         key: args.key,
         pickedImage: args.pickedImage,
+        isNotValid: args.isNotValid,
       );
     },
   );
@@ -119,15 +122,18 @@ class ImageConfirmationRouteArgs {
   const ImageConfirmationRouteArgs({
     this.key,
     required this.pickedImage,
+    this.isNotValid,
   });
 
   final Key? key;
 
-  final XFile pickedImage;
+  final File pickedImage;
+
+  final bool? isNotValid;
 
   @override
   String toString() {
-    return 'ImageConfirmationRouteArgs{key: $key, pickedImage: $pickedImage}';
+    return 'ImageConfirmationRouteArgs{key: $key, pickedImage: $pickedImage, isNotValid: $isNotValid}';
   }
 }
 
@@ -136,7 +142,7 @@ class ImageConfirmationRouteArgs {
 class ImageResultRoute extends PageRouteInfo<ImageResultRouteArgs> {
   ImageResultRoute({
     Key? key,
-    required XFile image,
+    required File image,
     List<PageRouteInfo>? children,
   }) : super(
           ImageResultRoute.name,
@@ -169,7 +175,7 @@ class ImageResultRouteArgs {
 
   final Key? key;
 
-  final XFile image;
+  final File image;
 
   @override
   String toString() {

@@ -11,12 +11,13 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 class ExpandableCard extends StatefulWidget {
   final String title;
   final IconData icon;
+  final String content;
 
-  const ExpandableCard({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
+  const ExpandableCard(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.content});
 
   @override
   State<ExpandableCard> createState() => _ExpandableCardState();
@@ -61,7 +62,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
                 child: Padding(
                     padding: const EdgeInsets.only(top: Styles.mdPadding),
                     child: Text(
-                      'Tari Reog biasanya ditampilkan dalam acara-acara budaya, perayaan, atau penyambutan tamu penting. Dalam satu pertunjukan, terdapat beberapa unsur karakter seperti Warok (tokoh sakti), Jathil (penari kuda lumping), dan Barongan. Selain sebagai hiburan, Tari Reog juga mengandung nilai-nilai spiritual dan filosofi tentang perjuangan, keberanian, serta hubungan manusia dengan alam dan leluhur.',
+                      widget.content,
                       style: context.textTheme.bodySmall,
                     )),
               ),
