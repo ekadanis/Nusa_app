@@ -6,33 +6,24 @@ import '../services/firestore_service.dart';
 class DestinationSeeder {
   static int _generateRandomRecommendationScore() {
     final random = Random();
-    // Generate recommendation scores between 20-95
-    return 20 + random.nextInt(76); // 76 = 95 - 20 + 1
+    return 20 + random.nextInt(76);
   }
   
-  static Future<void> seedDestinations(Map<String, String> categoryIds, String userId) async {
-    print('🌱 Seeding Destinations...');
-    
-    // Get all destination data organized by category
-    final destinationsData = _getDestinationsData();
-    int createdCount = 0;
+  static Future<void> seedDestinations(Map<String, String> categoryIds, String userId) async {    final destinationsData = _getDestinationsData();
     
     for (final categoryName in destinationsData.keys) {
       final categoryId = categoryIds[categoryName];
       if (categoryId == null) {
-        print('⚠️ Category ID not found for: $categoryName');
         continue;
       }
       
       final destinations = destinationsData[categoryName]!;
       
       for (final destData in destinations) {
-        // Check if destination already exists
         final existing = await FirestoreService.destinationsCollection
             .where('title', isEqualTo: destData['title'])
             .where('categoryId', isEqualTo: categoryId)
-            .get();
-              if (existing.docs.isEmpty) {
+            .get();              if (existing.docs.isEmpty) {
           final destination = DestinationModel(
             categoryId: categoryId,
             subcategory: destData['subcategory'],
@@ -44,15 +35,10 @@ class DestinationSeeder {
             recommendation: _generateRandomRecommendationScore(),
           );
           
-          final docRef = await FirestoreService.destinationsCollection.add(destination.toFirestore());
-          createdCount++;
-          print('🏛️ Created destination: ${destData['title']} (${destData['subcategory']}) with ID: ${docRef.id}');
-        } else {
-          print('🏛️ Destination "${destData['title']}" already exists');
+          await FirestoreService.destinationsCollection.add(destination.toFirestore());
         }
       }
     }
-      print('🌱 Destinations seeding completed: $createdCount new destinations created');
   }
   
   static Map<String, List<Map<String, dynamic>>> _getDestinationsData() {

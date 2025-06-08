@@ -3,8 +3,6 @@ import '../services/firestore_service.dart';
 
 class ForumSeeder {
   static Future<void> seedForums(String userId) async {
-    print('💬 Seeding Forum Posts...');
-    
     final forums = [
       ForumModel(
         content: '''Hey everyone! I'm planning to visit Borobudur for the first time next month. Any tips on the best time to go? I've heard sunrise is amazing but is it worth the early wake-up call? 🌅
@@ -139,24 +137,16 @@ Each region has its own brewing methods and traditions too. What's your favorite
         date: DateTime(2024, 3, 15, 11, 00),
         userId: userId,
         like: 33,
-      ),
-    ];
+      ),    ];
 
-    int seedCount = 0;
-    for (final forum in forums) {      // Check if forum post already exists (checking content to avoid duplicates)
+    for (final forum in forums) {
       final existingForum = await FirestoreService.forumsCollection
           .where('content', isEqualTo: forum.content)
           .get();
 
       if (existingForum.docs.isEmpty) {
         await FirestoreService.forumsCollection.add(forum.toFirestore());
-        seedCount++;
-        print('💬 Created forum post: ${forum.content.substring(0, 50)}...');
-      } else {
-        print('💬 Forum post already exists: ${forum.content.substring(0, 30)}...');
       }
     }
-
-    print('✅ Forums seeding completed! Created $seedCount new forum posts');
   }
 }

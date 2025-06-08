@@ -1,4 +1,3 @@
-// filepath: lib/seeders/seeders.dart
 export 'category_seeder.dart';
 export 'user_seeder.dart';
 export 'destination_seeder.dart';

@@ -140,7 +140,7 @@ class FirestoreService {
         'like': FieldValue.increment(-1),
       });
     } catch (e) {
-      // Error saat mengurangi jumlah like
+    
     }
   }
   // Periksa apakah user menyukai item
@@ -213,10 +213,6 @@ class FirestoreService {
   static Future<List<DestinationModel>> getDestinationsByCategoryWithUserPrefs(String categoryId, String userId, {int limit = 5}) async {
     try {
       final destinations = await getDestinationsByCategory(categoryId, limit: limit);
-      
-      // Catatan: Dalam implementasi nyata, Anda bisa memperluas DestinationModel 
-      // untuk menyertakan field 'isFavorite' atau mengembalikan model yang berbeda
-      // Untuk saat ini, GenericSection akan menangani status favorit secara terpisah
       
       return destinations;
     } catch (e) {

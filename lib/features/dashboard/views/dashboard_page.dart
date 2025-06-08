@@ -62,15 +62,16 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
         );
-      },
-      floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 0,
-        onPressed: () {
-          context.router.push(ImageAnalyzerRoute());
-        },
-        child: const Icon(IconsaxPlusBold.scan),
-      ),
+      },      floatingActionButton: MediaQuery.of(context).viewInsets.bottom > 0 
+          ? null 
+          : FloatingActionButton(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              elevation: 0,
+              onPressed: () {
+                context.router.push(ImageAnalyzerRoute());
+              },
+              child: const Icon(IconsaxPlusBold.scan),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
