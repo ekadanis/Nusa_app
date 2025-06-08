@@ -114,10 +114,17 @@ class FeedsRoute extends PageRouteInfo<void> {
 
 /// generated route for
 /// [ForumDetailPage]
-class ForumDetailRoute extends PageRouteInfo<void> {
-  const ForumDetailRoute({List<PageRouteInfo>? children})
-      : super(
+class ForumDetailRoute extends PageRouteInfo<ForumDetailRouteArgs> {
+  ForumDetailRoute({
+    Key? key,
+    required ForumModel forumPost,
+    List<PageRouteInfo>? children,
+  }) : super(
           ForumDetailRoute.name,
+          args: ForumDetailRouteArgs(
+            key: key,
+            forumPost: forumPost,
+          ),
           initialChildren: children,
         );
 
@@ -126,9 +133,29 @@ class ForumDetailRoute extends PageRouteInfo<void> {
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ForumDetailPage();
+      final args = data.argsAs<ForumDetailRouteArgs>();
+      return ForumDetailPage(
+        key: args.key,
+        forumPost: args.forumPost,
+      );
     },
   );
+}
+
+class ForumDetailRouteArgs {
+  const ForumDetailRouteArgs({
+    this.key,
+    required this.forumPost,
+  });
+
+  final Key? key;
+
+  final ForumModel forumPost;
+
+  @override
+  String toString() {
+    return 'ForumDetailRouteArgs{key: $key, forumPost: $forumPost}';
+  }
 }
 
 /// generated route for

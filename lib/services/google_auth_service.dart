@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/user_model.dart';
 
 class GoogleAuthService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -39,12 +41,15 @@ class GoogleAuthService {
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
-      );
-
-      // Masuk ke Firebase dengan credential Google
+      );      // Masuk ke Firebase dengan credential Google
       final UserCredential userCredential = await _auth.signInWithCredential(credential);
 
-      return userCredential;    } on FirebaseAuthException catch (e) {
+      // Create or update user profile in Firestore with Google data
+      if (userCredential.user != null) {
+        await createOrUpdateUserProfile(userCredential.user!);
+      }
+
+      return userCredential;} on FirebaseAuthException catch (e) {
       throw e;
     } catch (e) {
       // Penanganan error yang lebih spesifik
@@ -87,5 +92,38 @@ class GoogleAuthService {
   /// Periksa apakah user sudah terotentikasi dan kembalikan user ID
   static String? getAuthenticatedUserId() {
     return _auth.currentUser?.uid;
+  }
+  /// Create or update user profile in Firestore with Google profile data
+  static Future<void> createOrUpdateUserProfile(User user) async {
+    try {
+      final userModel = UserModel(
+        id: user.uid,
+        name: user.displayName ?? 'User',
+        email: user.email ?? '',
+        password: '', // For Google Auth users, password is not stored
+        photoURL: user.photoURL, // Save Google profile photo
+      );
+
+      // Use set with merge to create or update the user profile
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .set(userModel.toFirestore(), SetOptions(merge: true));
+          
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  /// Refresh current user profile with latest Google data
+  static Future<void> refreshCurrentUserProfile() async {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        await createOrUpdateUserProfile(user);
+      }
+    } catch (e) {
+      throw e;
+    }
   }
 }

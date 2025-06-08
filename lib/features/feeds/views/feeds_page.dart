@@ -1,12 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/core/app_colors.dart';
-import 'package:nusa_app/core/styles.dart';
-import 'package:nusa_app/l10n/l10n.dart';
-import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:nusa_app/routes/router.dart';
-import 'package:intl/intl.dart';
+import 'package:nusa_app/features/feeds/widgets/forum_tab.dart';
+import 'package:nusa_app/features/feeds/widgets/article_tab.dart';
+import 'package:nusa_app/features/feeds/widgets/create_post_dialog.dart';
 
 @RoutePage()
 class FeedsPage extends StatefulWidget {
@@ -20,10 +17,6 @@ class _FeedsPageState extends State<FeedsPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _currentIndex = 0;
-  final TextEditingController _postController = TextEditingController();
-
-  final CollectionReference myFeeds =
-      FirebaseFirestore.instance.collection('feeds');
 
   @override
   void initState() {
@@ -39,14 +32,13 @@ class _FeedsPageState extends State<FeedsPage>
   @override
   void dispose() {
     _tabController.dispose();
-    _postController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[50],
       body: SafeArea(
         child: Column(
           children: [
@@ -55,9 +47,9 @@ class _FeedsPageState extends State<FeedsPage>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: [
-                  _buildForumContent(),
-                  _buildArticleContent(),
+                children: const [
+                  ForumTab(),
+                  ArticleTab(),
                 ],
               ),
             ),
@@ -70,7 +62,7 @@ class _FeedsPageState extends State<FeedsPage>
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.blue.withOpacity(0.4),
+                    color: AppColors.primary50.withOpacity(0.4),
                     spreadRadius: 4,
                     blurRadius: 10,
                     offset: const Offset(0, 4),
@@ -81,7 +73,12 @@ class _FeedsPageState extends State<FeedsPage>
                 onPressed: () => _showCreatePostDialog(context),
                 backgroundColor: AppColors.primary50,
                 shape: const CircleBorder(),
-                child: const Icon(Icons.add, color: Colors.white),
+                elevation: 0,
+                child: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 28,
+                ),
               ),
             )
           : null,
@@ -90,55 +87,77 @@ class _FeedsPageState extends State<FeedsPage>
 
   Widget _buildHeader() {
     return Container(
-      color: const Color(0xFF1A3B80),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            const Color(0xFF1A3B80),
+            const Color(0xFF2A4F9B),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
-        children: [
-          Row(
+        children: [          Row(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new,
-                      color: Colors.white, size: 18),
-                  onPressed: () {},
-                ),
-              ),
               const SizedBox(width: 16),
-              const Text(
-                'Feeds',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text(
+                  'Cultural Feeds',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
           ),
-          if (_currentIndex == 0)
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Container(
-                height: 46,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(24),
+          if (_currentIndex == 0) ...[
+            const SizedBox(height: 16),
+            Container(
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.3),
+                  width: 1,
                 ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Find your culture',
-                    hintStyle: TextStyle(color: Colors.white70),
-                    prefixIcon: Icon(Icons.search, color: Colors.white70),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 10),
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search cultural discussions...',
+                  hintStyle: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: 14,
                   ),
-                  style: TextStyle(color: Colors.white),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.white.withOpacity(0.8),
+                    size: 20,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
+                ),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
                 ),
               ),
             ),
+          ],
         ],
       ),
     );
@@ -146,315 +165,52 @@ class _FeedsPageState extends State<FeedsPage>
 
   Widget _buildTabBar() {
     return Container(
-      color: Colors.white,
-      child: TabBar(
-        controller: _tabController,
-        tabs: const [
-          Tab(text: 'Forum'),
-          Tab(text: 'Artikel'),
-        ],
-        labelColor: Colors.blue,
-        unselectedLabelColor: Colors.grey,
-        indicatorColor: Colors.blue,
-        dividerColor: Colors.transparent,
-      ),
-    );
-  }
-
-  Widget _buildForumContent() {
-    return StreamBuilder(
-      stream: myFeeds.snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapShot) {
-        if (streamSnapShot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (streamSnapShot.hasError) {
-          print('Firestore Error: ${streamSnapShot.error}');
-          return Center(
-            child: Text(
-              'Error: ${streamSnapShot.error}',
-              style: const TextStyle(color: Colors.red),
-            ),
-          );
-        }
-
-        final docs = streamSnapShot.data?.docs ?? [];
-
-        if (docs.isEmpty) {
-          return const Center(child: Text('No posts found.'));
-        }
-
-        return ListView.builder(
-          itemCount: docs.length,
-          itemBuilder: (context, index) {
-            final doc = docs[index];
-            final data = doc.data() as Map<String, dynamic>;
-            final content = data['content'] ?? '';
-            final timestamp = data['date'] as Timestamp?;
-            final like = data['like'] ?? 0;
-
-            // Format tanggal
-            final dateStr = timestamp != null
-                ? DateFormat('EEEE, d MMMM yyyy', 'id_ID')
-                    .format(timestamp.toDate())
-                : 'Unknown date';
-
-            return InkWell(
-              onTap: () => context.router.push(const ForumDetailRoute()),
-              child: Card(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                elevation: 1,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header: Avatar & Author & Date
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.grey[400],
-                                child: const Text('S',
-                                    style: TextStyle(color: Colors.white)),
-                              ),
-                              const SizedBox(width: 6),
-                              const Text(
-                                'Saif Desur',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            dateStr,
-                            style: TextStyle(
-                              color: AppColors.grey300,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Content
-                      Text(
-                        content,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Likes & Comments Row
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.favorite_border,
-                                  color: AppColors.primary50, size: 20),
-                              const SizedBox(width: 4),
-                              Text('$like',
-                                  style: const TextStyle(fontSize: 13)),
-                              const SizedBox(width: 16),
-                              const Icon(Icons.comment_outlined,
-                                  color: AppColors.primary50, size: 20),
-                              const SizedBox(width: 4),
-                              const Text('300',
-                                  style:
-                                      TextStyle(fontSize: 13)), // placeholder
-                            ],
-                          ),
-                          Row(
-                            children: const [
-                              Text(
-                                'Lihat Selengkapnya',
-                                style:
-                                    TextStyle(color: Colors.blue, fontSize: 13),
-                              ),
-                              SizedBox(width: 4),
-                              Icon(Icons.chevron_right,
-                                  color: Colors.blue, size: 18),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildArticleContent() {
-    return Column(
-      children: [
-        _buildFeaturedCardsSection(),
-        _buildCategoryChipsSection(),
-        Expanded(
-          child: ListView.builder(
-            itemCount: 4,
-            itemBuilder: (context, index) => _buildArticleItem(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFeaturedCardsSection() {
-    return SizedBox(
-      height: 160,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.all(10),
-        children: [
-          _buildFeaturedCard(
-              "Evening Metropolis: A reflection on modern city life"),
-          _buildFeaturedCard(
-              "Visit the Valley: Discover treasures that exist in nature"),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryChipsSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            _buildCategoryChip("Discover", isSelected: true),
-            _buildCategoryChip("Culture/Sites"),
-            _buildCategoryChip("Food & Recipes"),
-            _buildCategoryChip("Traditional Wear"),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFeaturedCard(String title) {
-    return Container(
-      width: 160,
-      margin: const EdgeInsets.only(right: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.brown[300],
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.grey.withOpacity(0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: Stack(
-        children: [
-          Positioned(
-            bottom: 10,
-            left: 10,
-            right: 10,
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.white,
-                  ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+      child: TabBar(
+        controller: _tabController,
+        tabs: [
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.forum_outlined, size: 20),
+                const SizedBox(width: 8),
+                Text('Forum'),
+              ],
+            ),
+          ),
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.article_outlined, size: 20),
+                const SizedBox(width: 8),
+                Text('Articles'),
+              ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryChip(String label, {bool isSelected = false}) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.blue.shade100 : Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(20),
-        border: isSelected ? Border.all(color: Colors.blue.shade300) : null,
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 13,
-          color: isSelected ? Colors.blue.shade800 : Colors.black87,
+        labelColor: AppColors.primary50,
+        unselectedLabelColor: Colors.grey[600],
+        indicatorColor: AppColors.primary50,
+        indicatorWeight: 3,
+        dividerColor: Colors.transparent,
+        labelStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
         ),
-      ),
-    );
-  }
-
-  Widget _buildArticleItem() {
-    return InkWell(
-      onTap: () {},
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 80,
-                height: 80,
-                color: Colors.brown[400],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Text(
-                      'Culinary',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Tahu Tek: A Flavorful Fusion of Tofu, Peanut Sauce, and Crunch',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Selasa, 20 Maret 2024',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+        unselectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
         ),
       ),
     );
@@ -463,91 +219,9 @@ class _FeedsPageState extends State<FeedsPage>
   void _showCreatePostDialog(BuildContext context) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Share your message to the forum!',
-                        style: Theme.of(context).textTheme.titleLarge,
-                        overflow: TextOverflow.fade,
-                      ),
-                    ),
-                    IconButton(
-                      icon:
-                          const Icon(Icons.close, color: Colors.red, size: 18),
-                      constraints: const BoxConstraints(),
-                      padding: EdgeInsets.zero,
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.grey200, width: 1.5),
-                  ),
-                  child: TextField(
-                    controller: _postController,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      hintText: 'Write your message here...',
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(12),
-                      hintStyle:
-                          Theme.of(context).textTheme.labelLarge?.copyWith(
-                                fontSize: 13,
-                                color: AppColors.grey500,
-                              ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary50,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      _postController.clear();
-                    },
-                    child: Text(
-                      'Share',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return const CreatePostDialog();
       },
     );
   }
