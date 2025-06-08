@@ -1,0 +1,1 @@
+/home/ekadanis/Documents/project/Nusa_app/build/app/intermediates/cxx/Debug/41154sm3/obj/arm64-v8a

@@ -59,6 +59,7 @@ class ChatbotService {
     If it doesn't fit, apologize and say you can only help about Indonesian culture or history.
     Here is the question:
     $inputText
+    explain with slowly please.
   ''';
 
     final response = await http.post(
@@ -118,7 +119,7 @@ class ChatbotService {
         await Future.delayed(const Duration(milliseconds: 100));
       }
 
-      // 🔴 Stop efek recording setelah rekaman selesai
+      // Stop efek recording setelah rekaman selesai
       await stopVoiceRecording();
 
       // Jika tidak ada suara dikenali, jangan lanjut
