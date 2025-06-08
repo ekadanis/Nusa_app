@@ -80,6 +80,7 @@ class AppColors {
   static const purple20 = Color(0xFFd0b9ff);
   static const purple10 = Color(0xFFf3edff);
 
+  static const boxShadow = Color(0x3F000000);
   static Color lighten(Color c, [int percent = 10]) {
     assert(1 <= percent && percent <= 100);
     final p = percent / 100;

@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=C:\Development\flutter
-FLUTTER_APPLICATION_PATH=D:\Kuliah\Projects\GSC 2025\Nusa_app
+FLUTTER_ROOT=C:\src\flutter
+FLUTTER_APPLICATION_PATH=D:\MYSTUDY\STUDY_PENS\Semester4\GSC\Nusa_app
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib\main.dart
 FLUTTER_BUILD_DIR=build

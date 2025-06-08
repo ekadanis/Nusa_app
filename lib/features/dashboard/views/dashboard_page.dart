@@ -18,7 +18,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      routes: [InfoCenterRoute(), NusaBotRoute(), FeedsRoute(), AccountRoute()],
+      routes: [HomeRoute(), NusaBotRoute(), FeedsRoute(), AccountRoute()],
       bottomNavigationBuilder: (_, tabsRouter) {
         return Container(
           padding:
@@ -26,26 +26,38 @@ class _DashboardPageState extends State<DashboardPage> {
           decoration: BoxDecoration(
             color: AppColors.white,
             boxShadow: Styles.defaultShadow,
-          ),
-          child: NavigationBar(
+          ),          child: NavigationBar(
             selectedIndex: tabsRouter.activeIndex,
             onDestinationSelected: tabsRouter.setActiveIndex,
             destinations: [
-              NavigationDestination(
-                icon: const Icon(IconsaxPlusBold.home),
-                label: 'Info Center',
+
+              Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: NavigationDestination(
+                  icon: const Icon(IconsaxPlusBold.home),
+                  label: 'HomePage',
+                ),
               ),
-              NavigationDestination(
-                icon: const Icon(IconsaxPlusBold.airdrop),
-                label: 'NusaBot',
+              Padding(
+                padding: EdgeInsets.only(right: 40.0),
+                child: NavigationDestination(
+                  icon: const Icon(IconsaxPlusBold.airdrop),
+                  label: 'NusaBot',
+                ),
               ),
-              NavigationDestination(
-                icon: const Icon(IconsaxPlusBold.document_1),
-                label: 'Feed',
+              Padding(
+                padding: EdgeInsets.only(left: 40.0),
+                child: NavigationDestination(
+                  icon: const Icon(IconsaxPlusBold.document_1),
+                  label: 'Feed',
+                ),
               ),
-              NavigationDestination(
-                icon: const Icon(IconsaxPlusBold.profile_circle),
-                label: 'Profil',
+              Padding(
+                padding: EdgeInsets.only(left: 8.0),
+                child: NavigationDestination(
+                  icon: const Icon(IconsaxPlusBold.profile_circle),
+                  label: 'Profil',
+                ),
               ),
             ],
           ),

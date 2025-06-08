@@ -2,7 +2,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
+import 'package:nusa_app/features/homepage/homepage.dart';
+import 'package:nusa_app/features/katalog_produk/katalog_produk.dart';
 import '../features/pages.dart';
+import 'package:camera/camera.dart';
+import '../features/homepage/views/homepage_dynamic.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -24,14 +28,19 @@ class AppRouter extends RootStackRouter {
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(
+          page: KatalogProdukRoute.page,
+          path: '/katalog-produk',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
             page: DashboardRoute.page,
             path: '/dashboard',
             transitionsBuilder: TransitionsBuilders.fadeIn,
             durationInMilliseconds: 300,
             children: [
               CustomRoute<void>(
-                page: InfoCenterRoute.page,
-                path: '-info-center',
+                page: HomeRoute.page,
+                path: '-homepage',
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
               CustomRoute<void>(
