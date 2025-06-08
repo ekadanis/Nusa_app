@@ -10,7 +10,8 @@ class LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: Center(        child: Column(
+      body: Center(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             LoadingAnimationWidget.beat(
@@ -21,16 +22,16 @@ class LoadingScreen extends StatelessWidget {
             Text(
               'Generating content with AI...',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppColors.grey60,
-                fontWeight: FontWeight.w500,
-              ),
+                    color: AppColors.grey60,
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
             SizedBox(height: 1.h),
             Text(
               'Please wait a moment',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.grey50,
-              ),
+                    color: AppColors.grey50,
+                  ),
             ),
           ],
         ),

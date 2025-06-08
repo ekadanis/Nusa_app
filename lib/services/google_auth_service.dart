@@ -73,7 +73,7 @@ class GoogleAuthService {
   /// Dapatkan user ID saat ini
   static String? get currentUserId => _auth.currentUser?.uid;
 
-  /// Dapatkan informasi user untuk ditampilkan di UI
+
   static Map<String, String?> getUserInfo() {
     final user = _auth.currentUser;
     return {

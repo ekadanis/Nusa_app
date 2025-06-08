@@ -6,13 +6,14 @@ import 'dart:typed_data';
 
 class GeminiService {
   // Method untuk generate destination content
-  Future<Map<String, String>> generateDestinationContent(
-      String destinationName, String category, String subcategory, String location) async {
+  Future<Map<String, String>> generateDestinationContent(String destinationName,
+      String category, String subcategory, String location) async {
     try {
       final model = GenerativeModel(
         model: Constants.geminiModelId,
         apiKey: Constants.geminiApiKey,
-      );      final prompts = {
+      );
+      final prompts = {
         'overview': '''
 Create an engaging introduction to "${destinationName}" situated in ${location}. 
 This magnificent ${subcategory} belongs to the ${category} heritage category. 
@@ -43,7 +44,8 @@ Explain the spiritual symbols, philosophical concepts, sacred geometry, or cultu
 Detail the main traditional materials and construction elements used in building "${destinationName}". 
 Write in English, 120-180 words.
 Identify the primary materials (wood, stone, clay, metals, etc.), traditional construction techniques, and local craftsmanship involved. Explain HOW tourists can learn about and experience these materials: visiting material sources, watching craftsmen work, participating in traditional building workshops, touching and examining materials, purchasing handcrafted items made from the same materials, or joining conservation activities.
-''',        'modern_development': '''
+''',
+        'modern_development': '''
 Describe the modern developments and contemporary enhancements at "${destinationName}". 
 Write in English, 120-180 words.
 Cover recent renovations, technological additions, accessibility improvements, new facilities, and educational programs while maintaining cultural authenticity. Explain HOW tourists can benefit from these modern developments: using mobile apps for self-guided tours, accessing digital exhibits, enjoying improved facilities, participating in modern educational programs, or using contemporary amenities that enhance their cultural experience without diminishing the traditional atmosphere.
@@ -56,37 +58,46 @@ Include essential details: how to get there (transportation options, nearest air
       };
 
       Map<String, String> results = {};
-      
+
       for (String key in prompts.keys) {
-        final response = await model.generateContent([
-          Content.text(prompts[key]!)
-        ]);
-        
+        final response =
+            await model.generateContent([Content.text(prompts[key]!)]);
+
         if (response.text != null) {
           results[key] = response.text!.trim();
-          print('Generated $key: ${response.text!.substring(0, 50)}...');        } else {
+          print('Generated $key: ${response.text!.substring(0, 50)}...');
+        } else {
           results[key] = 'Content cannot be generated for this section.';
         }
-        
+
         // Add small delay to avoid rate limiting
-        await Future.delayed(Duration(milliseconds: 500));      }
-      
+        await Future.delayed(Duration(milliseconds: 500));
+      }
+
       return results;
-    } catch (e) {      print('Error generating destination content: $e');
+    } catch (e) {
+      print('Error generating destination content: $e');
       // Return default content if generation fails
       return {
-        'overview': 'Detailed information about ${destinationName} is currently being prepared...',
-        'history': 'Historical timeline of ${destinationName} is being compiled...',
-        'cultural_significance': 'Cultural importance of ${destinationName} is being documented...',
-        'architecture': 'Architectural analysis of ${destinationName} is being processed...',
-        'visitor_info': 'Symbolic philosophy of ${destinationName} is being researched...',
-        'conservation': 'Traditional materials of ${destinationName} are being catalogued...',
-        'modern_development': 'Contemporary developments at ${destinationName} are being reviewed...',
-        'visitor_guide': 'Practical visitor information for ${destinationName} is being compiled...',
+        'overview':
+            'Detailed information about ${destinationName} is currently being prepared...',
+        'history':
+            'Historical timeline of ${destinationName} is being compiled...',
+        'cultural_significance':
+            'Cultural importance of ${destinationName} is being documented...',
+        'architecture':
+            'Architectural analysis of ${destinationName} is being processed...',
+        'visitor_info':
+            'Symbolic philosophy of ${destinationName} is being researched...',
+        'conservation':
+            'Traditional materials of ${destinationName} are being catalogued...',
+        'modern_development':
+            'Contemporary developments at ${destinationName} are being reviewed...',
+        'visitor_guide':
+            'Practical visitor information for ${destinationName} is being compiled...',
       };
     }
   }
-
 
   Future<String> uploadFileToGemini(
       String filePath, String prompt, Schema schema) async {
