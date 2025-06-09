@@ -117,17 +117,17 @@ class DestinationSeeder {
           'imageUrl':
               'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Mpu_Tantular_Museum.jpg/500px-Mpu_Tantular_Museum.jpg',
           'location': const GeoPoint(-7.433982, 112.719922),
-          'address': 'Buduran, Sidoarjo, Jawa Timur',
+          'address': 'Buduran, Sidoarjo, East Java',
           'like': 78,
         },
         {
           'title': 'Kompleks Percandian Dieng',
           'subcategory': 'Archaeological Sites',
           'imageUrl':
-              'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272',
+              'https://asset.kompas.com/crops/pHi-W-EvMqogNjq368W6XdqWJfw=/0x0:1800x1200/780x390/data/photo/2021/09/25/614ea1f2206ed.jpg',
           'location': const GeoPoint(-7.2067, 109.9125),
           'address':
-              'Dieng Kulon, Batur, Banjarnegara Regency, Central Java 53456',
+              'Dieng Kulon, Batur, Banjarnegara Regency',
           'like': 134,
         },
 
@@ -136,20 +136,20 @@ class DestinationSeeder {
           'title': 'Rumah Gadang Baanjuang',
           'subcategory': 'Traditional Houses',
           'imageUrl':
-              'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+              'https://cdn.antaranews.com/cache/1200x800/2021/12/08/08.museum_1.jpg.webp',
           'location': const GeoPoint(-0.7893, 100.6501),
           'address':
-              'Baanjuang, Lima Kaum, Tanah Datar Regency, West Sumatra 27213',
+              'Baanjuang, Lima Kaum, Tanah Datar Regency',
           'like': 92,
         },
         {
           'title': 'Keraton Yogyakarta',
           'subcategory': 'Traditional Houses',
           'imageUrl':
-              'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272',
+              'https://static.promediateknologi.id/crop/0x0:0x0/0x0/webp/photo/p2/222/2024/10/17/WhatsApp-Image-2024-10-17-at-154421-3260115575.jpeg',
           'location': const GeoPoint(-7.8053, 110.3642),
           'address':
-              'Alun-alun Utara No.1, Patehan, Kraton, Yogyakarta City, Special Region of Yogyakarta 55133',
+              'Alun-alun Utara No.1, Patehan, Kraton, Yogyakarta City',
           'like': 167,
         },
       ],
@@ -159,19 +159,19 @@ class DestinationSeeder {
           'title': 'Batik Parang Klasik',
           'subcategory': 'Hand-drawn Batiks',
           'imageUrl':
-              'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+              'https://sintesakonveksi.com/info/wp-content/uploads/2021/02/Motif-Batik-Parang-Kusumo-2.jpg',
           'location': const GeoPoint(-7.5575, 110.8317), // Solo coordinates
-          'address': 'Laweyan, Surakarta City, Central Java 57146',
+          'address': 'Laweyan, Surakarta City, Central Java',
           'like': 143,
         },
         {
           'title': 'Batik Kawung Yogya',
           'subcategory': 'Hand-drawn Batiks',
           'imageUrl':
-              'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272',
+              'https://www.jogjasiana.net/photo/handycrafts/kawung%20(1).jpg',
           'location': const GeoPoint(-7.7956, 110.3695),
           'address':
-              'Taman, Yogyakarta City, Special Region of Yogyakarta 55243',
+              'Taman, Yogyakarta City',
           'like': 128,
         },
 
@@ -180,9 +180,9 @@ class DestinationSeeder {
           'title': 'Batik Cap Pekalongan',
           'subcategory': 'Stamped Batiks',
           'imageUrl':
-              'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+              'https://img.freepik.com/premium-photo/batik-tulis-dan-batik-cap-asal-pekalongan-dari-indonesia-koleksi-museum-pekalongan_1048944-4780995.jpg',
           'location': const GeoPoint(-6.8886, 109.6753),
-          'address': 'Kauman, Pekalongan City, Central Java 51123',
+          'address': 'Kauman, Pekalongan City, Central Java',
           'like': 95,
         },
 
@@ -191,9 +191,9 @@ class DestinationSeeder {
           'title': 'Tenun Ikat Sumba',
           'subcategory': 'Woven Fabrics',
           'imageUrl':
-              'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272',
+              'https://mongabay.co.id/wp-content/uploads/2018/03/tenun-ikat.jpg',
           'location': const GeoPoint(-9.6540, 120.2640),
-          'address': 'Waingapu, East Sumba Regency, East Nusa Tenggara 87112',
+          'address': 'Waingapu, East Nusa Tenggara ',
           'like': 67,
         },
 
@@ -202,10 +202,10 @@ class DestinationSeeder {
           'title': 'Songket Palembang',
           'subcategory': 'Songkets',
           'imageUrl':
-              'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7rjeNTvHn9GXU_UEWc9GypqWYwoP_s7QvIA&s',
           'location': const GeoPoint(-2.9761, 104.7754),
           'address':
-              '13 Ulu, Seberang Ulu II, Palembang City, South Sumatra 30267',
+              'Seberang Ulu II, Palembang City, South Sumatra',
           'like': 112,
         },
       ],
@@ -215,10 +215,10 @@ class DestinationSeeder {
           'title': 'Angklung Udjo Bandung',
           'subcategory': 'Bamboo Instruments',
           'imageUrl':
-              'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYiCpk8OhYfiseCDpwRb7UNYzHsgeprtgF7A&s',
           'location': const GeoPoint(-6.9175, 107.6191),
           'address':
-              'Jl. Padasuka No.118, Pasirlayung, Cibeunying Kidul, Bandung City, West Java 40192',
+              'Pasirlayung, Cibeunying Kidul, Bandung City',
           'like': 187,
         },
 
@@ -227,9 +227,9 @@ class DestinationSeeder {
           'title': 'Kendang Bali',
           'subcategory': 'Percussion Drums',
           'imageUrl':
-              'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272',
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_fmM6uKe9J8tnltYefxHNdu5JkBB5_4hm7A&s',
           'location': const GeoPoint(-8.3405, 115.0920),
-          'address': 'Ubud, Gianyar Regency, Bali 80571',
+          'address': 'Ubud, Gianyar Regency, Bali',
           'like': 94,
         },
 
@@ -238,9 +238,9 @@ class DestinationSeeder {
           'title': 'Sasando Rote',
           'subcategory': 'String Instruments',
           'imageUrl':
-              'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpinWh1Ft76Z5LpTEt3BXVnCgINYg4NKlVLg&s',
           'location': const GeoPoint(-10.6872, 123.0576),
-          'address': 'Ba\'a, Rote Ndao Regency, East Nusa Tenggara 85982',
+          'address': 'Rote Ndao Regency, East Nusa Tenggara',
           'like': 56,
         },
 
@@ -249,10 +249,10 @@ class DestinationSeeder {
           'title': 'Gamelan Jawa',
           'subcategory': 'Gongs',
           'imageUrl':
-              'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272',
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7tf5-IW-WTfRAWjaGRBqf5s-a9RWn4qdhEg&s',
           'location': const GeoPoint(-7.7956, 110.3695),
           'address':
-              'Kraton, Yogyakarta City, Special Region of Yogyakarta 55133',
+              'Kraton, Yogyakarta City',
           'like': 205,
         },
       ],
@@ -262,19 +262,19 @@ class DestinationSeeder {
           'title': 'Kebaya Jawa Klasik',
           'subcategory': 'Women\'s Dresses',
           'imageUrl':
-              'https://images.unsplash.com/photo-1565967511849-76a60a516170',
+              'https://hypeabis.id/assets/content/20220322181920000000sdgsdwa.jpg',
           'location': const GeoPoint(-7.7956, 110.3695),
           'address':
-              'Malioboro, Yogyakarta City, Special Region of Yogyakarta 55271',
+              'Malioboro, Yogyakarta City',
           'like': 172,
         },
         {
           'title': 'Baju Bodo Makassar',
           'subcategory': 'Women\'s Dresses',
           'imageUrl':
-              'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272',
+              'https://awsimages.detik.net.id/community/media/visual/2021/03/04/baju-bodo_169.jpeg?w=1200',
           'location': const GeoPoint(-5.1477, 119.4327),
-          'address': 'Somba Opu, Gowa Regency, South Sulawesi 92113',
+          'address': 'Somba Opu, Gowa, South Sulawesi',
           'like': 108,
         },
 
