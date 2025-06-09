@@ -20,7 +20,8 @@ class InputField extends StatefulWidget {
   State<InputField> createState() => _InputFieldState();
 }
 
-class _InputFieldState extends State<InputField> with SingleTickerProviderStateMixin {
+class _InputFieldState extends State<InputField>
+    with SingleTickerProviderStateMixin {
   bool isTyping = false;
   late AnimationController _animationController;
   late Animation<double> _pulseAnimation;
