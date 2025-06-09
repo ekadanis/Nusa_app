@@ -6,7 +6,7 @@ import '../../../models/destination_model.dart';
 import '../widgets/destination_header.dart';
 import '../widgets/destination_overview.dart';
 import '../widgets/destination_content.dart';
-import '../widgets/loading_screen.dart';
+import '../../../widgets/loading_screen.dart';
 import '../../../services/gemini_service.dart';
 
 @RoutePage()

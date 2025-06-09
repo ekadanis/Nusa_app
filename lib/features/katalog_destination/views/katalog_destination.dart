@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:sizer/sizer.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../../core/styles.dart';
+import '../../../core/app_colors.dart';
 import '../../../widgets/custom_search.dart';
 import '../widgets/home_appbar_katalog_screen.dart';
 import '../widgets/product_grid_section.dart';
@@ -104,17 +105,28 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
     _searchController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
+    // Show loading screen until data is completely fetched
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: Colors.white,        body: Center(
+          child: LoadingAnimationWidget.beat(
+            color: AppColors.primary50,
+            size: 15.w,
+          ),
+        ),
+      );
+    }
+
+    // Show complete screen only after data is loaded
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(22.h),
         child: Stack(
           clipBehavior: Clip.none,
-          children: [
-            HomeAppBar(
-              categoryName: _selectedCategory?.categoryName ?? "Loading...",
+          children: [            HomeAppBar(
+              categoryName: _selectedCategory?.categoryName ?? "Cultural Sites",
             ),
             Positioned(
               top: 15.5.h,
@@ -124,7 +136,8 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
                 elevation: 10,
                 shadowColor: Colors.black.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(12),
-                child: SizedBox(                  child: SearchWidget(
+                child: SizedBox(
+                  child: SearchWidget(
                     hintText: "Find Your Culture",
                     controller: _searchController,
                     onChanged: (text) {
@@ -142,50 +155,52 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
         bottom: false,
         child: Column(
           children: [
-            Expanded(              child: _isLoading
+            Expanded(
+              child: _filteredDestinations.isEmpty
                   ? Center(
-                      child: LoadingAnimationWidget.beat(
-                        color: Colors.blue,
-                        size: 15.w,
-                      ),
-                    )
-                  : _filteredDestinations.isEmpty
-                      ? Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(4.w),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.search_off,
-                                  size: 20.w,
-                                  color: Colors.grey,
-                                ),
-                                SizedBox(height: 2.h),
-                                Text(
-                                  _searchQuery.isEmpty 
-                                      ? 'No destinations found'
-                                      : 'No results found for "$_searchQuery"',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      child: Padding(
+                        padding: EdgeInsets.all(4.w),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 20.w,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 2.h),
+                            Text(
+                              _searchQuery.isEmpty
+                                  ? 'No destinations found'
+                                  : 'No results found for "$_searchQuery"',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
                                     color: Colors.grey[600],
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 1.h),
-                                Text(
-                                  'Try searching with different keywords',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 1.h),
+                            Text(
+                              'Try searching with different keywords',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
                                     color: Colors.grey[500],
                                   ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                              textAlign: TextAlign.center,
                             ),
-                          ),
-                        )
-                      : SingleChildScrollView(
+                          ],
+                        ),
+                      ),
+                    )
+                  : SingleChildScrollView(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,                        children: [                          SizedBox(height: Styles.xsSpacing),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: Styles.xsSpacing),
                           ProductGridSection(
                             products: _filteredDestinations,
                             customFilters: _subcategories,
