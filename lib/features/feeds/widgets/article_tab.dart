@@ -1,11 +1,49 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/core/app_colors.dart';
+import 'package:nusa_app/features/feeds/widgets/build_category_name.dart';
+import 'package:nusa_app/models/article_model.dart';
+import 'package:nusa_app/routes/router.dart';
+import 'package:nusa_app/services/firestore_service.dart';
 
-class ArticleTab extends StatelessWidget {
+class ArticleTab extends StatefulWidget {
   const ArticleTab({super.key});
 
   @override
+  State<ArticleTab> createState() => _ArticleTabState();
+}
+
+class _ArticleTabState extends State<ArticleTab> {
+  List<ArticleModel> _articles = [];
+  List<ArticleModel> _featuredArticles = [];
+  bool _isLoading = true;
+  String? _error;
+  String _selectedCategory = "Discover";
+  final Map<String, String> _categoryMap = {
+    "Discover": "",
+    "Cultural Sites": "cultural_sites",
+    "Local Foods": "local_foods",
+    "Traditional Wear": "traditional_wear",
+    "Arts & Culture": "art_and_culture",
+    "Folk Instruments": "folk_instruments",
+    "Crafts & Artifacts": "crafts_and_artifacts"
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchArticles();
+    _fetchFeaturedArticles();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_error != null) {
+      return Center(child: Text(_error!));
+    }
     return Column(
       children: [
         _buildFeaturedCardsSection(context),
@@ -13,36 +51,85 @@ class ArticleTab extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            itemCount: 4, // TODO: Replace with actual data
-            itemBuilder: (context, index) => _buildArticleItem(context),
+            itemCount: _articles.length, // TODO: Replace with actual data
+            itemBuilder: (context, index) =>
+                _buildArticleItem(context, _articles[index]),
           ),
         ),
       ],
     );
   }
 
+  Future<void> _fetchArticles({String? categoryId}) async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      List<ArticleModel> articles;
+      if (categoryId == null || categoryId.isEmpty) {
+        articles = await FirestoreService.getArticles(limit: 10);
+      } else {
+        articles =
+            await FirestoreService.getArticlesByCategory(categoryId, limit: 10);
+      }
+      setState(() {
+        _articles = articles;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _error = "Failed to load articles: ${e.toString()}";
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchFeaturedArticles() async {
+    final featured = await FirestoreService.getTopArticlesByLikes(limit: 5);
+    setState(() {
+      _featuredArticles = featured;
+    });
+  }
+
+  Future<void> _onCategorySelectedAndFetch(String label) async {
+    setState(() {
+      _selectedCategory = label;
+      _isLoading = true;
+      _error = null;
+    });
+
+    try {
+      String categoryId = "";
+      if (label != "Discover") {
+        // Ambil id kategori dari Firestore berdasarkan nama kategori
+        categoryId = await FirestoreService.getCategoryIdByName(label);
+      }
+      await _fetchArticles(categoryId: categoryId);
+    } catch (e) {
+      setState(() {
+        _error = "Failed to load articles: ${e.toString()}";
+        _isLoading = false;
+      });
+    }
+  }
+
   Widget _buildFeaturedCardsSection(BuildContext context) {
     return Container(
       height: 160,
       margin: const EdgeInsets.only(bottom: 16),
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          _buildFeaturedCard(
-            context,
-            "Evening Metropolis: A reflection on modern city life",
-          ),
-          _buildFeaturedCard(
-            context,
-            "Visit the Valley: Discover treasures that exist in nature",
-          ),
-          _buildFeaturedCard(
-            context,
-            "Cultural Heritage: Preserving traditions for future generations",
-          ),
-        ],
-      ),
+      child: _featuredArticles.isEmpty
+          ? const Center(child: Text("Belum ada artikel populer"))
+          : ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _featuredArticles.length,
+              itemBuilder: (context, index) {
+                final article = _featuredArticles[index];
+                return _buildFeaturedCard(context, article);
+              },
+            ),
     );
   }
 
@@ -53,103 +140,152 @@ class ArticleTab extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          _buildCategoryChip("Discover", isSelected: true),
-          _buildCategoryChip("Culture/Sites"),
-          _buildCategoryChip("Food & Recipes"),
-          _buildCategoryChip("Traditional Wear"),
-          _buildCategoryChip("Art & Craft"),
-          _buildCategoryChip("Folk Music"),
-        ],
+        children: _categoryMap.keys.map((label) {
+          return GestureDetector(
+            onTap: () => _onCategorySelectedAndFetch(label),
+            child: _buildCategoryChip(label,
+                isSelected: _selectedCategory == label),
+          );
+        }).toList(),
       ),
     );
   }
 
-  Widget _buildFeaturedCard(BuildContext context, String title) {
-    return Container(
-      width: 200,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.brown[400]!,
-            Colors.brown[600]!,
+  Widget _buildFeaturedCard(BuildContext context, ArticleModel article) {
+    return InkWell(
+      onTap: () {
+        AutoRouter.of(context).push(ArticleRoute(article: article));
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 200,
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
           ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          // Overlay gradient
-          Container(
-            decoration: BoxDecoration(
+        child: Stack(
+          children: [
+            // Article image
+            ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.7),
+              child: Image.network(
+                article.imageUrl,
+                width: 200,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.brown[400]!,
+                          Colors.brown[600]!,
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.brown[400]!,
+                          Colors.brown[600]!,
+                        ],
+                      ),
+                    ),
+                    child: const Center(
+                        child: Icon(Icons.error, color: Colors.white)),
+                  );
+                },
+              ),
+            ),
+            // Overlay gradient
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.7),
+                  ],
+                ),
+              ),
+            ),
+            // Content
+            Positioned(
+              bottom: 16,
+              left: 16,
+              right: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    article.title ?? '-',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      height: 1.3,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.favorite,
+                        color: Colors.white.withOpacity(0.8),
+                        size: 14,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '${article.like ?? 0} likes',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
-          ),
-          // Content
-          Positioned(
-            bottom: 16,
-            left: 16,
-            right: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    height: 1.3,
-                  ),
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.schedule,
-                      color: Colors.white.withOpacity(0.8),
-                      size: 14,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '5 min read',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.8),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildCategoryChip(String label, {bool isSelected = false}) {
     return Container(
+      alignment: Alignment.center,
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -179,10 +315,10 @@ class ArticleTab extends StatelessWidget {
     );
   }
 
-  Widget _buildArticleItem(BuildContext context) {
+  Widget _buildArticleItem(BuildContext context, ArticleModel article) {
     return InkWell(
       onTap: () {
-        // TODO: Navigate to article detail
+        AutoRouter.of(context).push(ArticleRoute(article: article));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -199,22 +335,35 @@ class ArticleTab extends StatelessWidget {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Container(
                 width: 80,
-                height: 80,
+                height: 120,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Colors.brown[300]!, Colors.brown[500]!],
                   ),
                 ),
-                child: Icon(
-                  Icons.article,
-                  color: Colors.white,
-                  size: 32,
+                child: Image.network(
+                  article.imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(child: Icon(Icons.error));
+                  },
                 ),
               ),
             ),
@@ -230,20 +379,14 @@ class ArticleTab extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.primary50.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(4),
-                    ),                    child: Text(
-                      'Culinary',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primary50,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      borderRadius: BorderRadius.circular(8),
                     ),
+                    child: buildCategoryName(article.categoryId),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Tahu Tek: A Flavorful Fusion of Tofu, Peanut Sauce, and Crunch',
-                    style: TextStyle(
+                  Text(
+                    article.title ?? '-',
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                       height: 1.3,
@@ -259,8 +402,11 @@ class ArticleTab extends StatelessWidget {
                         size: 14,
                         color: Colors.grey[600],
                       ),
-                      const SizedBox(width: 4),                      Text(
-                        'Tuesday, March 20, 2024',
+                      const SizedBox(width: 4),
+                      Text(
+                        article.date != null
+                            ? "${article.date!.day}/${article.date!.month}/${article.date!.year}"
+                            : '-',
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 12,
@@ -274,7 +420,7 @@ class ArticleTab extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '1.2k',
+                        article.like.toString() ?? '-',
                         style: TextStyle(
                           color: Colors.grey[600],
                           fontSize: 12,

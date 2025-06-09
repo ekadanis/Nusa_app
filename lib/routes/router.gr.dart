@@ -29,6 +29,52 @@ class AccountRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
+/// [ArticlePage]
+class ArticleRoute extends PageRouteInfo<ArticleRouteArgs> {
+  ArticleRoute({
+    Key? key,
+    required ArticleModel article,
+    List<PageRouteInfo>? children,
+  }) : super(
+          ArticleRoute.name,
+          args: ArticleRouteArgs(
+            key: key,
+            article: article,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ArticleRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ArticleRouteArgs>();
+      return ArticlePage(
+        key: args.key,
+        article: args.article,
+      );
+    },
+  );
+}
+
+class ArticleRouteArgs {
+  const ArticleRouteArgs({
+    this.key,
+    required this.article,
+  });
+
+  final Key? key;
+
+  final ArticleModel article;
+
+  @override
+  String toString() {
+    return 'ArticleRouteArgs{key: $key, article: $article}';
+  }
+}
+
+/// generated route for
 /// [DashboardPage]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})
