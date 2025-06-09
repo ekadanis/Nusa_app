@@ -20,7 +20,8 @@ class InputField extends StatefulWidget {
   State<InputField> createState() => _InputFieldState();
 }
 
-class _InputFieldState extends State<InputField> with SingleTickerProviderStateMixin {
+class _InputFieldState extends State<InputField>
+    with SingleTickerProviderStateMixin {
   bool isTyping = false;
   late AnimationController _animationController;
   late Animation<double> _pulseAnimation;
@@ -38,6 +39,17 @@ class _InputFieldState extends State<InputField> with SingleTickerProviderStateM
     _pulseAnimation = Tween<double>(begin: 1.0, end: 1.3).animate(
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
+  }
+
+  @override
+  void didUpdateWidget(covariant InputField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.isRecording && !_animationController.isAnimating) {
+      _animationController.repeat(reverse: true);
+    } else if (!widget.isRecording && _animationController.isAnimating) {
+      _animationController.stop();
+    }
   }
 
   @override
