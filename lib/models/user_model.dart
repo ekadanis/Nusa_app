@@ -5,23 +5,24 @@ class UserModel {
   final String name;
   final String email;
   final String password;
+  final String? photoURL;
 
   UserModel({
     this.id,
     required this.name,
     required this.email,
     required this.password,
+    this.photoURL,
   });
-
   // Convert to Map for Firestore
   Map<String, dynamic> toFirestore() {
     return {
       'name': name,
       'email': email,
       'password': password,
+      'photoURL': photoURL,
     };
   }
-
   // Create from Firestore document
   factory UserModel.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -30,9 +31,9 @@ class UserModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       password: data['password'] ?? '',
+      photoURL: data['photoURL'],
     );
   }
-
   // Create from Map
   factory UserModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return UserModel(
@@ -40,21 +41,23 @@ class UserModel {
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       password: map['password'] ?? '',
+      photoURL: map['photoURL'],
     );
   }
-
   // Copy with method
   UserModel copyWith({
     String? id,
     String? name,
     String? email,
     String? password,
+    String? photoURL,
   }) {
     return UserModel(
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
       password: password ?? this.password,
+      photoURL: photoURL ?? this.photoURL,
     );
   }
 

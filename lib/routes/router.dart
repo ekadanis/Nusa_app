@@ -8,7 +8,7 @@ import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
 import '../features/pages.dart';
 import '../models/destination_model.dart';
-import 'package:camera/camera.dart';
+import '../models/forum_model.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')

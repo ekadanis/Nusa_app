@@ -1,10 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/models.dart';
-import '../services/firestore_service.dart';
 
 class ForumSeeder {
+  // Clear existing forum data from feeds collection
+  static Future<void> clearForumData() async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('feeds')
+          .get();
+      
+      for (final doc in snapshot.docs) {
+        await doc.reference.delete();
+      }
+    } catch (e) {
+      print('Error clearing forum data: $e');
+    }
+  }
+
+  // Re-seed forum data (clear first then seed)
+  static Future<void> reseedForums(String userId) async {
+    try {
+      await clearForumData();
+      await seedForums(userId);
+      print('Forum data reseeded successfully');
+    } catch (e) {
+      print('Error reseeding forum data: $e');
+    }
+  }
+
   static Future<void> seedForums(String userId) async {
-    print('💬 Seeding Forum Posts...');
-    
     final forums = [
       ForumModel(
         content: '''Hey everyone! I'm planning to visit Borobudur for the first time next month. Any tips on the best time to go? I've heard sunrise is amazing but is it worth the early wake-up call? 🌅
@@ -139,24 +163,17 @@ Each region has its own brewing methods and traditions too. What's your favorite
         date: DateTime(2024, 3, 15, 11, 00),
         userId: userId,
         like: 33,
-      ),
-    ];
-
-    int seedCount = 0;
-    for (final forum in forums) {      // Check if forum post already exists (checking content to avoid duplicates)
-      final existingForum = await FirestoreService.forumsCollection
+      ),    ];    for (final forum in forums) {
+      final existingForum = await FirebaseFirestore.instance
+          .collection('feeds')
           .where('content', isEqualTo: forum.content)
           .get();
 
       if (existingForum.docs.isEmpty) {
-        await FirestoreService.forumsCollection.add(forum.toFirestore());
-        seedCount++;
-        print('💬 Created forum post: ${forum.content.substring(0, 50)}...');
-      } else {
-        print('💬 Forum post already exists: ${forum.content.substring(0, 30)}...');
+        await FirebaseFirestore.instance
+            .collection('feeds')
+            .add(forum.toFirestore());
       }
     }
-
-    print('✅ Forums seeding completed! Created $seedCount new forum posts');
   }
 }

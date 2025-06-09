@@ -6,6 +6,7 @@ class ForumModel {
   final DateTime date;
   final int like;
   final String userId;
+  final int commentsCount;
 
   ForumModel({
     this.id,
@@ -13,17 +14,17 @@ class ForumModel {
     required this.date,
     required this.userId,
     this.like = 0,
-  });
-  // Convert to Map for Firestore
+    this.commentsCount = 0,
+  });  // Convert to Map for Firestore
   Map<String, dynamic> toFirestore() {
     return {
       'content': content,
       'date': Timestamp.fromDate(date),
       'like': like,
       'userId': userId,
+      'commentsCount': commentsCount,
     };
-  }
-  // Create from Firestore document
+  }  // Create from Firestore document
   factory ForumModel.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return ForumModel(
@@ -32,9 +33,9 @@ class ForumModel {
       date: (data['date'] as Timestamp?)?.toDate() ?? DateTime.now(),
       like: data['like'] ?? 0,
       userId: data['userId'] ?? '',
+      commentsCount: data['commentsCount'] ?? 0,
     );
-  }
-  // Create from Map
+  }  // Create from Map
   factory ForumModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return ForumModel(
       id: id,
@@ -44,6 +45,7 @@ class ForumModel {
           : map['date'] ?? DateTime.now(),
       like: map['like'] ?? 0,
       userId: map['userId'] ?? '',
+      commentsCount: map['commentsCount'] ?? 0,
     );
   }
   // Copy with method

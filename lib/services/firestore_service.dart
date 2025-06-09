@@ -4,13 +4,13 @@ import '../seeders/seeders.dart';
 
 class FirestoreService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   // Collection references
   static CollectionReference get usersCollection => _firestore.collection('users');
   static CollectionReference get categoriesCollection => _firestore.collection('categories');
   static CollectionReference get destinationsCollection => _firestore.collection('destinations');
   static CollectionReference get articlesCollection => _firestore.collection('articles');
   static CollectionReference get forumsCollection => _firestore.collection('forums');
+  static CollectionReference get commentsCollection => _firestore.collection('comments');
 
   // User subcollections
   static CollectionReference getUserLikedDestinations(String userId) {
@@ -108,18 +108,17 @@ class FirestoreService {
     } catch (e) {
       // Error saat toggle like artikel
     }
-  }
-  static Future<void> toggleForumLike(String userId, String forumId) async {
+  }  static Future<void> toggleForumLike(String userId, String forumId) async {
     try {
       final likedForumPostsRef = getUserLikedForumPosts(userId);
       final doc = await likedForumPostsRef.doc(forumId).get();
 
       if (doc.exists) {
         await likedForumPostsRef.doc(forumId).delete();
-        await _decrementLikeCount('forum', forumId);
+        await _decrementLikeCount('feeds', forumId);
       } else {
         await likedForumPostsRef.doc(forumId).set({'isFavorite': true});
-        await _incrementLikeCount('forum', forumId);
+        await _incrementLikeCount('feeds', forumId);
       }
     } catch (e) {
       // Error saat toggle like forum
@@ -140,7 +139,7 @@ class FirestoreService {
         'like': FieldValue.increment(-1),
       });
     } catch (e) {
-      // Error saat mengurangi jumlah like
+    
     }
   }
   // Periksa apakah user menyukai item
@@ -214,10 +213,6 @@ class FirestoreService {
     try {
       final destinations = await getDestinationsByCategory(categoryId, limit: limit);
       
-      // Catatan: Dalam implementasi nyata, Anda bisa memperluas DestinationModel 
-      // untuk menyertakan field 'isFavorite' atau mengembalikan model yang berbeda
-      // Untuk saat ini, GenericSection akan menangani status favorit secara terpisah
-      
       return destinations;
     } catch (e) {
       // Error saat mengambil destinasi dengan preferensi user
@@ -234,15 +229,57 @@ class FirestoreService {
       Query query = destinationsCollection
           .where('categoryId', isEqualTo: categoryId)
           .limit(limit);
-          
-      if (lastDocument != null) {
+            if (lastDocument != null) {
         query = query.startAfterDocument(lastDocument);
       }
-        final snapshot = await query.get();
+      final snapshot = await query.get();
       return snapshot.docs.map((doc) => DestinationModel.fromFirestore(doc)).toList();
     } catch (e) {
       // Error saat mengambil destinasi dengan paginasi
       return [];
+    }
+  }
+
+  // Comment operations
+  static Future<String?> addComment(CommentModel comment) async {
+    try {
+      final docRef = await commentsCollection.add(comment.toFirestore());
+      
+      // Update forum's comments count
+      await _firestore.collection('feeds').doc(comment.forumId).update({
+        'commentsCount': FieldValue.increment(1),
+      });
+      
+      return docRef.id;
+    } catch (e) {
+      // Error saat menambah komentar
+      return null;
+    }
+  }
+
+  static Future<List<CommentModel>> getCommentsByForumId(String forumId) async {
+    try {
+      final snapshot = await commentsCollection
+          .where('forumId', isEqualTo: forumId)
+          .orderBy('date', descending: false)
+          .get();
+      return snapshot.docs.map((doc) => CommentModel.fromFirestore(doc)).toList();
+    } catch (e) {
+      // Error saat mengambil komentar
+      return [];
+    }
+  }
+
+  static Future<int> getCommentsCount(String forumId) async {
+    try {
+      final snapshot = await commentsCollection
+          .where('forumId', isEqualTo: forumId)
+          .count()
+          .get();
+      return snapshot.count ?? 0;
+    } catch (e) {
+      // Error saat menghitung komentar
+      return 0;
     }
   }
 }

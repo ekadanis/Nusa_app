@@ -3,8 +3,6 @@ import '../services/firestore_service.dart';
 
 class ArticleSeeder {
   static Future<void> seedArticles(Map<String, String> categoryIds) async {
-    print('📰 Seeding Articles...');
-    
     final articles = [
       // Cultural Sites Articles
       ArticleModel(
@@ -175,25 +173,15 @@ The peanut sauce is the star of the dish, typically made from ground peanuts, pa
 Gado-gado represents the Indonesian philosophy of unity in diversity. Just as the nation brings together different ethnic groups, this dish harmoniously combines various ingredients into one delicious, nutritious meal.''',
         imageUrl: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80',
         like: 156,
-      ),
-    ];
+      ),    ];
 
-    int seedCount = 0;
-    for (final article in articles) {
-      // Check if article already exists
-      final existingArticle = await FirestoreService.articlesCollection
+    for (final article in articles) {final existingArticle = await FirestoreService.articlesCollection
           .where('title', isEqualTo: article.title)
           .get();
 
       if (existingArticle.docs.isEmpty) {
         await FirestoreService.articlesCollection.add(article.toFirestore());
-        seedCount++;
-        print('📰 Created article: ${article.title}');
-      } else {
-        print('📰 Article "${article.title}" already exists');
       }
     }
-
-    print('✅ Articles seeding completed! Created $seedCount new articles');
   }
 }

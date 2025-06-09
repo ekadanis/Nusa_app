@@ -36,56 +36,55 @@ class _HomeAppBarState extends State<HomeAppBar> {
         return;
       }
 
-      final userId = currentUser.uid;
-
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+      final userId = currentUser.uid;      DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .get();
 
       if (userDoc.exists && mounted) {
-        setState(() {
-          _currentUser = UserModel.fromFirestore(userDoc);
-          _isLoading = false;
-        });
-      } else {
-        // Buat profil user jika belum ada
-        await _createUserProfile(currentUser);
+        final user = UserModel.fromFirestore(userDoc);
+        
+        // Check if user profile needs photo update from Google
+        if (user.photoURL == null && currentUser.photoURL != null) {
+          // Refresh user profile with Google data
+          await GoogleAuthService.refreshCurrentUserProfile();
+          // Fetch updated user data
+          final updatedDoc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .get();
+          if (updatedDoc.exists) {
+            setState(() {
+              _currentUser = UserModel.fromFirestore(updatedDoc);
+              _isLoading = false;
+            });
+          }
+        } else {
+          setState(() {
+            _currentUser = user;
+            _isLoading = false;
+          });
+        }} else {
+        // Buat profil user jika belum ada menggunakan GoogleAuthService
+        await GoogleAuthService.createOrUpdateUserProfile(currentUser);
+        // Fetch the created user data
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+        if (userDoc.exists && mounted) {
+          setState(() {
+            _currentUser = UserModel.fromFirestore(userDoc);
+            _isLoading = false;
+          });
+        }
       }
     } catch (e) {
       if (mounted) {
         setState(() {
           _isLoading = false;
         });
-      }
-    }
-  }  Future<void> _createUserProfile(user) async {
-    try {
-      final userModel = UserModel(
-        id: user.uid,
-        name: user.displayName ?? 'User',
-        email: user.email ?? '',
-        password: '', // Untuk user Google Auth, password tidak disimpan
-      );
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .set(userModel.toFirestore());
-
-      if (mounted) {
-        setState(() {
-          _currentUser = userModel;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+      }    }
   }
 
   @override

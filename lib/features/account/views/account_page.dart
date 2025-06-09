@@ -139,7 +139,7 @@ class _AccountPageState extends State<AccountPage> {
                           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       )
-                    : const Icon(IconsaxPlusBold.logout),
+                    : const Icon(IconsaxPlusBold.logout , color: AppColors.background,),
                 label: Text(_isLoggingOut ? 'Logging out...' : 'Logout'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,

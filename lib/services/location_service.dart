@@ -51,15 +51,15 @@ class LocationService {
     }
   }
 
-  /// Calculate distance between two points using Haversine formula
+
   static double calculateDistance(
     double lat1,
     double lon1,
     double lat2,
     double lon2,
   ) {
-    return Geolocator.distanceBetween(lat1, lon1, lat2, lon2) / 1000; // Convert to km
-  }  /// Saring destinasi berdasarkan jarak dari lokasi user
+    return Geolocator.distanceBetween(lat1, lon1, lat2, lon2) / 1000;
+  }
   static List<DestinationModel> filterByDistance(
     List<DestinationModel> destinations,
     Position userLocation,
