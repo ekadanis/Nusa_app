@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ import 'package:nusa_app/l10n/l10n.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:nusa_app/routes/router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 @RoutePage()
 class ImageAnalyzerPage extends StatefulWidget {
@@ -18,10 +22,12 @@ class ImageAnalyzerPage extends StatefulWidget {
 }
 
 class _ImageAnalyzerPageState extends State<ImageAnalyzerPage> {
-  late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
-  XFile? pickedImage;
+  CameraController? _controller; // Ubah dari late ke nullable
+  Future<void>? _initializeControllerFuture; // Ubah dari late ke nullable
+  File? pickedImage;
   final ImagePicker picker = ImagePicker();
+  bool _isInitializing = true; // Tambahkan state untuk loading
+  String? _errorMessage; // Tambahkan state untuk error
 
   @override
   void initState() {
@@ -31,74 +37,121 @@ class _ImageAnalyzerPageState extends State<ImageAnalyzerPage> {
 
   Future<void> _setupCamera() async {
     try {
-      // Ambil semua kamera yang tersedia
+      setState(() {
+        _isInitializing = true;
+        _errorMessage = null;
+      });
+
       final cameras = await availableCameras();
 
-      // Pilih kamera belakang jika ada
+      if (cameras.isEmpty) {
+        setState(() {
+          _errorMessage = 'Tidak ada kamera yang tersedia';
+          _isInitializing = false;
+        });
+        return;
+      }
+
       final backCamera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back,
         orElse: () => cameras.first,
       );
 
-      // Buat controller dan inisialisasi
       _controller = CameraController(backCamera, ResolutionPreset.high);
-      _initializeControllerFuture = _controller.initialize();
+      _initializeControllerFuture = _controller!.initialize();
 
-      setState(() {}); // Trigger build ulang saat controller sudah siap
+      await _initializeControllerFuture;
+
+      if (mounted) {
+        setState(() {
+          _isInitializing = false;
+        });
+      }
     } catch (e) {
       print('Gagal setup kamera: $e');
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Gagal mengakses kamera: $e';
+          _isInitializing = false;
+        });
+      }
     }
   }
 
   Future<void> pickImageFromGallery() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (image != null) {
-      print('Path gambar: ${image.path}');
+    if (pickedFile != null) {
+      try {
+        // Ambil direktori sementara
+        final tempDir = await getTemporaryDirectory();
+
+        // Ambil ekstensi asli file
+        final extension = path.extension(pickedFile.path);
+
+        // Buat path baru untuk menyimpan file
+        final fileName =
+            'temp_image_${DateTime.now().millisecondsSinceEpoch}$extension';
+        final savedPath = path.join(tempDir.path, fileName);
+
+        // Simpan file ke direktori sementara, convert XFile to File
+        final savedImage = await File(pickedFile.path).copy(savedPath);
+
+        // Navigasi ke halaman konfirmasi
+        if (mounted) {
+          AutoRouter.of(context)
+              .push(ImageConfirmationRoute(pickedImage: savedImage));
+        }
+      } catch (e) {
+        print('Error saat menyimpan gambar: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Gagal memproses gambar: $e')),
+          );
+        }
+      }
     } else {
       print('Tidak ada gambar dipilih.');
     }
   }
 
+  Future<void> _takePicture() async {
+    if (_controller == null || !_controller!.value.isInitialized) {
+      print('Controller kamera tidak siap');
+      return;
+    }
+
+    try {
+      final image = await _controller!.takePicture();
+      final pickedImage = File(image.path);
+      print('Foto disimpan di: ${image.path}');
+
+      if (mounted) {
+        AutoRouter.of(context)
+            .push(ImageConfirmationRoute(pickedImage: pickedImage));
+      }
+    } catch (e) {
+      print('Gagal mengambil foto: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal mengambil foto: $e')),
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // agar konten bisa ke bawah nav bar
-      body: _initializeControllerFuture == null
-          ? const Center(child: CircularProgressIndicator())
-          : FutureBuilder<void>(
-              future: _initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Stack(
-                    children: [
-                      Positioned.fill(
-                        child: CameraPreview(_controller),
-                      ),
-                      Positioned.fill(
-                        child: CustomPaint(
-                          painter: GridPainter(),
-                        ),
-                      ),
-                      Positioned.fill(
-                          child: Image.asset(
-                        'assets/core/scanner_mockup.png',
-                        width: 52,
-                      )),
-                    ],
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+      extendBody: true,
+      body: _buildBody(),
       floatingActionButton: Container(
         margin: EdgeInsets.symmetric(vertical: 84),
         child: Row(
@@ -122,44 +175,84 @@ class _ImageAnalyzerPageState extends State<ImageAnalyzerPage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               elevation: 0,
-              onPressed: () async {
-                try {
-                  await _initializeControllerFuture;
-                  final image = await _controller.takePicture();
-                  print('Foto disimpan di: ${image.path}');
-                  AutoRouter.of(context)
-                      .push(ImageConfirmationRoute(pickedImage: image));
-                } catch (e) {
-                  print('Gagal mengambil foto: $e');
-                }
-              },
+              onPressed: _takePicture,
               child: const Icon(Icons.camera_alt),
             ),
             FloatingActionButton(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               elevation: 0,
-              onPressed: () async {
-                try {
-                  final picked =
-                      await picker.pickImage(source: ImageSource.gallery);
-                  if (picked != null) {
-                    setState(() {
-                      pickedImage = picked;
-                    });
-                    AutoRouter.of(context).push(
-                        ImageConfirmationRoute(pickedImage: pickedImage!));
-                  }
-                } catch (e) {
-                  print('Gagal mengambil foto: $e');
-                }
-              },
+              onPressed: pickImageFromGallery,
               child: Icon(IconsaxPlusBold.gallery),
             ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _buildBody() {
+    if (_isInitializing) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 16),
+            Text('Mempersiapkan kamera...'),
+          ],
+        ),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 64,
+              color: Colors.red,
+            ),
+            SizedBox(height: 16),
+            Text(
+              _errorMessage!,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _setupCamera,
+              child: Text('Coba Lagi'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (_controller == null || !_controller!.value.isInitialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: CameraPreview(_controller!),
+        ),
+        Positioned.fill(
+          child: CustomPaint(
+            painter: GridPainter(),
+          ),
+        ),
+        Positioned.fill(
+          child: Image.asset(
+            'assets/core/scanner_mockup.png',
+            width: 52,
+          ),
+        ),
+      ],
     );
   }
 }

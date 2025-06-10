@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/styles.dart';
 import '../../../../core/app_colors.dart';
-import '../../../features/katalog_produk/views/katalog_produk.dart';
+import '../../katalog_destination/views/katalog_destination.dart';
 import 'category_item.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -58,7 +58,6 @@ class _CategoriesSectionState extends State<CategoriesSection> {
           iconPath: category["icon"] as String,
           colorHex: category["colorHex"] as String,
           onTap: () {
-            // Use PageTransition for smoother transitions
             Navigator.push(
               context,
               PageTransition(
@@ -67,8 +66,8 @@ class _CategoriesSectionState extends State<CategoriesSection> {
                 child: KatalogProdukPage(
                   categoryName: category["title"] as String,
                 ),
-                childCurrent: widget, // Reference to current widget for smoother transition
-                curve: Curves.easeInOut, // Smooth curve
+                childCurrent: widget,
+                curve: Curves.easeInOut,
               ),
             );
           },
