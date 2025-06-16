@@ -9,6 +9,7 @@ import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
 import '../features/pages.dart';
 import '../models/destination_model.dart';
 import '../models/forum_model.dart';
+import '../models/article_model.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -85,13 +86,20 @@ class AppRouter extends RootStackRouter {
           page: ImageConfirmationRoute.page,
           path: '/image-confirmation',
           transitionsBuilder: TransitionsBuilders.fadeIn,
-        ),        CustomRoute<void>(
+        ),
+        CustomRoute<void>(
           page: ImageResultRoute.page,
           path: '/image-result',
           transitionsBuilder: TransitionsBuilders.fadeIn,
-        ),        CustomRoute<void>(
+        ),
+        CustomRoute<void>(
           page: DetailRouteDestination.page,
           path: '/detail-destination',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: ArticleRoute.page,
+          path: '/article',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
       ];
