@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:nusa_app/core/app_colors.dart';
-import 'package:nusa_app/core/styles.dart';
 import 'package:sizer/sizer.dart';
 
 class CommonAppBar extends StatelessWidget {

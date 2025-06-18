@@ -6,7 +6,6 @@ import 'package:sizer/sizer.dart';
 
 import '../../core/app_theme_data.dart';
 import '../../core/app_colors.dart';
-import '../../l10n/l10n.dart';
 import '../../routes/router.dart';
 import '../../widgets/network_wrapper.dart';
 

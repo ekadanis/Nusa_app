@@ -6,6 +6,7 @@ import 'package:nusa_app/features/feeds/views/forum_detail_page.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
+import 'package:nusa_app/features/auth/views/register_page.dart';
 import '../features/pages.dart';
 import '../models/destination_model.dart';
 import '../models/forum_model.dart';
@@ -38,6 +39,11 @@ class AppRouter extends RootStackRouter {
         CustomRoute<void>(
           page: LoginRoute.page,
           path: '/login',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: RegisterRoute.page,
+          path: '/register',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(

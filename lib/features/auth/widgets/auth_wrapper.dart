@@ -1,35 +1,89 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nusa_app/services/google_auth_service.dart';
-import 'package:nusa_app/features/auth/views/login_page.dart';
-import 'package:nusa_app/features/dashboard/views/dashboard_page.dart';
+import 'package:sizer/sizer.dart';
 
 class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
+  final Widget child;
+  final String title;
+  final String subtitle;
+  final bool showBackButton;
+
+  const AuthWrapper({
+    super.key,
+    required this.child,
+    this.title = "Welcome 👋",
+    this.subtitle = "Let’s Get You Started With Nusa",
+    this.showBackButton = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: GoogleAuthService.authStateChanges,
-      builder: (context, snapshot) {
-        // Show loading indicator while checking auth state
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
+    return Column(
+      children: [
+        SizedBox(height: 1.h),
         
-        // Check if user is signed in
-        if (snapshot.hasData && snapshot.data != null) {
-          // User is signed in, show dashboard
-          return const DashboardPage();
-        } else {
-          // User is not signed in, show login page
-          return const LoginPage();
-        }
-      },
+        if (showBackButton)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4.w),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+          ),
+
+        Column(
+          children: [
+            Image.asset(
+              'assets/core/logo.png',
+              width: 20.w,
+              color: Colors.white,
+            ),
+            SizedBox(height: 2.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.w),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title, 
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 1.h),
+                    Text(
+                      subtitle, 
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        SizedBox(height: 2.h),
+
+        Expanded(
+          child: Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            padding: EdgeInsets.only(left: 6.w, right: 6.w, bottom: 3.h, top:1.h),
+            child: SingleChildScrollView(child: child),
+          ),
+        ),
+      ],
     );
   }
 }
