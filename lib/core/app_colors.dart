@@ -15,6 +15,18 @@ class AppColors {
   static const primary30 = Color(0xFFA3B4F0);
   static const primary20 = Color(0xFFC1CDF5);
   static const primary10 = Color(0xFFE0E6FA);
+  // Status Colors
+  static const Color success = Color(0xFF4CAF50);
+  static const Color error = Color(0xFFF44336);
+  static const Color warning = Color(0xFFFF9800);
+    // Quiz Colors - Updated with new category colors
+  static const Color quizBlue = Color(0xFF4286EF);     // Cultural Sites
+  static const Color quizOrange = Color(0xFFFF6629);   // Arts & Culture (Batik)
+  static const Color quizGreen = Color(0xFF48BB78);    // Folk Instruments
+  static const Color quizYellow = Color(0xFFECC94B);   // Traditional Wear
+  static const Color quizRed = Color(0xFFF73131);      // Crafts & Artifacts
+  static const Color quizPurple = Color(0xFF8A4FFF);   // Local Foods
+  
   static const primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
