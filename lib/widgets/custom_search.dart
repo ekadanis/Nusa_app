@@ -14,7 +14,7 @@ class SearchWidget extends StatelessWidget {
     this.hintText = "Find your culture",
     this.onTap,
     this.controller,
-    this.onChanged,
+    this.onChanged, IconButton? suffixIcon,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {

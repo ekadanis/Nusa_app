@@ -168,7 +168,7 @@ class _ProductGridSectionState extends State<ProductGridSection> {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.80,
+              childAspectRatio: 0.75,
               crossAxisSpacing: 3.w,
               mainAxisSpacing: 2.h,
             ),
