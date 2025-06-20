@@ -265,10 +265,6 @@ class ForumTab extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(
-                    Icons.more_horiz,
-                    color: AppColors.grey300,
-                  ),
                 ],
               ),
 
