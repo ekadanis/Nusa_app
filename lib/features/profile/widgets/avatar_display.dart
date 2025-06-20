@@ -4,11 +4,13 @@ import 'package:nusa_app/features/profile/widgets/avatar_picker_dialog.dart';
 class AvatarDisplay extends StatelessWidget {
   final String? selectedAvatar;
   final void Function(String) onAvatarSelected;
+  final bool showEditIcon;
 
   const AvatarDisplay({
     super.key,
     required this.selectedAvatar,
     required this.onAvatarSelected,
+    this.showEditIcon = true,
   });
 
   @override
@@ -20,28 +22,30 @@ class AvatarDisplay extends StatelessWidget {
           CircleAvatar(
             radius: 60,
             backgroundColor: Colors.grey[300],
-            backgroundImage: AssetImage(selectedAvatar ?? 'assets/avatar/avatar-1.png'),
+            backgroundImage:
+                AssetImage(selectedAvatar ?? 'assets/avatar/avatar-1.png'),
           ),
-          Positioned(
-            child: InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => AvatarPickerDialog(
-                    onAvatarSelected: onAvatarSelected,
+          if (showEditIcon)
+            Positioned(
+              child: InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => AvatarPickerDialog(
+                      onAvatarSelected: onAvatarSelected,
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue,
                   ),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.all(6),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue,
+                  child: const Icon(Icons.edit, color: Colors.white, size: 18),
                 ),
-                child: const Icon(Icons.edit, color: Colors.white, size: 18),
               ),
             ),
-          ),
         ],
       ),
     );

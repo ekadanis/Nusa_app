@@ -7,28 +7,41 @@ class SubmitButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
 
-  const SubmitButton({super.key, required this.isLoading, required this.onPressed, required this.text});
+  const SubmitButton(
+      {super.key,
+      required this.isLoading,
+      required this.onPressed,
+      required this.text});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
+      height: 48, // Sesuai tinggi tombol UI kamu
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary30,
-          padding: EdgeInsets.symmetric(vertical: 1.8.h),
+          backgroundColor: AppColors.nusa90, // Warna biru solid dari UI
+          elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8), // Rounded sesuai gambar
           ),
         ),
         child: isLoading
-            ? const CircularProgressIndicator(color: Colors.white)
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
             : Text(
                 text,
                 style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 15.sp,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
       ),

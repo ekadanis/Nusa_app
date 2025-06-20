@@ -10,25 +10,6 @@
 part of 'router.dart';
 
 /// generated route for
-/// [AccountPage]
-class AccountRoute extends PageRouteInfo<void> {
-  const AccountRoute({List<PageRouteInfo>? children})
-      : super(
-          AccountRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'AccountRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const AccountPage();
-    },
-  );
-}
-
-/// generated route for
 /// [ArticlePage]
 class ArticleRoute extends PageRouteInfo<ArticleRouteArgs> {
   ArticleRoute({
@@ -137,6 +118,25 @@ class DetailRouteDestinationArgs {
   String toString() {
     return 'DetailRouteDestinationArgs{key: $key, destination: $destination}';
   }
+}
+
+/// generated route for
+/// [EditProfilePage]
+class EditProfileRoute extends PageRouteInfo<void> {
+  const EditProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          EditProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'EditProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EditProfilePage();
+    },
+  );
 }
 
 /// generated route for
@@ -440,6 +440,25 @@ class OnboardingRoute extends PageRouteInfo<void> {
     name,
     builder: (data) {
       return const OnboardingPage();
+    },
+  );
+}
+
+/// generated route for
+/// [ProfilePage]
+class ProfileRoute extends PageRouteInfo<void> {
+  const ProfileRoute({List<PageRouteInfo>? children})
+      : super(
+          ProfileRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'ProfileRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfilePage();
     },
   );
 }

@@ -7,6 +7,8 @@ import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
 import 'package:nusa_app/features/auth/views/register_page.dart';
+import 'package:nusa_app/features/profile/views/profile_page.dart';
+import 'package:nusa_app/features/profile/views/edit_profile_page.dart';
 import '../features/pages.dart';
 import '../models/destination_model.dart';
 import '../models/forum_model.dart';
@@ -78,11 +80,16 @@ class AppRouter extends RootStackRouter {
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
               CustomRoute<void>(
-                page: AccountRoute.page,
-                path: '-account',
+                page: ProfileRoute.page,
+                path: '-profile',
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
             ]),
+        CustomRoute<void>(
+          page: EditProfileRoute.page,
+          path: '/edit-profile',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
         CustomRoute<void>(
           page: ImageAnalyzerRoute.page,
           path: '/image-analyzer',
