@@ -36,7 +36,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       routes: [HomeRoute(), NusaBotRoute(), FeedsRoute(), ProfileRoute()],      bottomNavigationBuilder: (_, tabsRouter) {
         return SafeArea(
           child: Container(

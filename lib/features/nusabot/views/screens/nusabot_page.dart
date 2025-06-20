@@ -118,19 +118,13 @@ class _NusaBotPageState extends State<NusaBotPage> {
               },
             ),
           ),
-          AnimatedPadding(
-            duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom == 0 ? 56 : 0,
-            ),
-            child: InputField(
+          InputField(
               controller: _controller,
               onSend: _sendTextMessage,
               onVoice: _sendVoiceMessage,
               onCancelVoice: _stopVoiceRecording,
               isRecording: _service.isRecording,
             ),
-          ),
         ],
       ),
     );

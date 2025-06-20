@@ -25,12 +25,13 @@ class CommonAppBar extends StatelessWidget {
           Container(
             height: 14.h,
             width: 100.w,
-            padding: EdgeInsets.symmetric(
-              horizontal: 3.h,
-              // vertical: 1.h,
+            padding: EdgeInsets.only(
+              left: 3.h,
+              right: 3.h,
+              top: 4.h,
             ),
             decoration: BoxDecoration(
-              color: AppColors.primary50,
+              color: AppColors.danger50,
               image: DecorationImage(
                 image: const AssetImage('assets/banner/banner.png'),
                 fit: BoxFit.cover,
@@ -40,7 +41,7 @@ class CommonAppBar extends StatelessWidget {
                 ),
               ),
             ),
-            child: Row(
+            child:Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ClipRRect(

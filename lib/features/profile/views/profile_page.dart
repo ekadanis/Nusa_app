@@ -111,18 +111,17 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _loadUserInfo() async {
-  final uid = FirebaseAuth.instance.currentUser?.uid;
-  if (uid == null) return;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
 
-  final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
-  final data = doc.data();
-  if (data != null) {
-    setState(() {
-      displayName = data['name'] ?? 'User';
-      email = data['email'] ?? 'No email';
-      selectedAvatarPath = data['avatar'];
-    });
+    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final data = doc.data();
+    if (data != null) {
+      setState(() {
+        displayName = data['name'] ?? 'User';
+        email = data['email'] ?? 'No email';
+        selectedAvatarPath = data['avatar'];
+      });
+    }
   }
-}
-
 }
