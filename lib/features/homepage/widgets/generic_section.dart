@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart'; // Still needed for Position type
 import 'package:sizer/sizer.dart';
 import 'package:auto_route/auto_route.dart';
 import '../../../core/styles.dart';
 import '../../../models/destination_model.dart';
-import '../../../services/location_service.dart';
 import '../../../routes/router.dart';
 import 'section_header.dart';
-import 'generic_section/radius_bottom_sheet.dart';
 import 'generic_section/empty_state_widget.dart';
-import 'generic_section/filter_chips_row.dart';
 import 'generic_section/items_list_widget.dart';
-import 'generic_section/generic_section_controller.dart';
+import 'generic_section/generic_section_controller.dart'; // Still needed for logic like toggle favorite
 
 class GenericSection extends StatefulWidget {
   final String title;
-  final List<DestinationModel> items;
-  final String categoryName;
+  final List<DestinationModel> items; // items ini sudah difilter dari HomePage
+  final String categoryName; // categoryName tetap diperlukan untuk navigasi See All
   final Widget? locationIcon;
   final String? userId;
 
@@ -31,26 +28,18 @@ class GenericSection extends StatefulWidget {
 
   @override
   State<GenericSection> createState() => GenericSectionState();
-
-  // Method to expose state for external calls
-  static void refreshLocationForKey(GlobalKey<GenericSectionState> key) {
-    key.currentState?._loadUserLocation();
-  }
 }
 
 class GenericSectionState extends State<GenericSection> {
-  String _selectedFilter = "Discover";
-  late List<DestinationModel> _filteredItems;
+  late List<DestinationModel> _filteredItems; // Ini akan menjadi salinan dari widget.items
   Map<String, bool> _favoriteStatus = {};
   Map<String, int> _likeCount = {};
-  Position? _userLocation;
-  bool _isLoadingLocation = false;
-  double _selectedRadius = GenericSectionController.defaultRadius;
+
 
   @override
   void initState() {
     super.initState();
-    _filteredItems = List.from(widget.items);
+    _filteredItems = List.from(widget.items); // Inisialisasi dengan items yang sudah difilter
     _initializeLikeCounts();
     _loadFavoriteStatus();
   }
@@ -82,124 +71,21 @@ class GenericSectionState extends State<GenericSection> {
   void didUpdateWidget(GenericSection oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    // Hanya perlu memperbarui _filteredItems jika widget.items berubah
+    // Filter dan lokasi sekarang dikelola di HomePage
     if (oldWidget.items != widget.items) {
       _filteredItems = List.from(widget.items);
-      _initializeLikeCounts();
-      _filterItems(_selectedFilter);
+      _initializeLikeCounts(); // Re-initialize like counts for new items
+      _loadFavoriteStatus(); // Re-load favorite status for new items
     }
-  }
-
-  void _filterItems(String filter) async {
-    if (filter == "Nearby" && _userLocation != null) {
-      await _filterNearbyItems();
-    } else {
-      setState(() {
-        _selectedFilter = filter;
-        _filteredItems = GenericSectionController.filterItemsSync(
-          widget.items,
-          filter,
-        );
-      });
-    }
-  }
-
-  Future<void> _filterNearbyItems() async {
-    if (_userLocation == null) return;
-
-    setState(() {
-      _selectedFilter = "Nearby";
-    });
-
-    final nearbyItems = await GenericSectionController.filterNearbyItems(
-      categoryName: widget.categoryName,
-      userLocation: _userLocation!,
-      radius: _selectedRadius,
-    );
-
-    setState(() {
-      _filteredItems = nearbyItems;
-    });
-  }
-
-  Future<void> _loadUserLocation() async {
-    debugPrint('_loadUserLocation called');
-    setState(() {
-      _isLoadingLocation = true;
-    });
-
-    try {
-      Position? position = await LocationService.getCurrentLocation();
-      debugPrint('Location result: $position');
-      if (position != null && mounted) {
-        setState(() {
-          _userLocation = position;
-        });
-
-        debugPrint('User location set: ${position.latitude}, ${position.longitude}');
-
-        if (_selectedFilter == "Nearby") {
-          _filterItems("Nearby");
-        }
-      } else {
-        debugPrint('Failed to get location or widget not mounted');
-      }
-    } catch (e) {
-      debugPrint('Error loading location: $e');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoadingLocation = false;
-        });
-      }
-    }
-  }
-
-  void _showRadiusBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => RadiusBottomSheet(
-        initialRadius: _selectedRadius,
-        onRadiusChanged: (radius) {
-          setState(() {
-            _selectedRadius = radius;
-          });
-          if (_selectedFilter == "Nearby") {
-            _filterItems("Nearby");
-          }
-        },
-      ),
-    );
-  }
-
-  Future<void> _onNearbyTapped() async {
-    debugPrint('Nearby chip tapped');
-    if (_userLocation == null) {
-      debugPrint('User location is null, loading location...');
-      await _loadUserLocation();
-    }
-    if (_userLocation != null) {
-      debugPrint('User location available, filtering nearby items');
-      _filterItems("Nearby");
-      debugPrint('Filter Nearby terpilih pada ${widget.title}');
-    } else {
-      debugPrint('User location still null after loading');
-    }
-  }
-
-  void _onFilterSelected(String filter) {
-    _filterItems(filter);
-    debugPrint('Filter $filter terpilih pada ${widget.title}');
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.items.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    // Menghapus kondisi awal ini, karena header akan selalu ditampilkan.
+    // if (_filteredItems.isEmpty && !widget.title.startsWith("Hasil Pencarian untuk")) {
+    //   return const SizedBox.shrink(); // Biarkan HomePage yang menampilkan empty state untuk hasil pencarian
+    // }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,36 +96,26 @@ class GenericSectionState extends State<GenericSection> {
             context.router.push(KatalogProdukRoute(categoryName: widget.categoryName));
           },
         ),
-        const SizedBox(height: Styles.xsSpacing),
+        SizedBox(height: 2.h), // Jaga spasi jika diperlukan
 
-        // Filter chips
-        FilterChipsRow(
-          selectedFilter: _selectedFilter,
-          isLoadingLocation: _isLoadingLocation,
-          hasUserLocation: _userLocation != null,
-          selectedRadius: _selectedRadius,
-          onFilterSelected: _onFilterSelected,
-          onNearbyTapped: _onNearbyTapped,
-          onRadiusTapped: _showRadiusBottomSheet,
-        ),
-
-        SizedBox(height: 2.h),
-
-        // Items list or empty state
+        // Items list atau empty state
         if (_filteredItems.isEmpty)
+        // Menampilkan EmptyStateWidget
           EmptyStateWidget(
             title: widget.title,
-            selectedFilter: _selectedFilter,
-            selectedRadius: _selectedRadius,
-            onAdjustRadius: _selectedFilter == "Nearby" ? _showRadiusBottomSheet : null,
+            // selectedFilter dan selectedRadius diatur berdasarkan title atau nilai default
+            selectedFilter: widget.title.startsWith("Hasil Pencarian untuk") ? "Search" : "Discover",
+            selectedRadius: GenericSectionController.defaultRadius,
+            onAdjustRadius: null, // Tombol adjust radius tidak relevan di sini lagi
           )
         else
           ItemsListWidget(
-            items: _filteredItems,
+            items: _filteredItems, // Menggunakan items yang sudah difilter
             likeCount: _likeCount,
             favoriteStatus: _favoriteStatus,
-            selectedFilter: _selectedFilter,
-            userLocation: _userLocation,
+            // selectedFilter tidak relevan untuk GenericSection lagi, bisa diatur statis atau sesuai kebutuhan tampilan
+            selectedFilter: widget.title.startsWith("Hasil Pencarian untuk") ? "Search" : "Discover",
+            userLocation: null, // Lokasi dikelola di HomePage, tidak relevan di sini untuk filtering
             locationIcon: widget.locationIcon,
             onToggleFavorite: _toggleFavorite,
           ),

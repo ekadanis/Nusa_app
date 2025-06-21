@@ -257,6 +257,37 @@ class FirestoreService {
     }
   }
 
+  static Future<List<DestinationModel>> searchDestinationsByTitle(String queryText) async {
+    try {
+      // Pastikan data 'title' di Firestore disimpan dalam huruf kecil (lowercase)
+      // atau Anda memiliki field terpisah untuk pencarian lowercase (misal: 'title_lower').
+      // Jika 'title' di Firestore masih menggunakan campuran huruf besar/kecil,
+      // kueri ini tidak akan menemukan hasil kecuali Anda menambahkan index case-insensitive (tidak didukung secara native)
+      // atau menyimpan data duplikat dalam lowercase.
+      // final String lowercasedQuery = queryText.toLowerCase();
+
+      final snapshot = await destinationsCollection
+          .where('title', isGreaterThanOrEqualTo: queryText)
+          .where('title', isLessThan: queryText + '\uf8ff') // Teknik untuk "startsWith"
+          .get();
+
+      print("Firestore query for '$queryText' (lowercased: '$queryText') returned ${snapshot.docs.length} documents."); // Debugging log
+
+      return snapshot.docs
+          .map((doc) => DestinationModel.fromFirestore(doc))
+          .toList();
+    } on FirebaseException catch (e) {
+      // Tangani error spesifik dari Firebase, ini seringkali menunjukkan masalah indeks.
+      print("FirebaseException in searchDestinationsByTitle: Code: ${e.code}, Message: ${e.message}");
+      print("Pastikan Anda memiliki indeks Firestore untuk field 'title' (Ascending).");
+      return [];
+    } catch (e) {
+      // Error umum saat mencari destinasi berdasarkan judul
+      print("Error searching destinations by title: $e");
+      return [];
+    }
+  }
+
   static Future<List<ArticleModel>> getArticles({int limit = 10}) async {
     try {
       final snapshot = await articlesCollection.limit(limit).get();

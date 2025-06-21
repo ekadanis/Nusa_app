@@ -69,6 +69,7 @@ class ItemsListWidget extends StatelessWidget {
                       color: AppColors.success50,
                       size: 16,
                     ),
+                categoryId: item.categoryId,
               ),
             );
           }).toList(),
