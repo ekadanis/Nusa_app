@@ -13,6 +13,7 @@ class ProductGridSection extends StatefulWidget {
   final Function()? onSeeAll;
   final List<String>? customFilters;
   final String? userId;
+  final String selectedCategory;
 
   const ProductGridSection({
     Key? key,
@@ -20,6 +21,7 @@ class ProductGridSection extends StatefulWidget {
     this.onSeeAll,
     this.customFilters,
     this.userId,
+    required this.selectedCategory,
   }) : super(key: key);
 
   @override
@@ -155,6 +157,7 @@ class _ProductGridSectionState extends State<ProductGridSection> {
                   label: filters[index],
                   isSelected: _selectedFilterIndex == index,
                   onTap: () => _filterProducts(index, filters[index]),
+                  selectedCategory: widget.selectedCategory,
                 ),
               );
             },
@@ -187,6 +190,7 @@ class _ProductGridSectionState extends State<ProductGridSection> {
                 },
                 onFavorite: () => _toggleFavorite(product),
                 isFavorite: _favoriteStatus[product.id] ?? false,
+                categoryId: widget.selectedCategory,
               );
             },
           ),

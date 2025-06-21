@@ -33,16 +33,7 @@ class SectionHeader extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     // === Perbaikan: Menambahkan default case untuk warna ===
-                    color: switch (title) {
-                      'Local Foods' => AppColors.localFoods,
-                      'Folk Instruments' => AppColors.folkInstruments,
-                      'Traditional Wear' => AppColors.traditionalWear,
-                      'Arts & Culture' => AppColors.artsCulture,
-                      'Crafts & Artifacts' => AppColors.craftArtifacts,
-                      'Cultural Sites' => AppColors.culturalSite,
-                    // Kasus default untuk hasil pencarian atau judul lain
-                      _ => AppColors.grey50, // Menggunakan warna abu-abu default untuk hasil pencarian
-                    }),
+                    color: categoryColorPicker(title)),
                 child: getCategoryIcon(title),
               ),
               SizedBox(width: Styles.smSpacing), // Menambahkan spasi di sini
@@ -64,6 +55,18 @@ class SectionHeader extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  categoryColorPicker(String title) {
+    switch (title) {
+      case 'Local Foods' : return AppColors.localFoods;
+      case 'Folk Instruments' : return AppColors.folkInstruments;
+      case 'Traditional Wear' : return AppColors.traditionalWear;
+      case'Arts & Culture' : return AppColors.artsCulture;
+      case'Crafts & Artifacts' : return AppColors.craftArtifacts;
+      case'Cultural Sites' : return AppColors.culturalSite;
+      default: return AppColors.grey50; // Menggunakan warna abu-abu default untuk hasil pencarian
+    }
   }
 }
 

@@ -46,7 +46,7 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
 
       if (widget.categoryName != null) {
         _selectedCategory = categories.firstWhere(
-              (category) => category.categoryName == widget.categoryName,
+          (category) => category.categoryName == widget.categoryName,
           orElse: () => categories.first,
         );
       } else {
@@ -91,9 +91,12 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
         _filteredDestinations = List.from(_destinationsList);
       } else {
         _filteredDestinations = _destinationsList.where((destination) {
-          final titleMatches = destination.title.toLowerCase().contains(_searchQuery);
-          final addressMatches = destination.address.toLowerCase().contains(_searchQuery);
-          final subcategoryMatches = destination.subcategory.toLowerCase().contains(_searchQuery);
+          final titleMatches =
+              destination.title.toLowerCase().contains(_searchQuery);
+          final addressMatches =
+              destination.address.toLowerCase().contains(_searchQuery);
+          final subcategoryMatches =
+              destination.subcategory.toLowerCase().contains(_searchQuery);
 
           return titleMatches || addressMatches || subcategoryMatches;
         }).toList();
@@ -148,64 +151,72 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
             Expanded(
               child: _isLoading
                   ? Center(
-                child: LoadingAnimationWidget.beat(
-                  color: Colors.blue,
-                  size: 15.w,
-                ),
-              )
+                      child: LoadingAnimationWidget.beat(
+                        color: Colors.blue,
+                        size: 15.w,
+                      ),
+                    )
                   : _filteredDestinations.isEmpty
-                  ? Center(
-                child: Padding(
-                  padding: EdgeInsets.all(4.w),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.search_off,
-                        size: 20.w,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 2.h),
-                      Text(
-                        _searchQuery.isEmpty
-                            ? 'No destinations found'
-                            : 'No results found for "$_searchQuery"',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.grey[600],
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(4.w),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.search_off,
+                                  size: 20.w,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(height: 2.h),
+                                Text(
+                                  _searchQuery.isEmpty
+                                      ? 'No destinations found'
+                                      : 'No results found for "$_searchQuery"',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        color: Colors.grey[600],
+                                      ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 1.h),
+                                Text(
+                                  'Try searching with different keywords',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Colors.grey[500],
+                                      ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          // Adding a small padding to the bottom of the scroll view
+                          // to ensure any slight miscalculation or fixed height items
+                          // don't cause an overflow.
+                          padding: EdgeInsets.only(
+                              bottom: Styles.mdSpacing), // Add this line
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: Styles.xsSpacing),
+                              ProductGridSection(
+                                  products: _filteredDestinations,
+                                  customFilters: _subcategories,
+                                  userId: GoogleAuthService
+                                      .getAuthenticatedUserId(),
+                                  selectedCategory: _selectedCategory!.id!),
+                              // Remove the SizedBox at the end of the column, as we're adding padding to the SingleChildScrollView
+                              // const SizedBox(height: Styles.mdSpacing),
+                            ],
+                          ),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 1.h),
-                      Text(
-                        'Try searching with different keywords',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[500],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-                  : SingleChildScrollView(
-                // Adding a small padding to the bottom of the scroll view
-                // to ensure any slight miscalculation or fixed height items
-                // don't cause an overflow.
-                padding: EdgeInsets.only(bottom: Styles.mdSpacing), // Add this line
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: Styles.xsSpacing),
-                    ProductGridSection(
-                      products: _filteredDestinations,
-                      customFilters: _subcategories,
-                      userId: GoogleAuthService.getAuthenticatedUserId(),
-                    ),
-                    // Remove the SizedBox at the end of the column, as we're adding padding to the SingleChildScrollView
-                    // const SizedBox(height: Styles.mdSpacing),
-                  ],
-                ),
-              ),
             ),
           ],
         ),

@@ -14,7 +14,8 @@ class SiteCard extends StatelessWidget {
   final String? kategori;
   final int likeCount;
   final bool isCompact;
-  final String? distance; // New parameter for displaying distance
+  final String? distance;
+  final String categoryId;
 
   const SiteCard({
     Key? key,
@@ -28,7 +29,8 @@ class SiteCard extends StatelessWidget {
     this.kategori,
     this.likeCount = 0,
     this.isCompact = false,
-    this.distance, // Optional distance parameter
+    this.distance,
+    this.categoryId = '',
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -110,8 +112,7 @@ class SiteCard extends StatelessWidget {
                       child: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
                         size: 16,
-                        color:
-                            isFavorite ? AppColors.danger50 : AppColors.grey40,
+                        color: AppColors.danger50,
                       ),
                     ),
                   ),
@@ -225,14 +226,14 @@ class SiteCard extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primary10,
-                          borderRadius: BorderRadius.circular(6),
+                          color: chipsColorPicker(categoryId),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(
                           kategori!,
                           style:
                               Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: AppColors.primary50,
+                                    color: AppColors.white,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -248,5 +249,17 @@ class SiteCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color chipsColorPicker(String title) {
+    switch (title) {
+      case '7hdL7T5MpYY2SUqf0AC7' : return AppColors.purple50;
+      case 'DhonyYdgjgC4TwXzbcGC' : return AppColors.success50;
+      case 'PnzLyTwHbsC3ojAHjW3j' : return AppColors.yellow50;
+      case 'PvuucOStwQrVUHhXBKDi' : return AppColors.warning50;
+      case 'kQzkUbWuBC6Zrad0mVs2' : return AppColors.danger50;
+      case 'nFpGFc2Rkxg2F9zjIx2x' : return AppColors.primary50;
+      default: return AppColors.grey50; // Menggunakan warna abu-abu default untuk hasil pencarian
+    }
   }
 }
