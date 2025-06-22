@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../models/quiz_models.dart';
+import '../../../models/achievement_model.dart';
 import '../../../core/app_colors.dart';
 import 'gemini_service.dart';
 import 'quiz_firebase_service.dart';
+import '../../account/services/achievement_service.dart';
 
 class QuizService {
   static List<QuizCategory> getCategories() {
@@ -144,43 +146,6 @@ class QuizService {
     return QuizFirebaseService.getQuizHistoryStream();
   }
 
-  static List<Achievement> getAchievements() {
-    return [
-      Achievement(
-        id: 'knowledge_seeker',
-        title: 'Knowledge Seeker',
-        description: 'Read 50+ articles',
-        icon: '📚',
-        isUnlocked: true,
-        color: AppColors.quizBlue,
-      ),
-      Achievement(
-        id: 'quiz_master',
-        title: 'Quiz Master',
-        description: 'Complete 25+ quizzes',
-        icon: '🏆',
-        isUnlocked: true,
-        color: AppColors.quizYellow,
-      ),
-      Achievement(
-        id: 'culture_expert',
-        title: 'Culture Expert',
-        description: 'Explore all 6 categories',
-        icon: '⭐',
-        isUnlocked: false,
-        color: AppColors.quizPurple,
-      ),
-      Achievement(
-        id: 'perfect_score',
-        title: 'Perfect Score',
-        description: 'Get 100% in any quiz',
-        icon: '🎯',
-        isUnlocked: true,
-        color: AppColors.quizGreen,
-      ),
-    ];
-  }
-
   // Helper methods for UI components
   static String getCategoryNameById(String? categoryId) {
     switch (categoryId) {
@@ -244,5 +209,20 @@ class QuizService {
     } catch (e) {
       return 'Unknown';
     }
+  }
+
+  // Get achievements from AchievementService
+  static Future<List<Achievement>> getAchievements() async {
+    return await AchievementService.getAchievements();
+  }
+
+  // Get achievements as real-time stream
+  static Stream<List<Achievement>> getAchievementsStream() {
+    return AchievementService.getAchievementsStream();
+  }
+  // Check and unlock achievements after quiz completion
+  static Future<void> checkAndUnlockAchievements() async {
+    // Use the new tracking-based achievement system
+    await AchievementService.checkAchievementsFromTracking();
   }
 }

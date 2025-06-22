@@ -4,6 +4,7 @@ import 'package:sizer/sizer.dart';
 import '../../../routes/router.dart';
 import '../services/quiz_service.dart';
 import '../widgets/category_card.dart';
+import '../../../helpers/user_action_tracker.dart';
 
 class CategoryGridSection extends StatelessWidget {
   const CategoryGridSection({super.key});
@@ -36,10 +37,12 @@ class CategoryGridSection extends StatelessWidget {
               mainAxisSpacing: 1.5.h, // Spacing antar baris
             ),
             itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return CategoryCard(
+            itemBuilder: (context, index) {              return CategoryCard(
                 category: categories[index],
-                onTap: () {
+                onTap: () async {
+                  // Track category exploration for achievements
+                  await UserActionTracker.trackCategoryExplored(categories[index].id);
+                  
                   // Navigate to quiz dengan parameter yang benar
                   context.router.push(
                     QuizRoute(categoryId: categories[index].id),

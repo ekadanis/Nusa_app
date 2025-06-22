@@ -21,26 +21,15 @@ class StatsRow extends StatelessWidget {
             context,
             '${userStats.dayStreak}',
             'Day Streak',
-          ),
-          _buildStatItem(
+          ),          _buildStatItem(
             context,
-            _formatXP(userStats.totalXP),
+            '${userStats.totalXP}',
             'Total XP',
           ),
         ],
       ),
-    );
-  }
+    );  }
 
-  String _formatXP(int xp) {
-    if (xp < 1000) {
-      return xp.toString();
-    } else if (xp < 10000) {
-      return '${(xp / 1000).toStringAsFixed(1)}k';
-    } else {
-      return '${(xp / 1000).toInt()}k';
-    }
-  }
   Widget _buildStatItem(BuildContext context, String value, String label) {
     return Expanded(
       child: Padding(

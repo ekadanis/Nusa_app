@@ -6,6 +6,7 @@ import 'package:nusa_app/models/article_model.dart';
 import 'package:nusa_app/routes/router.dart';
 import 'package:nusa_app/services/firestore_service.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:nusa_app/helpers/user_action_tracker.dart';
 
 class ArticleTab extends StatefulWidget {
   const ArticleTab({super.key});
@@ -151,10 +152,13 @@ class _ArticleTabState extends State<ArticleTab> {
       ),
     );
   }
-
   Widget _buildFeaturedCard(BuildContext context, ArticleModel article) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        // Track article read for achievements
+        await UserActionTracker.trackArticleRead(article.id ?? '');
+        
+        // Navigate to article detail
         AutoRouter.of(context).push(ArticleRoute(article: article));
       },
       borderRadius: BorderRadius.circular(12),
@@ -315,10 +319,13 @@ class _ArticleTabState extends State<ArticleTab> {
       ),
     );
   }
-
   Widget _buildArticleItem(BuildContext context, ArticleModel article) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        // Track article read for achievements
+        await UserActionTracker.trackArticleRead(article.id ?? '');
+        
+        // Navigate to article detail
         AutoRouter.of(context).push(ArticleRoute(article: article));
       },
       child: Container(

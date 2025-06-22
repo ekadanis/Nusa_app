@@ -26,7 +26,8 @@ class HomePageQuiz extends StatelessWidget {
         // Navigate to dashboard when back is pressed
         context.router.replace(const DashboardRoute());
       },
-      child: Scaffold(        body: Container(
+      child: Scaffold(
+        body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -125,44 +126,64 @@ class HomePageQuiz extends StatelessWidget {
 
   Widget _buildContentArea() {
     return Expanded(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
-          ),
-        ),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: EdgeInsets.all(4.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                StreamBuilder<UserStats>(
-                  stream: QuizService.getUserStatsStream(),
-                  builder: (context, snapshot) {
-                    // Default ke level 1 jika data belum tersedia
-                    final userLevel =
-                        snapshot.hasData ? snapshot.data!.level : 1;
-                    return AIInfoSection(userLevel: userLevel);
-                  },
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // Main white container
+          Container(
+            margin: EdgeInsets.only(top: 4.h), 
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24),
+                topRight: Radius.circular(24),
+              ),
+            ),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: 6.h,
+                  left: 4.w,
+                  right: 4.w,
+                  bottom: 4.w,
                 ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+          
+                    SizedBox(height: 3.h),
 
-                SizedBox(height: 3.h), const CategoryGridSection(),                SizedBox(height: 2.h),
-                const GameHistorySection(),
+                    SizedBox(height: 1.h), 
+                    const CategoryGridSection(),
+                    SizedBox(height: 2.h),
+                    const GameHistorySection(),
 
-                // // Debug Widget - AKTIF untuk development
-                // // TODO: Remove before production
-                // const QuizDebugWidget(),
+                    // // Debug Widget - AKTIF untuk development
+                    // // TODO: Remove before production
+                    // const QuizDebugWidget(),
 
-                // Extra spacing di bawah
-                SizedBox(height: 5.h),
-              ],
+         
+                    SizedBox(height: 5.h),
+                  ],
+                ),
+              ),
+            ),
+          ),        
+          Positioned(
+            top: 0,
+            left: 4.w, 
+            right: 4.w,
+            child: StreamBuilder<UserStats>(
+              stream: QuizService.getUserStatsStream(),
+              builder: (context, snapshot) {
+        
+                final userLevel = snapshot.hasData ? snapshot.data!.level : 1;
+                return AIInfoSection(userLevel: userLevel);
+              },
             ),
           ),
-        ),
+        ],
       ),
     );
   }

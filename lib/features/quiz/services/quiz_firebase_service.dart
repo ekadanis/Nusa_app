@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../models/quiz_models.dart';
+import '../../../services/tracking_service.dart';
+import '../../account/services/achievement_service.dart';
 
 class QuizFirebaseService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -33,11 +35,18 @@ class QuizFirebaseService {
         'level': await getCurrentUserLevel(),
       };      // Simpan ke collection quiz_history (bukan quiz_results)
       final docRef = await _firestore.collection('quiz_history').add(quizData);
-      print('✅ Quiz result saved with ID: ${docRef.id}');
-
-      // Update user stats
+      print('✅ Quiz result saved with ID: ${docRef.id}');      // Update user stats
       await _updateUserStats(result);
-      print('✅ User stats updated successfully');
+      print('✅ User stats updated successfully');      // Track category played
+      await trackCategoryPlayed(categoryId);
+      
+      // Check and unlock achievements using tracking data
+      try {
+        await AchievementService.checkAchievementsFromTracking();
+        print('🏆 Achievement check completed');
+      } catch (achievementError) {
+        print('⚠️ Achievement check failed but continuing: $achievementError');
+      }
       
       // Debug: Verify data was saved
       print('🔍 Verifying saved data...');
@@ -533,6 +542,58 @@ class QuizFirebaseService {
       print('✅ Simulated yesterday play');
     } catch (e) {
       print('❌ Error simulating yesterday play: $e');
+    }
+  }
+  // Track categories played by user (for quiz completion)
+  static Future<void> trackCategoryPlayed(String categoryId) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return;
+
+      final userStatsRef = _firestore.collection('user_stats').doc(user.uid);
+      
+      await _firestore.runTransaction((transaction) async {
+        final doc = await transaction.get(userStatsRef);
+        
+        if (doc.exists) {
+          final currentData = doc.data()!;
+          final categoriesPlayed = List<String>.from(currentData['categoriesPlayed'] ?? []);
+          
+          if (!categoriesPlayed.contains(categoryId)) {
+            categoriesPlayed.add(categoryId);
+            transaction.update(userStatsRef, {
+              'categoriesPlayed': categoriesPlayed,
+            });
+            print('🎯 Quiz category $categoryId completed. Total quiz categories: ${categoriesPlayed.length}');
+          }
+        }
+      });
+      
+      // Also track as explored category for achievements
+      await TrackingService.trackCategoryExplored(categoryId);
+    } catch (e) {
+      print('Error tracking category: $e');
+    }
+  }
+
+  // Get categories played by user
+  static Future<Set<String>> getCategoriesPlayed() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return <String>{};
+
+      final doc = await _firestore.collection('user_stats').doc(user.uid).get();
+      
+      if (doc.exists) {
+        final data = doc.data()!;
+        final categoriesPlayed = List<String>.from(data['categoriesPlayed'] ?? []);
+        return Set<String>.from(categoriesPlayed);
+      }
+      
+      return <String>{};
+    } catch (e) {
+      print('Error getting categories played: $e');
+      return <String>{};
     }
   }
 }

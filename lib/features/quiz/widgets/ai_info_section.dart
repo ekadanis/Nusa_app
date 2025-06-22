@@ -23,45 +23,42 @@ class AIInfoSection extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      
+  Widget build(BuildContext context) {    return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
-  BoxShadow(
-    color: Colors.black.withOpacity(0.20),
-    blurRadius: 10,
-    offset: Offset(0, 4),
-  ),
-],
+          BoxShadow(
+            color: Colors.black.withOpacity(0.20),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child: IntrinsicHeight(
         child: Row(
-          children: [
-            // Orange left border stack effect
+          children: [    
             Container(
               width: 2.w,
               decoration: BoxDecoration(
                 color: Colors.orange,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  bottomLeft: Radius.circular(8),
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16), 
                 ),
               ),
-            ), // Content area
+            ),
+            // Content area
             Expanded(
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color(0xFFFFF7ED), // Warna latar belakang #FFF7ED
+                  color: Color(0xFFFFF7ED), 
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
+                    topRight: Radius.circular(16),
+                    bottomRight: Radius.circular(16), 
                   ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(4.w),
+                ),child: Padding(
+                  padding: EdgeInsets.all(3.5.w), 
                   child: Row(
                     children: [
                       Icon(
@@ -102,16 +99,15 @@ class AIInfoSection extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            ),
-                            SizedBox(height: 1.w),
+                            ),                            SizedBox(height: 1.w),
                             Text(
-                              'Level-based questions that adapt to your knowledge level!',
+                              'Adaptive questions that match your level with fresh content every time!',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall
                                   ?.copyWith(
                                     color: Colors.grey.shade600,
-                                    height: 1.2,
+                                    height: 1.3,
                                   ),
                             ),
                           ],
