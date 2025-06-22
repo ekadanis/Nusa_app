@@ -85,6 +85,14 @@ class AppColors {
   static const purple20 = Color(0xFFd0b9ff);
   static const purple10 = Color(0xFFf3edff);
 
+  static const culturalSite = Color(0xFFE6EEF9);
+  static const artsCulture = Color(0xFFFCD8CA);
+  static const folkInstruments = Color(0xFFD9EDE1);
+  static const traditionalWear = Color(0xFFF5EDD1);
+  static const craftArtifacts = Color(0xFFF8CECE);
+  static const localFoods = Color(0xFFDFD0FC);
+
+
   static Color lighten(Color c, [int percent = 10]) {
     assert(1 <= percent && percent <= 100);
     final p = percent / 100;

@@ -31,6 +31,5 @@ Future<void> setup() async {
   // Initialize Firestore database with comprehensive seeding
   // This includes: Users, Categories, Destinations, Articles, and Forum posts
   // Comment out this line after first run to avoid recreating data
-  await FirestoreService.initializeDatabase();
 
 }

@@ -15,7 +15,7 @@ class HomeFeaturedBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FeaturedBanner(
-      title: "Step Inside Indonesia's Cultural Treasure",
+      title: "Travel Through Indonesia's Cultural History",
       image: "assets/banner/museum_indonesia.png",
       buttonText: "Explore Now",
       onTap: _launchUrl,

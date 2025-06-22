@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nusa_app/util/extensions.dart';
 import '../../../../core/styles.dart';
 import '../../../../core/app_colors.dart';
 import '../../katalog_destination/views/katalog_destination.dart';
@@ -16,25 +17,37 @@ class _CategoriesSectionState extends State<CategoriesSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
-      padding: const EdgeInsets.all(Styles.mdPadding),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(Styles.mdRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.grey20.withOpacity(0.8),
-            blurRadius: 1,
-            offset: const Offset(0, 0),
-          ),
-        ],
-      ),
-      child: Column(
+        margin: const EdgeInsets.symmetric(horizontal: Styles.mdPadding),
+        child:
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildCategoriesGrid(context),
+          Text('Culture Categories', style: context.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),),
+          SizedBox(height: Styles.mdSpacing,),
+          Container(
+            padding: const EdgeInsets.all(Styles.mdPadding),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(Styles.mdRadius),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.grey20.withOpacity(0.8),
+                  blurRadius: 1,
+                  offset: const Offset(0, 0),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCategoriesGrid(context),
+              ],
+            ),
+          )
         ],
-      ),
+      )
     );
   }
 
