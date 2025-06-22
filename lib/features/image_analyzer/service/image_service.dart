@@ -71,52 +71,38 @@ Future<String> sendImageToGeminiAPI(String base64Image) async {
   );
 
   final promptText = '''
-jelaskan objek budaya di gambar tersebut dengan dalam bentuk JSON dengan struktur berikut. Kembalikan HANYA objek JSON, TANPA blok markdown, tanpa penjelasan tambahan, dan TANPA properti type, properties, atau required. Formatnya langsung seperti ini:
+Analyze the cultural object in the image and respond with a JSON object only (no markdown or explanations), using the structure below. Each field should contain content between **100–150 words**, but each paragraph can only content between **40-50 words** written in English.
+
+Return **ONLY** a raw JSON like this (no markdown, no preface, no explanation, no schema keywords like "type", "properties", or "required"):
 
 {
-  "type": "object",
-  "properties": {
-    "nama_budaya": {
-      "type": "string"
-    },
-    "deskripsi_singkat": {
-      "type": "string"
-    },
-    "sejarah": {
-      "type": "string"
-    },
-    "fungsi_budaya": {
-      "type": "string"
-    },
-    "asal_daerah": {
-      "type": "string"
-    },
-    "filosofi_simbolik": {
-      "type": "string"
-    },
-    "material_utama": {
-      "type": "string"
-    },
-    "perkembangan_kini": {
-      "type": "string"
-    }
-  },
-  "required": [
-    "nama_budaya",
-    "deskripsi_singkat",
-    "sejarah",
-    "asal_daerah"
-  ]
+  "nama_budaya": "string",
+  "asal_kota" : "string",
+  "asal_provinsi" : "string",
+  "kategori_objek" : "string",
+  "deskripsi_singkat": "string (100–150 words)",
+  "sejarah": "string (100–150 words)",
+  "fungsi_budaya": "string (100–150 words)",
+  "asal_daerah": "string (100–150 words)",
+  "filosofi_simbolik": "string (100–150 words)",
+  "material_utama": "string (100–150 words)",
+  "perkembangan_kini": "string (100–150 words)",
+  "panduan_pengunjung": "string (100–150 words)"
 }
 
-berikut deskripsi kolom yang ada: 
-nama_budaya: nama budaya tersebut
-sejarah: sejarah budaya tersebut
-fungsi_budaya: fungsi budaya objek tersebut
-asal_daerah: asal daerah objek tersebut
-filosofi_simbolik: filosofi simbolik objek tersebut
-material_utama: bahan atau material objek tersebut
-perkembangan_kini: perkembangan objek tersebut hingga kini
+Explanation of each field:
+- **nama_budaya**: The name of the cultural object
+- **asal_kota**: The city or town of origin
+- **asal_provinsi**: The province or state of origin
+- **kategori_objek**: The category or type of cultural object
+- **deskripsi_singkat**: General description and overview
+- **sejarah**: Historical background and development
+- **fungsi_budaya**: Cultural and ceremonial functions
+- **asal_daerah**: Region or place of origin and architectural influence
+- **filosofi_simbolik**: Symbolic meaning and spiritual philosophy
+- **material_utama**: Main traditional materials used
+- **perkembangan_kini**: Current developments and modern aspects
+- **panduan_pengunjung**: Practical visitor guide with how to visit, dress code, facilities, tips, etc.
 ''';
 
   final body = jsonEncode({
@@ -125,15 +111,21 @@ perkembangan_kini: perkembangan objek tersebut hingga kini
         "parts": [
           {"text": promptText},
           {
-            "inline_data": {"mime_type": "image/jpeg", "data": base64Image}
+            "inline_data": {
+              "mime_type": "image/jpeg",
+              "data": base64Image,
+            }
           }
         ]
       }
     ]
   });
 
-  final response = await http.post(url,
-      headers: {'Content-Type': 'application/json'}, body: body);
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: body,
+  );
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);

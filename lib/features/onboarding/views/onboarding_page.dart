@@ -186,7 +186,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                       child: ElevatedButton(
                         onPressed: () {
                           SharedPreferencesService.setIsFirstTime(false);
-                          context.router.replace(const DashboardRoute());
+                          context.router.replace(const LoginRoute());
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
