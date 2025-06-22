@@ -259,19 +259,14 @@ class FirestoreService {
 
   static Future<List<DestinationModel>> searchDestinationsByTitle(String queryText) async {
     try {
-      // Pastikan data 'title' di Firestore disimpan dalam huruf kecil (lowercase)
-      // atau Anda memiliki field terpisah untuk pencarian lowercase (misal: 'title_lower').
-      // Jika 'title' di Firestore masih menggunakan campuran huruf besar/kecil,
-      // kueri ini tidak akan menemukan hasil kecuali Anda menambahkan index case-insensitive (tidak didukung secara native)
-      // atau menyimpan data duplikat dalam lowercase.
-      // final String lowercasedQuery = queryText.toLowerCase();
+      final queryTextLowercased = queryText.toLowerCase();
 
       final snapshot = await destinationsCollection
-          .where('title', isGreaterThanOrEqualTo: queryText)
-          .where('title', isLessThan: queryText + '\uf8ff') // Teknik untuk "startsWith"
+          .where('title_lowercase', isGreaterThanOrEqualTo: queryText)
+          .where('title_lowercase', isLessThan: queryText + '\uf8ff') // Teknik untuk "startsWith"
           .get();
 
-      print("Firestore query for '$queryText' (lowercased: '$queryText') returned ${snapshot.docs.length} documents."); // Debugging log
+      print("Firestore query for lowercase '$queryTextLowercased' returned ${snapshot.docs.length} documents.");
 
       return snapshot.docs
           .map((doc) => DestinationModel.fromFirestore(doc))

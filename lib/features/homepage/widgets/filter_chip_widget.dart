@@ -49,7 +49,7 @@ class FilterChipWidget extends StatelessWidget {
       case 'PvuucOStwQrVUHhXBKDi' : return AppColors.warning50.withOpacity(0.4);
       case 'kQzkUbWuBC6Zrad0mVs2' : return AppColors.danger50.withOpacity(0.4);
       case 'nFpGFc2Rkxg2F9zjIx2x' : return AppColors.primary50.withOpacity(0.4);
-      default: return AppColors.grey50; // Menggunakan warna abu-abu default untuk hasil pencarian
+      default: return AppColors.primary50.withOpacity(0.4); // Menggunakan warna abu-abu default untuk hasil pencarian
     }
   }
 
@@ -61,7 +61,7 @@ class FilterChipWidget extends StatelessWidget {
       case 'PvuucOStwQrVUHhXBKDi' : return AppColors.warning50;
       case 'kQzkUbWuBC6Zrad0mVs2' : return AppColors.danger50;
       case 'nFpGFc2Rkxg2F9zjIx2x' : return AppColors.primary50;
-      default: return AppColors.grey50; // Menggunakan warna abu-abu default untuk hasil pencarian
+      default: return AppColors.primary50; // Menggunakan warna abu-abu default untuk hasil pencarian
     }
   }
 }

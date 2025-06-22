@@ -41,6 +41,20 @@ class _ProductGridSectionState extends State<ProductGridSection> {
     _loadFavoriteStatus();
   }
 
+  @override
+  void didUpdateWidget(covariant ProductGridSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.products != widget.products) {
+      setState(() {
+        _filteredProducts = List.from(widget.products);
+        _initializeLikeCounts(); // Perbarui like count
+        _loadFavoriteStatus();  // Perbarui status favorite
+      });
+    }
+  }
+
+
   void _initializeLikeCounts() {
     for (var item in widget.products) {
       if (item.id != null) {
