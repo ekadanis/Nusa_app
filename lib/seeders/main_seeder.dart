@@ -1,7 +1,6 @@
 import 'category_seeder.dart';
 import 'user_seeder.dart';
 import 'destination_seeder.dart';
-import 'article_seeder.dart';
 import 'forum_seeder.dart';
 
 class MainSeeder {
@@ -10,7 +9,6 @@ class MainSeeder {
       final categoryIds = await CategorySeeder.seedCategories();
       final userId = await UserSeeder.seedUsers();
       await DestinationSeeder.seedDestinations(categoryIds, userId);
-      await ArticleSeeder.seedArticles(categoryIds);
       await ForumSeeder.seedForums(userId);
     } catch (e) {
       rethrow;
@@ -32,11 +30,6 @@ class MainSeeder {
           final categoryIds = await CategorySeeder.seedCategories();
           final userId = await UserSeeder.seedUsers();
           await DestinationSeeder.seedDestinations(categoryIds, userId);
-          break;
-
-        case 'articles':
-          final categoryIds = await CategorySeeder.seedCategories();
-          await ArticleSeeder.seedArticles(categoryIds);
           break;
 
         case 'forum':

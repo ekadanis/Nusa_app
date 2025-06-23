@@ -54,7 +54,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    FirestoreService.initializeDatabase();
     _fetchAndFilterFirebaseData(); // Memanggil fungsi baru yang juga memfilter
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAndShowLocationPopup();

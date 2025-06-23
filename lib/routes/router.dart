@@ -98,10 +98,5 @@ class AppRouter extends RootStackRouter {
           path: '/detail-destination',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
-        CustomRoute<void>(
-          page: ArticleRoute.page,
-          path: '/article',
-          transitionsBuilder: TransitionsBuilders.fadeIn,
-        ),
       ];
 }
