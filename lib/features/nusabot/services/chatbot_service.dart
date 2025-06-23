@@ -5,15 +5,6 @@ import 'package:http/http.dart' as http;
 import '../data/chat_message.dart';
 
 class ChatbotService {
-  //set singleton
-  // static final ChatbotService _instance = ChatbotService._internal();
-
-  // factory ChatbotService() {
-  //   return _instance;
-  // }
-
-  // ChatbotService._internal();
-
   final List<ChatMessage> _message = [];
   final FlutterTts _flutterTts = FlutterTts();
   final stt.SpeechToText _speechToText = stt.SpeechToText();
@@ -28,10 +19,26 @@ class ChatbotService {
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
   String? get errorMessage => _errorMessage;
+  bool _hasWelcomed = false;
 
   static final ChatbotService _instance = ChatbotService._internal();
   factory ChatbotService() => _instance;
   ChatbotService._internal();
+
+  void addWelcomeMessage() {
+    if (_hasWelcomed) return;
+    _message.add(ChatMessage(
+      text: 'Hello Nusa friend , I am here to help you! 😊',
+      isUser: false,
+      timestamp: DateTime.now(),
+    ));
+    _hasWelcomed = true;
+  }
+
+  void resetMessages() {
+    _message.clear();
+    _hasWelcomed = false;
+  }
 
   Future<void> sendMessage(String inputText) async {
     await stopTts(); //stop tts ketika ada req. baru

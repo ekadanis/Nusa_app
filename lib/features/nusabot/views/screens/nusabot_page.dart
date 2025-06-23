@@ -31,17 +31,7 @@ class _NusaBotPageState extends State<NusaBotPage> {
   @override
   void initState() {
     super.initState();
-    _addWelcomeMessage();
-  }
-
-  void _addWelcomeMessage() {
-    _service.messages.add(
-      ChatMessage(
-          text: 'Hello Nusa friend , I am here to help you! 😊',
-          isUser: false,
-          timestamp: DateTime.now()),
-    );
-    setState(() {}); // biar langsung kelihatan di UI
+    _service.addWelcomeMessage();
   }
 
   void _scrollToBottom() {
