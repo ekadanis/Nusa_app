@@ -1,5 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../../core/styles.dart';
@@ -33,6 +35,10 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _fetchFirebaseData();
+    FCMService.setupOnMessageListener();
+    FirebaseMessaging.instance.getToken().then((token) {
+      print("🎯 My FCM Token: $token");
+    });
   }
 
   void _onLocationEnabled() {
@@ -141,15 +147,14 @@ class _HomePageState extends State<HomePage> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     SizedBox(height: Styles.xsSpacing),
-                    const CategoriesSection(),                    const SizedBox(height: Styles.smSpacing),
+                    const CategoriesSection(),
+                    const SizedBox(height: Styles.smSpacing),
                     const HomeFeaturedBanner(),
                     const SizedBox(height: Styles.smSpacing),
                     HomeLocationBanner(
                       onLocationEnabled: _onLocationEnabled,
                     ),
-                    const SizedBox(
-                        height: Styles
-                            .smSpacing),
+                    const SizedBox(height: Styles.smSpacing),
                     for (var category in categories) ...[
                       GenericSection(
                         key: _sectionKeys.putIfAbsent(
@@ -157,7 +162,8 @@ class _HomePageState extends State<HomePage> {
                           () => GlobalKey<GenericSectionState>(),
                         ),
                         title: category["title"]!,
-                        categoryName: category["categoryName"]!,                        items: _getDestinationsForSection(
+                        categoryName: category["categoryName"]!,
+                        items: _getDestinationsForSection(
                             category["categoryName"]!),
                         userId: GoogleAuthService.getAuthenticatedUserId(),
                         locationIcon: Icon(
@@ -169,6 +175,22 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(height: Styles.smSpacing),
                     ],
 
+                    /// 👇 Tambahkan tombol di bawah semua section
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    //   child: ElevatedButton(
+                    //     onPressed: () async {
+                    //       final correctToken =
+                    //           "cNdX0MwOThSsXFAXV6qT3N:APA91bE7apzykDX2zpOma3bG2E4oAyZOQv_hsV9y0qjATSLE_tI5EX8yQhSJpkRIET9jwt3bB_TvCufpHYvR1qYRkpWnkwTGS45phz_dMGzbwN5mgYd6saE";
+                    //       await FCMService.sendNotification(
+                    //         deviceToken: correctToken,
+                    //         title: "Tes Langsung",
+                    //         body: "Tes langsung ke HP B",
+                    //       );
+                    //     },
+                    //     child: const Text("📩 Kirim Tes Notifikasi"),
+                    //   ),
+                    // ),
                     const SizedBox(height: Styles.xlSpacing),
                   ],
                 ),

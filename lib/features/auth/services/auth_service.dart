@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // Tambahkan ini
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -8,6 +9,7 @@ class AuthService {
   Future<String?> login(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await _saveFcmToken(_auth.currentUser!.uid);
       return null;
     } on FirebaseAuthException catch (e) {
       print("FirebaseAuthException code: ${e.code}");
@@ -41,6 +43,8 @@ class AuthService {
         'createdAt': FieldValue.serverTimestamp(),
       });
 
+      await _saveFcmToken(uid!);
+
       return null;
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -58,6 +62,17 @@ class AuthService {
       return e.message;
     }
   }
+
+Future<void> _saveFcmToken(String uid) async {
+  final fcm = FirebaseMessaging.instance;
+  final token = await fcm.getToken();
+
+  if (token != null) {
+    await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      'fcmToken': token,
+    });
+  }
+}
 
   // Logout
   Future<void> logout() async {

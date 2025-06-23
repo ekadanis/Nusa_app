@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nusa_app/core/app_colors.dart';
+import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:nusa_app/models/forum_model.dart';
 import 'package:nusa_app/models/user_model.dart';
 import 'package:nusa_app/routes/router.dart';
@@ -21,16 +22,62 @@ class ForumTab extends StatelessWidget {
     }
   }
 
+  // Future<void> _handleLike(ForumModel forumPost) async {
+  //   if (forumPost.id == null) return;
+
+  //   final currentUserId = GoogleAuthService.currentUserId;
+  //   if (currentUserId == null) return;
+
+  //   try {
+  //     await FirestoreService.toggleForumLike(currentUserId, forumPost.id!);
+  //   } catch (e) {
+  //     print('Error toggling like: $e');
+  //   }
+  // }
+
   Future<void> _handleLike(ForumModel forumPost) async {
     if (forumPost.id == null) return;
 
-    final currentUserId = GoogleAuthService.currentUserId;
-    if (currentUserId == null) return;
+    final currentUser = GoogleAuthService.currentUser;
+    if (currentUser == null) return;
+
+    final currentUserId = currentUser.uid;
 
     try {
+      final isLiked = await FirestoreService.hasUserLikedForumPost(
+          currentUserId, forumPost.id!);
+
+      // Toggle like
       await FirestoreService.toggleForumLike(currentUserId, forumPost.id!);
+
+      // Jika baru saja di-LIKE, kirim notifikasi
+      if (!isLiked) {
+        final postOwner = await FirestoreService.getUserById(forumPost.userId);
+        final fcmToken = postOwner?.fcmToken;
+        final postOwnerId = postOwner?.id;
+
+        if (postOwnerId != null &&
+            postOwnerId != currentUserId &&
+            fcmToken != null &&
+            fcmToken.isNotEmpty) {
+          await FCMService.sendNotification(
+            deviceToken: fcmToken,
+            title: '❤️ Your post got a like!',
+            body:
+                '${currentUser.displayName ?? "Someone"} like your feed.',
+            data: {
+              'type': 'like',
+              'post_id': forumPost.id!,
+            },
+          );
+          print(
+              '[✅] Notifikasi like dari ForumTab berhasil dikirim ke $postOwnerId');
+        } else {
+          print('[⚠️] Notifikasi TIDAK dikirim (token kosong atau user sama)');
+        }
+      }
     } catch (e) {
-      print('Error toggling like: $e');
+      print('❌ Error toggling like or sending notification: $e');
     }
   }
 
@@ -39,7 +86,8 @@ class ForumTab extends StatelessWidget {
     if (currentUserId == null) return false;
 
     try {
-      return await FirestoreService.hasUserLikedForumPost(currentUserId, forumId);
+      return await FirestoreService.hasUserLikedForumPost(
+          currentUserId, forumId);
     } catch (e) {
       print('Error checking like status: $e');
       return false;
@@ -73,7 +121,8 @@ class ForumTab extends StatelessWidget {
         if (docs.isEmpty) {
           return const Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,              children: [
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Icon(
                   Icons.forum_outlined,
                   size: 64,
@@ -114,8 +163,8 @@ class ForumTab extends StatelessWidget {
   }
 
   Widget _buildForumCard(BuildContext context, ForumModel forumPost) {
-    final dateStr = DateFormat('EEEE, d MMMM yyyy', 'id_ID')
-        .format(forumPost.date);
+    final dateStr =
+        DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(forumPost.date);
 
     return InkWell(
       onTap: () => context.router.push(ForumDetailRoute(forumPost: forumPost)),
@@ -140,22 +189,25 @@ class ForumTab extends StatelessWidget {
                         FutureBuilder<UserModel?>(
                           future: _getUserData(forumPost.userId),
                           builder: (context, userSnapshot) {
-                            final userName = userSnapshot.data?.name ?? 'Anonymous';
-                            final userInitial = userName.isNotEmpty 
-                                ? userName[0].toUpperCase() 
+                            final userName =
+                                userSnapshot.data?.name ?? 'Anonymous';
+                            final userInitial = userName.isNotEmpty
+                                ? userName[0].toUpperCase()
                                 : 'A';
-                            
+
                             // Check if this is the current user to get their Google photo
-                            final currentUserId = GoogleAuthService.currentUserId;
-                            final isCurrentUser = currentUserId == forumPost.userId;
-                            
+                            final currentUserId =
+                                GoogleAuthService.currentUserId;
+                            final isCurrentUser =
+                                currentUserId == forumPost.userId;
+
                             Widget avatarWidget;
-                            
+
                             if (isCurrentUser) {
                               // For current user, get photo from GoogleAuthService
                               final userInfo = GoogleAuthService.getUserInfo();
                               final photoURL = userInfo['photoURL'];
-                              
+
                               if (photoURL != null && photoURL.isNotEmpty) {
                                 avatarWidget = CircleAvatar(
                                   backgroundColor: AppColors.primary50,
@@ -164,13 +216,15 @@ class ForumTab extends StatelessWidget {
                                   onBackgroundImageError: (_, __) {
                                     // Fallback to initial if image fails to load
                                   },
-                                  child: photoURL.isEmpty ? Text(
-                                    userInitial,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ) : null,
+                                  child: photoURL.isEmpty
+                                      ? Text(
+                                          userInitial,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : null,
                                 );
                               } else {
                                 avatarWidget = CircleAvatar(
@@ -188,7 +242,7 @@ class ForumTab extends StatelessWidget {
                             } else {
                               // For other users, use their stored photoURL if available
                               final photoURL = userSnapshot.data?.photoURL;
-                              
+
                               if (photoURL != null && photoURL.isNotEmpty) {
                                 avatarWidget = CircleAvatar(
                                   backgroundColor: AppColors.primary50,
@@ -197,13 +251,15 @@ class ForumTab extends StatelessWidget {
                                   onBackgroundImageError: (_, __) {
                                     // Fallback to initial if image fails to load
                                   },
-                                  child: photoURL.isEmpty ? Text(
-                                    userInitial,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ) : null,
+                                  child: photoURL.isEmpty
+                                      ? Text(
+                                          userInitial,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : null,
                                 );
                               } else {
                                 avatarWidget = CircleAvatar(
@@ -219,7 +275,7 @@ class ForumTab extends StatelessWidget {
                                 );
                               }
                             }
-                            
+
                             return avatarWidget;
                           },
                         ),
@@ -231,7 +287,8 @@ class ForumTab extends StatelessWidget {
                               FutureBuilder<UserModel?>(
                                 future: _getUserData(forumPost.userId),
                                 builder: (context, userSnapshot) {
-                                  if (userSnapshot.connectionState == ConnectionState.waiting) {
+                                  if (userSnapshot.connectionState ==
+                                      ConnectionState.waiting) {
                                     return const Text(
                                       'Loading...',
                                       style: TextStyle(
@@ -240,8 +297,9 @@ class ForumTab extends StatelessWidget {
                                       ),
                                     );
                                   }
-                                  
-                                  final userName = userSnapshot.data?.name ?? 'Anonymous User';
+
+                                  final userName = userSnapshot.data?.name ??
+                                      'Anonymous User';
                                   return Text(
                                     userName,
                                     style: const TextStyle(
@@ -288,17 +346,23 @@ class ForumTab extends StatelessWidget {
                   Row(
                     children: [
                       FutureBuilder<bool>(
-                        future: forumPost.id != null ? _hasUserLiked(forumPost.id!) : Future.value(false),
+                        future: forumPost.id != null
+                            ? _hasUserLiked(forumPost.id!)
+                            : Future.value(false),
                         builder: (context, likeSnapshot) {
                           final isLiked = likeSnapshot.data ?? false;
-                          
+
                           return GestureDetector(
                             onTap: () => _handleLike(forumPost),
                             child: Row(
                               children: [
                                 Icon(
-                                  isLiked ? Icons.favorite : Icons.favorite_border,
-                                  color: isLiked ? Colors.red : AppColors.primary50,
+                                  isLiked
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: isLiked
+                                      ? Colors.red
+                                      : AppColors.primary50,
                                   size: 20,
                                 ),
                                 const SizedBox(width: 4),
@@ -315,7 +379,8 @@ class ForumTab extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           // Navigate to forum detail for comments
-                          context.router.push(ForumDetailRoute(forumPost: forumPost));
+                          context.router
+                              .push(ForumDetailRoute(forumPost: forumPost));
                         },
                         child: Row(
                           children: [
@@ -335,7 +400,8 @@ class ForumTab extends StatelessWidget {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () => context.router.push(ForumDetailRoute(forumPost: forumPost)),
+                    onTap: () => context.router
+                        .push(ForumDetailRoute(forumPost: forumPost)),
                     child: const Row(
                       children: [
                         Text(
