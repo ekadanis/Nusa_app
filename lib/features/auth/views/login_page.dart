@@ -6,6 +6,7 @@ import 'package:nusa_app/features/auth/services/secure_storage_service.dart';
 import 'package:nusa_app/features/auth/widgets/auth_form.dart';
 import 'package:nusa_app/features/auth/widgets/auth_wrapper.dart';
 import 'package:nusa_app/features/auth/widgets/google_sign_in_button.dart';
+import 'package:nusa_app/features/auth/widgets/sign_in_success_dialog.dart';
 import 'package:nusa_app/routes/router.dart';
 import 'package:nusa_app/services/google_auth_service.dart';
 import 'package:sizer/sizer.dart';
@@ -93,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error)),
       );
-      await storage.clearCredentials(); 
+      await storage.clearCredentials();
     } else {
       if (rememberMe) {
         await storage.saveCredentials(email, password);
@@ -101,7 +102,19 @@ class _LoginPageState extends State<LoginPage> {
         await storage.clearCredentials();
       }
 
-      if (mounted) context.router.replace(const DashboardRoute());
+      if (mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => const SignInSuccessDialog(),
+        );
+
+        // Tunggu 2 detik lalu navigasi ke dashboard
+        await Future.delayed(const Duration(seconds: 2));
+        if (context.mounted) {
+          context.router.replace(const DashboardRoute());
+        }
+      }
     }
 
     setState(() => isLoading = false);
