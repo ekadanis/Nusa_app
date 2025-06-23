@@ -8,6 +8,7 @@ class DestinationModel {
   final GeoPoint location;
   final String address;
   final String title;
+  final String? titleLowercase;
   final int like;
   final int recommendation;
 
@@ -21,6 +22,7 @@ class DestinationModel {
     required this.title,
     this.like = 0,
     this.recommendation = 0,
+    this.titleLowercase,
   });
   // Convert to Map for Firestore
   Map<String, dynamic> toFirestore() {
@@ -33,6 +35,7 @@ class DestinationModel {
       'title': title,
       'like': like,
       'recommendation': recommendation,
+      'title_lowercase': title.toLowerCase(),
     };
   }
   // Create from Firestore document
@@ -48,6 +51,7 @@ class DestinationModel {
       title: data['title'] ?? '',
       like: data['like'] ?? 0,
       recommendation: data['recommendation'] ?? 0,
+      titleLowercase: data['title_lowercase'],
     );
   }
 
@@ -61,6 +65,7 @@ class DestinationModel {
       location: map['location'] ?? const GeoPoint(0, 0),
       address: map['address'] ?? '',
       title: map['title'] ?? '',
+      titleLowercase: map['title_lowercase'],
       like: map['like'] ?? 0,
     );
   }
@@ -74,6 +79,7 @@ class DestinationModel {
     GeoPoint? location,
     String? address,
     String? title,
+    String? titleLowercase,
     int? like,
   }) {
     return DestinationModel(
@@ -84,6 +90,7 @@ class DestinationModel {
       location: location ?? this.location,
       address: address ?? this.address,
       title: title ?? this.title,
+      titleLowercase: titleLowercase ?? this.titleLowercase,
       like: like ?? this.like,
     );
   }

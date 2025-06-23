@@ -19,20 +19,23 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    navigateToNextPage();
-
+    print("\n\nINITIAL PAGE\n\n");
     super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      navigateToNextPage();
+    });
   }
 
-  void navigateToNextPage() {
-    // bool isFirstTime = SharedPreferencesService.getIsFirstTime();
-    bool isFirstTime = false;
+  void navigateToNextPage() async {
+    final isFirstTime = await SharedPreferencesService.getIsFirstTime();
+
     if (isFirstTime) {
       context.router.replace(const OnboardingRoute());
     } else {
-      context.router.replace(const LoginRoute());
+      context.router.replace(const DashboardRoute()); // langsung ke beranda
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

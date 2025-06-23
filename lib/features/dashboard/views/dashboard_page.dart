@@ -66,8 +66,7 @@ class _DashboardPageState extends State<DashboardPage> {
           }),
       Positioned(
         bottom: MediaQuery.of(context).viewInsets.bottom == 0 ? 52 : -100,
-        left: MediaQuery.of(context).size.width / 2 -
-            28, // Tengah horizontal, setengah dari lebar 56
+        left: MediaQuery.of(context).size.width / 2 - 28,
         child: Container(
           decoration: BoxDecoration(
             boxShadow: Styles.defaultShadow,

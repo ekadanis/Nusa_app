@@ -29,52 +29,6 @@ class AccountRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [ArticlePage]
-class ArticleRoute extends PageRouteInfo<ArticleRouteArgs> {
-  ArticleRoute({
-    Key? key,
-    required ArticleModel article,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ArticleRoute.name,
-          args: ArticleRouteArgs(
-            key: key,
-            article: article,
-          ),
-          initialChildren: children,
-        );
-
-  static const String name = 'ArticleRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<ArticleRouteArgs>();
-      return ArticlePage(
-        key: args.key,
-        article: args.article,
-      );
-    },
-  );
-}
-
-class ArticleRouteArgs {
-  const ArticleRouteArgs({
-    this.key,
-    required this.article,
-  });
-
-  final Key? key;
-
-  final ArticleModel article;
-
-  @override
-  String toString() {
-    return 'ArticleRouteArgs{key: $key, article: $article}';
-  }
-}
-
-/// generated route for
 /// [DashboardPage]
 class DashboardRoute extends PageRouteInfo<void> {
   const DashboardRoute({List<PageRouteInfo>? children})
@@ -442,6 +396,58 @@ class OnboardingRoute extends PageRouteInfo<void> {
       return const OnboardingPage();
     },
   );
+}
+
+/// generated route for
+/// [SearchResultsPage]
+class SearchResultsRoute extends PageRouteInfo<SearchResultsRouteArgs> {
+  SearchResultsRoute({
+    Key? key,
+    required String query,
+    required List<DestinationModel> results,
+    List<PageRouteInfo>? children,
+  }) : super(
+          SearchResultsRoute.name,
+          args: SearchResultsRouteArgs(
+            key: key,
+            query: query,
+            results: results,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'SearchResultsRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<SearchResultsRouteArgs>();
+      return SearchResultsPage(
+        key: args.key,
+        query: args.query,
+        results: args.results,
+      );
+    },
+  );
+}
+
+class SearchResultsRouteArgs {
+  const SearchResultsRouteArgs({
+    this.key,
+    required this.query,
+    required this.results,
+  });
+
+  final Key? key;
+
+  final String query;
+
+  final List<DestinationModel> results;
+
+  @override
+  String toString() {
+    return 'SearchResultsRouteArgs{key: $key, query: $query, results: $results}';
+  }
 }
 
 /// generated route for

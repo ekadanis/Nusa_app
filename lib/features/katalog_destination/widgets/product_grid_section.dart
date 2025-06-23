@@ -13,6 +13,7 @@ class ProductGridSection extends StatefulWidget {
   final Function()? onSeeAll;
   final List<String>? customFilters;
   final String? userId;
+  final String selectedCategory;
 
   const ProductGridSection({
     Key? key,
@@ -20,6 +21,7 @@ class ProductGridSection extends StatefulWidget {
     this.onSeeAll,
     this.customFilters,
     this.userId,
+    required this.selectedCategory,
   }) : super(key: key);
 
   @override
@@ -38,6 +40,20 @@ class _ProductGridSectionState extends State<ProductGridSection> {
     _initializeLikeCounts();
     _loadFavoriteStatus();
   }
+
+  @override
+  void didUpdateWidget(covariant ProductGridSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.products != widget.products) {
+      setState(() {
+        _filteredProducts = List.from(widget.products);
+        _initializeLikeCounts(); // Perbarui like count
+        _loadFavoriteStatus();  // Perbarui status favorite
+      });
+    }
+  }
+
 
   void _initializeLikeCounts() {
     for (var item in widget.products) {
@@ -155,6 +171,7 @@ class _ProductGridSectionState extends State<ProductGridSection> {
                   label: filters[index],
                   isSelected: _selectedFilterIndex == index,
                   onTap: () => _filterProducts(index, filters[index]),
+                  selectedCategory: widget.selectedCategory,
                 ),
               );
             },
@@ -168,7 +185,7 @@ class _ProductGridSectionState extends State<ProductGridSection> {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.80,
+              childAspectRatio: 0.75,
               crossAxisSpacing: 3.w,
               mainAxisSpacing: 2.h,
             ),
@@ -187,6 +204,7 @@ class _ProductGridSectionState extends State<ProductGridSection> {
                 },
                 onFavorite: () => _toggleFavorite(product),
                 isFavorite: _favoriteStatus[product.id] ?? false,
+                categoryId: widget.selectedCategory,
               );
             },
           ),

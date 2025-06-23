@@ -257,50 +257,76 @@ class FirestoreService {
     }
   }
 
-  static Future<List<ArticleModel>> getArticles({int limit = 10}) async {
+  static Future<List<DestinationModel>> searchDestinationsByTitle(String queryText) async {
     try {
-      final snapshot = await articlesCollection.limit(limit).get();
+      final queryTextLowercased = queryText.toLowerCase();
+
+      final snapshot = await destinationsCollection
+          .where('title_lowercase', isGreaterThanOrEqualTo: queryText)
+          .where('title_lowercase', isLessThan: queryText + '\uf8ff') // Teknik untuk "startsWith"
+          .get();
+
+      print("Firestore query for lowercase '$queryTextLowercased' returned ${snapshot.docs.length} documents.");
+
       return snapshot.docs
-          .map((doc) => ArticleModel.fromFirestore(doc))
+          .map((doc) => DestinationModel.fromFirestore(doc))
           .toList();
+    } on FirebaseException catch (e) {
+      // Tangani error spesifik dari Firebase, ini seringkali menunjukkan masalah indeks.
+      print("FirebaseException in searchDestinationsByTitle: Code: ${e.code}, Message: ${e.message}");
+      print("Pastikan Anda memiliki indeks Firestore untuk field 'title' (Ascending).");
+      return [];
     } catch (e) {
-      // Error saat mengambil data artikel
+      // Error umum saat mencari destinasi berdasarkan judul
+      print("Error searching destinations by title: $e");
       return [];
     }
   }
 
-  static Future<List<ArticleModel>> getTopArticlesByLikes(
-      {int limit = 5}) async {
-    try {
-      final snapshot = await articlesCollection
-          .orderBy('like', descending: true)
-          .limit(limit)
-          .get();
-      print("\n\n<<<ARTIKEL POPULER: ${snapshot.docs}\n\n");
-      return snapshot.docs
-          .map((doc) => ArticleModel.fromFirestore(doc))
-          .toList();
-    } catch (e) {
-      return [];
-    }
-  }
-
-  static Future<List<ArticleModel>> getArticlesByCategory(String categoryId,
-      {int limit = 10}) async {
-    try {
-      final snapshot = await articlesCollection
-          .where('categoryId', isEqualTo: categoryId)
-          .limit(limit)
-          .get();
-      print("\n\n<<<ISI CATEGORIES${snapshot.docs}\n\n");
-      return snapshot.docs
-          .map((doc) => ArticleModel.fromFirestore(doc))
-          .toList();
-    } catch (e) {
-      // Error saat mengambil artikel berdasarkan kategori
-      return [];
-    }
-  }
+  // static Future<List<ArticleModel>> getArticles({int limit = 10}) async {
+  //   try {
+  //     final snapshot = await articlesCollection.limit(limit).get();
+  //     return snapshot.docs
+  //         .map((doc) => ArticleModel.fromFirestore(doc))
+  //         .toList();
+  //   } catch (e) {
+  //     // Error saat mengambil data artikel
+  //     return [];
+  //   }
+  // }
+  //
+  // static Future<List<ArticleModel>> getTopArticlesByLikes(
+  //     {int limit = 5}) async {
+  //   try {
+  //     final snapshot = await articlesCollection
+  //         .orderBy('like', descending: true)
+  //         .limit(limit)
+  //         .get();
+  //     print("\n\n<<<ARTIKEL POPULER: ${snapshot.docs}\n\n");
+  //     return snapshot.docs
+  //         .map((doc) => ArticleModel.fromFirestore(doc))
+  //         .toList();
+  //   } catch (e) {
+  //     return [];
+  //   }
+  // }
+  //
+  // static Future<List<ArticleModel>> getArticlesByCategory(String categoryId,
+  //     {int limit = 10}) async {
+  //   try {
+  //     final snapshot = await articlesCollection
+  //         .where('categoryId', isEqualTo: categoryId)
+  //         .limit(limit)
+  //         .get();
+  //     print("\n\n<<<ISI CATEGORIES${snapshot.docs}\n\n");
+  //     return snapshot.docs
+  //         .map((doc) => ArticleModel.fromFirestore(doc))
+  //         .toList();
+  //   } catch (e) {
+  //     // Error saat mengambil artikel berdasarkan kategori
+  //     return [];
+  //   }
+  // }
 
   static Future<String> getCategoryNameById(String categoryId) async {
     try {
