@@ -13,7 +13,7 @@ class ChatbotService {
   // }
 
   // ChatbotService._internal();
-  
+
   final List<ChatMessage> _message = [];
   final FlutterTts _flutterTts = FlutterTts();
   final stt.SpeechToText _speechToText = stt.SpeechToText();
@@ -28,6 +28,10 @@ class ChatbotService {
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
   String? get errorMessage => _errorMessage;
+
+  static final ChatbotService _instance = ChatbotService._internal();
+  factory ChatbotService() => _instance;
+  ChatbotService._internal();
 
   Future<void> sendMessage(String inputText) async {
     await stopTts(); //stop tts ketika ada req. baru
