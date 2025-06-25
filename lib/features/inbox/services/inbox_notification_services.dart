@@ -7,7 +7,7 @@ class InboxNotificationServices {
 
   static CollectionReference<Map<String, dynamic>> _userNotificationCollection(String uid) {
     return _firestore
-        .collection('notifications')
+        .collection('inbox_notification')
         .doc(uid)
         .collection('items');
   }

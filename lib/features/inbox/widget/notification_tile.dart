@@ -10,7 +10,6 @@ class NotificationTile extends StatelessWidget {
   final IconData iconData;
   final Color iconColor;
   final String? postId;
-  final VoidCallback? onTap;
 
   const NotificationTile({
     super.key,
@@ -20,7 +19,6 @@ class NotificationTile extends StatelessWidget {
     required this.iconData,
     required this.iconColor,
     this.postId,
-    this.onTap,
   });
 
   @override
@@ -72,10 +70,13 @@ class NotificationTile extends StatelessWidget {
             ),
           ),
           onTap: () async {
+            print("==========PRINT ON TAP======");
+            print('========== ${postId} ==============');
             if (postId != null) {
               final forum = await FeedService.getForumById(postId!);
+              print('========== ${forum} ==============');
               if (forum != null && context.mounted) {
-                context.pushRoute(ForumDetailRoute(forumPost: forum));
+                context.router.push(ForumDetailRoute(forumPost: forum));
               }
             }
           }),

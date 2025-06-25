@@ -118,9 +118,11 @@ class _InboxPageState extends State<InboxPage>
         return NotificationTile(
           title: notification.title,
           message: notification.message,
+          postId: notification.postId,
           date: notification.date,
           iconData: notification.iconData,
           iconColor: notification.iconColor,
+          
         );
       },
     );

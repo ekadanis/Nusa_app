@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/core/services/fcm_service.dart';
+import 'package:nusa_app/features/feeds/services/comment_service.dart';
 import '../../../models/models.dart';
 import '../../../services/firestore_service.dart';
 import '../../../services/google_auth_service.dart';
@@ -103,8 +104,7 @@ class _ForumDetailPageState extends State<ForumDetailPage> {
           await FCMService.sendNotification(
             deviceToken: fcmToken,
             title: '❤️ Your post got a like!',
-            body:
-                '${currentUser.displayName ?? "Someone"} like your feed.',
+            body: '${currentUser.displayName ?? "Someone"} like your feed.',
             data: {
               'type': 'like',
               'post_id': widget.forumPost.id!,
@@ -127,77 +127,6 @@ class _ForumDetailPageState extends State<ForumDetailPage> {
             _likeCount++;
             _isLiked = true;
           }
-        });
-      }
-    }
-  }
-
-  Future<void> _addComment() async {
-    final text = _commentController.text.trim();
-    if (text.isEmpty || _isAddingComment) return;
-
-    final currentUser = GoogleAuthService.currentUser;
-    if (currentUser == null || widget.forumPost.id == null) return;
-
-    setState(() {
-      _isAddingComment = true;
-    });
-
-    try {
-      final comment = CommentModel(
-        content: text,
-        userId: currentUser.uid,
-        forumId: widget.forumPost.id!,
-        date: DateTime.now(),
-      );
-
-      await FirestoreService.addComment(comment);
-      _commentController.clear();
-
-      // send notification to pemilik postingan
-      if (widget.forumPost.userId != currentUser.uid) {
-        final postOwner =
-            await FirestoreService.getUserById(widget.forumPost.userId);
-        final fcmToken = postOwner?.fcmToken;
-
-        if (fcmToken != null && fcmToken.isNotEmpty) {
-          print('[📨] Sedang kirim notifikasi ke token: $fcmToken');
-          print('[📨] Judul: Komentar Baru di Forum');
-          print(
-            '[📨] Isi: ${currentUser.displayName ?? 'Seseorang'} mengomentari postinganmu',
-          );
-          await FCMService.sendNotification(
-            deviceToken: fcmToken,
-            title: "💬 New comment on the forum",
-            body:
-                "${currentUser.displayName ?? 'Someone'} commented on your feed",
-            data: {
-              "forum_id": widget.forumPost.id!,
-              "type": "comment",
-            },
-          );
-        }
-      }
-      // Show success message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Comment added successfully!'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add comment: $e')),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isAddingComment = false;
         });
       }
     }
@@ -234,7 +163,13 @@ class _ForumDetailPageState extends State<ForumDetailPage> {
           CommentInput(
             controller: _commentController,
             isLoading: _isAddingComment,
-            onAddComment: _addComment,
+            onAddComment: () => commentService(
+              controller: _commentController,
+              forumPost: widget.forumPost,
+              context: context,
+              onStart: () => setState(() => _isAddingComment = true),
+              onComplete: () => setState(() => _isAddingComment = false),
+            ),
           ),
         ],
       ),

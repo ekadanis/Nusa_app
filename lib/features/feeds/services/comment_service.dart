@@ -1,47 +1,90 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nusa_app/services/fcm_notification_helper.dart';
+import 'package:flutter/material.dart';
+import 'package:nusa_app/core/services/fcm_service.dart';
+import 'package:nusa_app/models/comment_model.dart';
+import 'package:nusa_app/models/forum_model.dart';
+import 'package:nusa_app/services/firestore_service.dart';
+import 'package:nusa_app/services/google_auth_service.dart';
 
-class CommentService {
-  static Future<void> addComment({
-    required String forumId,
-    required String content,
-    required String currentUserId,
-  }) async {
-    // 1. Tambah komentar
-    await FirebaseFirestore.instance.collection('comments').add({
-      'forumId': forumId,
-      'userId': currentUserId,
-      'content': content,
-      'date': FieldValue.serverTimestamp(),
-    });
+Future<void> commentService({
+  required TextEditingController controller,
+  required ForumModel forumPost,
+  required BuildContext context,
+  required VoidCallback onStart,
+  required VoidCallback onComplete,
+}) async {
+  final text = controller.text.trim();
+  final currentUser = GoogleAuthService.currentUser;
 
-    // 2. Tambah counter komentar di forum
-    await FirebaseFirestore.instance
-        .collection('forums')
-        .doc(forumId)
-        .update({
-      'commentsCount': FieldValue.increment(1),
-    });
+  if (text.isEmpty || currentUser == null || forumPost.id == null) return;
 
-    // 3. Kirim push ke pemilik forum
-    final forumDoc = await FirebaseFirestore.instance
-        .collection('forums')
-        .doc(forumId)
-        .get();
+  onStart();
 
-    final forumOwnerId = forumDoc.data()?['userId'];
-    final forumContent = forumDoc.data()?['content'] ?? "";
+  try {
+    final comment = CommentModel(
+      content: text,
+      userId: currentUser.uid,
+      forumId: forumPost.id!,
+      date: DateTime.now(),
+    );
 
-    if (forumOwnerId != null && forumOwnerId != currentUserId) {
-      await sendPushToUser(
-        receiverUid: forumOwnerId,
-        title: "💬 Komentar Baru",
-        body: "Someone commented: \"$forumContent\"",
-        data: {
-          "forumId": forumId,
-          "type": "comment",
-        },
+    await FirestoreService.addComment(comment);
+    controller.clear();
+
+    if (forumPost.userId != currentUser.uid) {
+      final postOwner = await FirestoreService.getUserById(forumPost.userId);
+      final fcmToken = postOwner?.fcmToken;
+
+      if (postOwner != null && fcmToken != null && fcmToken.isNotEmpty) {
+        print('ID Notifikasi: ${postOwner.id}');
+        final title = "💬 New Comment";
+        final message =
+            "${currentUser.displayName ?? 'Someone'} commented on your feed";
+
+        // Push Notification
+        await FCMService.sendNotification(
+          deviceToken: fcmToken,
+          title: title,
+          body: message,
+          data: {
+            "forum_id": forumPost.id!,
+            "type": "comment",
+          },
+        );
+        print("ceeeek");
+        // Inbox Notification (Firestore)
+        final notifcomment = await FirebaseFirestore.instance
+            .collection('inbox_notification')
+            .doc(postOwner.id)
+            .collection('items')
+            .add({
+          'title': title,
+          'message': message,
+          'postId': forumPost.id!,
+          'type': 'comment',
+          'updateAt': FieldValue.serverTimestamp(),
+        });
+
+        print('ID Notifikasi: ${notifcomment.id}');
+      }
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Comment added successfully!'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
       );
     }
+  } catch (e) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to add comment: $e')),
+      );
+    }
+  } finally {
+    onComplete();
   }
 }
