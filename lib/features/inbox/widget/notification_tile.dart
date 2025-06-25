@@ -1,0 +1,72 @@
+import 'package:flutter/material.dart';
+
+class NotificationTile extends StatelessWidget {
+  final String title;
+  final String message;
+  final String date;
+  final IconData iconData;
+  final Color iconColor;
+
+  const NotificationTile({
+    super.key,
+    required this.title,
+    required this.message,
+    required this.date,
+    required this.iconData,
+    required this.iconColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: iconColor,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            iconData,
+            color: Colors.white,
+            size: 24,
+          ),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            message,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
+              height: 1.3,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        trailing: Text(
+          date,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.grey[500],
+          ),
+        ),
+        onTap: () {
+          // Handle tap
+        },
+      ),
+    );
+  }
+}

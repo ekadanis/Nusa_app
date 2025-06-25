@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:nusa_app/core/services/fcm_service.dart';
 import '../../../models/models.dart';
 import '../../../services/firestore_service.dart';
 import '../../../services/google_auth_service.dart';
@@ -65,6 +66,8 @@ class _ForumDetailPageState extends State<ForumDetailPage> {
     final currentUser = GoogleAuthService.currentUser;
     if (currentUser == null || widget.forumPost.id == null) return;
 
+    final oldIsLiked = _isLiked;
+
     setState(() {
       if (_isLiked) {
         _likeCount--;
@@ -80,6 +83,39 @@ class _ForumDetailPageState extends State<ForumDetailPage> {
         currentUser.uid,
         widget.forumPost.id!,
       );
+
+      if (!oldIsLiked) {
+        // artinya baru saja di-LIKE (bukan unlike)
+        final postOwner =
+            await FirestoreService.getUserById(widget.forumPost.userId);
+        final fcmToken = postOwner?.fcmToken;
+        final postOwnerId = postOwner?.id;
+
+        print('Like Notification Debug');
+        print(' Post Owner ID: $postOwnerId');
+        print(' Current User ID: ${currentUser.uid}');
+        print(' FCM Token: $fcmToken');
+
+        if (postOwnerId != null &&
+            postOwnerId != currentUser.uid &&
+            fcmToken != null &&
+            fcmToken.isNotEmpty) {
+          await FCMService.sendNotification(
+            deviceToken: fcmToken,
+            title: '❤️ Your post got a like!',
+            body:
+                '${currentUser.displayName ?? "Someone"} like your feed.',
+            data: {
+              'type': 'like',
+              'post_id': widget.forumPost.id!,
+            },
+          );
+          print('Notifikasi like berhasil dikirim ke $postOwnerId');
+        } else {
+          print(
+              ' Notifikasi like TIDAK dikirim. Penyebab mungkin: token kosong, sama user, atau null');
+        }
+      }
     } catch (e) {
       // Revert on error
       if (mounted) {
@@ -118,6 +154,30 @@ class _ForumDetailPageState extends State<ForumDetailPage> {
       await FirestoreService.addComment(comment);
       _commentController.clear();
 
+      // send notification to pemilik postingan
+      if (widget.forumPost.userId != currentUser.uid) {
+        final postOwner =
+            await FirestoreService.getUserById(widget.forumPost.userId);
+        final fcmToken = postOwner?.fcmToken;
+
+        if (fcmToken != null && fcmToken.isNotEmpty) {
+          print('[📨] Sedang kirim notifikasi ke token: $fcmToken');
+          print('[📨] Judul: Komentar Baru di Forum');
+          print(
+            '[📨] Isi: ${currentUser.displayName ?? 'Seseorang'} mengomentari postinganmu',
+          );
+          await FCMService.sendNotification(
+            deviceToken: fcmToken,
+            title: "💬 New comment on the forum",
+            body:
+                "${currentUser.displayName ?? 'Someone'} commented on your feed",
+            data: {
+              "forum_id": widget.forumPost.id!,
+              "type": "comment",
+            },
+          );
+        }
+      }
       // Show success message
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

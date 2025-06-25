@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:nusa_app/features/detail_screen_destination/widgets/ask_nusabot_floating.dart';
 import 'package:sizer/sizer.dart';
 import 'package:nusa_app/core/app_colors.dart';
 import '../../../models/destination_model.dart';
 import '../widgets/destination_header.dart';
 import '../widgets/destination_overview.dart';
 import '../widgets/destination_content.dart';
-import '../widgets/loading_screen.dart';
+import '../../../widgets/loading_screen.dart';
 import '../../../services/gemini_service.dart';
 
 @RoutePage()
@@ -86,31 +87,29 @@ class _DetailScreenDestinationState extends State<DetailScreenDestination> {
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: ListView(
+      body: Stack(
         children: [
-          // Header with image, title, location, and like count
-          DestinationHeader(destination: widget.destination),
-
-          SizedBox(height: 3.h),
-
-          // Overview section with category badge
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            child: DestinationOverview(
-              overviewContent: _generatedContent?['overview'],
-              subcategory: widget.destination.subcategory,
-            ),
+          ListView(
+            children: [
+              DestinationHeader(destination: widget.destination),
+              SizedBox(height: 3.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: DestinationOverview(
+                  overviewContent: _generatedContent?['overview'],
+                  subcategory: widget.destination.subcategory,
+                ),
+              ),
+              SizedBox(height: 3.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: DestinationContent(generatedContent: _generatedContent),
+              ),
+              SizedBox(height: 3.h),
+            ],
           ),
 
-          SizedBox(height: 3.h),
-
-          // All expandable content sections
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            child: DestinationContent(generatedContent: _generatedContent),
-          ),
-
-          SizedBox(height: 3.h),
+          const AskNusaBotFloating(),
         ],
       ),
     );

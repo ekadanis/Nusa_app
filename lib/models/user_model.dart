@@ -6,6 +6,7 @@ class UserModel {
   final String email;
   final String password;
   final String? photoURL;
+  final String? fcmToken;
 
   UserModel({
     this.id,
@@ -13,6 +14,7 @@ class UserModel {
     required this.email,
     required this.password,
     this.photoURL,
+    this.fcmToken,
   });
   // Convert to Map for Firestore
   Map<String, dynamic> toFirestore() {
@@ -32,6 +34,7 @@ class UserModel {
       email: data['email'] ?? '',
       password: data['password'] ?? '',
       photoURL: data['photoURL'],
+      fcmToken: data['fcmToken'],
     );
   }
   // Create from Map
@@ -42,6 +45,7 @@ class UserModel {
       email: map['email'] ?? '',
       password: map['password'] ?? '',
       photoURL: map['photoURL'],
+      fcmToken: map['fcmToken'],
     );
   }
   // Copy with method
@@ -51,6 +55,7 @@ class UserModel {
     String? email,
     String? password,
     String? photoURL,
+    String? fcmToken,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -58,6 +63,7 @@ class UserModel {
       email: email ?? this.email,
       password: password ?? this.password,
       photoURL: photoURL ?? this.photoURL,
+      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 

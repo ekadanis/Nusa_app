@@ -1,6 +1,4 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class SharedPreferencesService {
   static Future<SharedPreferences> get _instance async =>
@@ -27,4 +25,5 @@ class SharedPreferencesService {
   static Future<void> clearAllPrefs() async {
     await prefs?.clear();
   }
+
 }

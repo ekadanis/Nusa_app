@@ -5,7 +5,7 @@ class AppColors {
   static const black = Color(0xFF000000);
   static const background = Color(0xFFFAFAFA);
 
-  static const nusa90 = Color(0xFF007dfc);
+  static const nusa90 = Color(0xFF235DFF);
   static const primary90 = Color(0xFF070d18);
   static const primary80 = Color(0xFF1a3660);
   static const primary70 = Color(0xFF28508f);

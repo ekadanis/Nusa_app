@@ -1,9 +1,11 @@
 export 'splash/splash.dart';
 export 'dashboard/dashboard.dart';
-export 'account/account.dart';
+export 'profile/profile.dart';
 export 'feeds/feeds.dart';
 export 'image_analyzer/image_analyzer.dart';
 export 'homepage/homepage.dart';
 export 'nusabot/nusabot.dart';
 export 'katalog_destination/katalog_destination.dart';
 export 'detail_screen_destination/detail_screen_destination.dart';
+export 'inbox/inbox.dart';
+

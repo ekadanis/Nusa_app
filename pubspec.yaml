@@ -23,7 +23,7 @@ dependencies:
   freezed_annotation: ^2.4.4
   get_it: ^8.0.2
   google_fonts: ^6.2.1
-  intl: ^0.19.0
+  intl: 0.19.0
   json_annotation: ^4.9.0
   loader_overlay: ^4.0.3
   logger: ^2.4.0
@@ -46,7 +46,7 @@ dependencies:
   flutter_tts: ^4.2.2
   speech_to_text: ^7.0.0
   http: ^1.4.0
-  flutter_svg: ^2.1.0
+  flutter_svg: ^2.2.0
   page_transition: ^2.1.0
   firebase_core: ^3.13.1
   firebase_auth: ^5.5.4
@@ -56,6 +56,10 @@ dependencies:
   geolocator: ^14.0.1
   permission_handler: ^11.3.1
   google_sign_in: ^6.3.0
+  flutter_secure_storage: ^9.0.0
+  googleapis_auth: ^1.4.0
+  firebase_messaging: ^15.2.7
+  flutter_local_notifications: ^17.1.2
 
 dev_dependencies:
   flutter_test:
@@ -84,3 +88,5 @@ flutter:
     - assets/images/
     - assets/images/onboarding/
     - assets/banner/
+    - assets/firebase/
+    

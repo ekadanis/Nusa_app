@@ -1,8 +1,5 @@
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:nusa_app/database/constants.dart';
-import 'package:mime/mime.dart';
-import 'dart:io';
-import 'dart:typed_data';
 
 class GeminiService {
   // Method untuk generate destination content
@@ -12,48 +9,47 @@ class GeminiService {
       final model = GenerativeModel(
         model: Constants.geminiModelId,
         apiKey: Constants.geminiApiKey,
-      );
-      final prompts = {
+      );      final prompts = {
         'overview': '''
-Create an engaging introduction to "${destinationName}" situated in ${location}. 
-This magnificent ${subcategory} belongs to the ${category} heritage category. 
-Write in English, 100-150 words. 
-Highlight what makes this destination unique, its cultural importance, and why visitors should explore it. Include what tourists can expect to experience when visiting - such as guided tours, cultural performances, interactive exhibits, or hands-on activities.
+Buatlah pengantar menarik tentang "${destinationName}" yang terletak di ${location}. 
+${subcategory} yang megah ini termasuk dalam kategori warisan ${category}. 
+Tulis dalam bahasa Indonesia, maksimal 100 kata. 
+Jelaskan keunikan destinasi ini, pentingnya secara budaya, dan mengapa wisatawan harus mengunjunginya. Sertakan pengalaman yang bisa didapat wisatawan seperti tur, pertunjukan budaya, atau aktivitas interaktif.
 ''',
         'history': '''
-Write about the historical development and timeline of "${destinationName}" in ${location}. 
-Write in English, 150-200 words.
-Cover its founding era, key historical figures, significant periods, and major events that shaped its legacy. Focus on HOW tourists can learn about and experience this history during their visit: guided historical tours, museum displays, storytelling sessions, historical reenactments, documentary screenings, or interactive timeline exhibits that visitors can engage with.
+Tuliskan sejarah dan perkembangan "${destinationName}" di ${location}. 
+Tulis dalam bahasa Indonesia, maksimal 100 kata.
+Jelaskan era berdirinya, tokoh penting, periode signifikan, dan peristiwa besar yang membentuk warisan ini. Fokus pada bagaimana wisatawan bisa mempelajari sejarah ini melalui tur, museum, atau pameran interaktif.
 ''',
         'cultural_significance': '''
-Explain the cultural functions and ceremonial importance of "${destinationName}" as a ${subcategory}. 
-Write in English, 120-180 words.
-Describe its role in local traditions, spiritual practices, community ceremonies, and cultural identity. Most importantly, detail HOW tourists can experience these cultural functions: attending traditional ceremonies, participating in cultural workshops, watching traditional performances, joining prayer sessions, learning traditional crafts, or experiencing cultural festivals and celebrations that tourists are welcome to observe or join.
+Jelaskan fungsi budaya dan pentingnya upacara "${destinationName}" sebagai ${subcategory}. 
+Tulis dalam bahasa Indonesia, maksimal 100 kata.
+Deskripsikan perannya dalam tradisi lokal, praktik spiritual, upacara komunitas, dan identitas budaya. Jelaskan bagaimana wisatawan bisa mengalami fungsi budaya ini melalui upacara tradisional, workshop, pertunjukan, atau festival budaya.
 ''',
         'architecture': '''
-Describe the place of origin and regional architectural influences of "${destinationName}". 
-Write in English, 120-180 words.
-Explain which region/culture it originates from, what architectural styles influenced its design, and how it represents its place of origin. Include HOW tourists can explore and appreciate the architecture: guided architectural tours, climbing specific structures, touching certain elements, photography opportunities, architectural workshops, or learning about building techniques through hands-on demonstrations.
+Deskripsikan asal daerah dan pengaruh arsitektur regional "${destinationName}". 
+Tulis dalam bahasa Indonesia, maksimal 100 kata.
+Jelaskan dari wilayah/budaya mana asalnya, gaya arsitektur yang mempengaruhi desainnya, dan bagaimana mencerminkan asal daerahnya. Sertakan cara wisatawan bisa menjelajahi arsitektur melalui tur, fotografi, atau workshop.
 ''',
         'visitor_info': '''
-Explore the symbolic philosophy and deeper meanings embedded in "${destinationName}" located in ${location}. 
-Write in English, 150-200 words.
-Explain the spiritual symbols, philosophical concepts, sacred geometry, or cultural beliefs represented in its design and purpose. Detail HOW tourists can understand and experience these philosophical aspects: meditation sessions, spiritual guidance tours, symbol interpretation workshops, philosophical discussions with local guides, traditional blessing ceremonies, or educational programs that help visitors connect with the deeper meanings.
+Jelaskan filosofi simbolik dan makna mendalam "${destinationName}" di ${location}. 
+Tulis dalam bahasa Indonesia, maksimal 100 kata.
+Jelaskan simbol spiritual, konsep filosofis, atau kepercayaan budaya yang terwakili dalam desain dan tujuannya. Detail bagaimana wisatawan bisa memahami aspek filosofis ini melalui sesi meditasi, tur spiritual, atau program edukatif.
 ''',
         'conservation': '''
-Detail the main traditional materials and construction elements used in building "${destinationName}". 
-Write in English, 120-180 words.
-Identify the primary materials (wood, stone, clay, metals, etc.), traditional construction techniques, and local craftsmanship involved. Explain HOW tourists can learn about and experience these materials: visiting material sources, watching craftsmen work, participating in traditional building workshops, touching and examining materials, purchasing handcrafted items made from the same materials, or joining conservation activities.
+Jelaskan material tradisional dan elemen konstruksi utama "${destinationName}". 
+Tulis dalam bahasa Indonesia, maksimal 100 kata.
+Identifikasi material utama (kayu, batu, tanah liat, logam), teknik konstruksi tradisional, dan kerajinan lokal yang terlibat. Jelaskan bagaimana wisatawan bisa belajar tentang material ini melalui workshop, observasi pengrajin, atau aktivitas konservasi.
 ''',
         'modern_development': '''
-Describe the modern developments and contemporary enhancements at "${destinationName}". 
-Write in English, 120-180 words.
-Cover recent renovations, technological additions, accessibility improvements, new facilities, and educational programs while maintaining cultural authenticity. Explain HOW tourists can benefit from these modern developments: using mobile apps for self-guided tours, accessing digital exhibits, enjoying improved facilities, participating in modern educational programs, or using contemporary amenities that enhance their cultural experience without diminishing the traditional atmosphere.
+Deskripsikan perkembangan modern dan peningkatan kontemporer di "${destinationName}". 
+Tulis dalam bahasa Indonesia, maksimal 100 kata.
+Jelaskan renovasi terbaru, penambahan teknologi, peningkatan aksesibilitas, fasilitas baru, dan program edukasi sambil mempertahankan keaslian budaya. Sertakan manfaat perkembangan modern untuk wisatawan seperti aplikasi mobile atau fasilitas yang lebih baik.
 ''',
         'visitor_guide': '''
-Provide comprehensive practical visitor information for "${destinationName}" located in ${location}.
-Write in English, 150-200 words.
-Include essential details: how to get there (transportation options, nearest airport/station), opening hours, entrance fees, available facilities (parking, restrooms, cafeteria, souvenir shops), accessibility features, what to bring, dress code requirements, photography rules, guided tour options and schedules, best times to visit, weather considerations, nearby accommodations, and important visitor tips. Also mention any special requirements, seasonal closures, or booking procedures that tourists should know about.
+Berikan informasi praktis lengkap untuk mengunjungi "${destinationName}" di ${location}.
+Tulis dalam bahasa Indonesia, maksimal 100 kata.
+Sertakan detail penting: cara ke sana, jam buka, tiket masuk, fasilitas (parkir, toilet, kafe, toko suvenir), aksesibilitas, apa yang dibawa, aturan berpakaian, aturan foto, jadwal tur, waktu terbaik berkunjung, dan tips penting lainnya.
 '''
       };
 
@@ -76,25 +72,24 @@ Include essential details: how to get there (transportation options, nearest air
 
       return results;
     } catch (e) {
-      print('Error generating destination content: $e');
-      // Return default content if generation fails
+      print('Error generating destination content: $e');      // Return default content if generation fails
       return {
         'overview':
-            'Detailed information about ${destinationName} is currently being prepared...',
+            'Informasi detail tentang ${destinationName} sedang dipersiapkan...',
         'history':
-            'Historical timeline of ${destinationName} is being compiled...',
+            'Sejarah ${destinationName} sedang disusun...',
         'cultural_significance':
-            'Cultural importance of ${destinationName} is being documented...',
+            'Makna budaya ${destinationName} sedang didokumentasikan...',
         'architecture':
-            'Architectural analysis of ${destinationName} is being processed...',
+            'Analisis arsitektur ${destinationName} sedang diproses...',
         'visitor_info':
-            'Symbolic philosophy of ${destinationName} is being researched...',
+            'Filosofi simbolik ${destinationName} sedang diteliti...',
         'conservation':
-            'Traditional materials of ${destinationName} are being catalogued...',
+            'Material tradisional ${destinationName} sedang dikatalogkan...',
         'modern_development':
-            'Contemporary developments at ${destinationName} are being reviewed...',
+            'Perkembangan kontemporer ${destinationName} sedang ditinjau...',
         'visitor_guide':
-            'Practical visitor information for ${destinationName} is being compiled...',
+            'Informasi praktis pengunjung ${destinationName} sedang disusun...',
       };
     }
   }

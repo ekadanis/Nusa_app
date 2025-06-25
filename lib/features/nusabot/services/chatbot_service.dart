@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:http/http.dart' as http;
@@ -20,24 +19,47 @@ class ChatbotService {
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
   String? get errorMessage => _errorMessage;
+  bool _hasWelcomed = false;
+
+  static final ChatbotService _instance = ChatbotService._internal();
+  factory ChatbotService() => _instance;
+  ChatbotService._internal();
+
+  void addWelcomeMessage() {
+    if (_hasWelcomed) return;
+    _message.add(ChatMessage(
+      text: 'Hello Nusa friend , I am here to help you! 😊',
+      isUser: false,
+      timestamp: DateTime.now(),
+    ));
+    _hasWelcomed = true;
+  }
+
+  void resetMessages() {
+    _message.clear();
+    _hasWelcomed = false;
+  }
 
   Future<void> sendMessage(String inputText) async {
-    _message.add(ChatMessage(text: inputText, isUser: true));
+    await stopTts(); //stop tts ketika ada req. baru
+
+    _message.add(
+        ChatMessage(text: inputText, isUser: true, timestamp: DateTime.now()));
     _setLoading(true);
 
     try {
       final reply = await _sendToGemini(inputText);
-      _message.add(ChatMessage(text: reply, isUser: false));
+      _message.add(
+          ChatMessage(text: reply, isUser: false, timestamp: DateTime.now()));
       _clearError();
     } catch (e) {
       _setError("Failed to process message: $e");
-      _message.add(ChatMessage(text: "Error occurred", isUser: false));
+      _message.add(ChatMessage(
+          text: "Error occurred", isUser: false, timestamp: DateTime.now()));
     } finally {
       _setLoading(false);
     }
   }
-
-//=================================//
 
   Future<String> _sendToGemini(String inputText) async {
     final apiKey = "AIzaSyDmCT0apoGo8DirEKrkGMzY3G-QGuqi9P0";
@@ -58,7 +80,7 @@ class ChatbotService {
     If the question is appropriate, answer in a casual and easy-to-understand style, don't use slank. Answers with english language.
     If it doesn't fit, apologize and say you can only help about Indonesian culture or history.
     Here is the question:
-    $inputText
+    $inputText, please explain slowly
   ''';
 
     final response = await http.post(
@@ -94,6 +116,8 @@ class ChatbotService {
   }
 
   Future<void> sendVoiceMessage() async {
+    await stopTts();
+
     _isRecording = true;
     _setLoading(true);
 
@@ -118,25 +142,28 @@ class ChatbotService {
         await Future.delayed(const Duration(milliseconds: 100));
       }
 
-      // 🔴 Stop efek recording setelah rekaman selesai
+      // Stop efek recording setelah rekaman selesai
       await stopVoiceRecording();
 
       // Jika tidak ada suara dikenali, jangan lanjut
       if (finalResult.isEmpty) return;
 
       // Tambahkan ke chat
-      _message.add(ChatMessage(text: finalResult, isUser: true));
+      _message.add(ChatMessage(
+          text: finalResult, isUser: true, timestamp: DateTime.now()));
 
       // Kirim ke Gemini
       final reply = await _sendToGemini(finalResult);
 
-      _message.add(ChatMessage(text: reply, isUser: false));
+      _message.add(
+          ChatMessage(text: reply, isUser: false, timestamp: DateTime.now()));
       await _speak(reply);
       _clearError();
     } catch (e) {
       _setError("An error occurred while recording: $e");
-      _message.add(ChatMessage(text: "Error occurred", isUser: false));
-      await stopVoiceRecording(); // ⛔ pastikan berhenti juga saat error
+      _message.add(ChatMessage(
+          text: "Error occurred", isUser: false, timestamp: DateTime.now()));
+      await stopVoiceRecording(); // pastikan berhenti juga saat error
     }
   }
 
@@ -144,7 +171,7 @@ class ChatbotService {
     try {
       await _flutterTts.setLanguage("en-US");
       await _flutterTts.speak(text);
-      print("[TTS] Speaking: $text"); // ✅ Log untuk cek
+      print("[TTS] Speaking: $text"); // Log untuk cek
     } catch (e) {
       print("[TTS ERROR] $e");
     }
@@ -156,7 +183,10 @@ class ChatbotService {
     }
     _isRecording = false;
     _setLoading(false); // supaya isRecording jadi false
-    
+  }
+
+  Future<void> stopTts() async {
+    await _flutterTts.stop();
   }
 
 // STATE HELPER //

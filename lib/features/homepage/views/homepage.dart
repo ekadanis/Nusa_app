@@ -1,7 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:nusa_app/features/homepage/widgets/play_button.dart';
 import 'package:nusa_app/util/extensions.dart';
+import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:geolocator/geolocator.dart'; // Import for Position
@@ -32,7 +34,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
-  // final Map<String, GlobalKey<GenericSectionState>> _sectionKeys = {}; // Tidak lagi diperlukan untuk manajemen filter individual
+  final Map<String, GlobalKey<GenericSectionState>> _sectionKeys = {};
 
   List<CategoryModel> _categoriesData = [];
   Map<String, List<DestinationModel>> _destinationsByCategory = {};
@@ -54,6 +56,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    FCMService.setupOnMessageListener();
+    FirebaseMessaging.instance.getToken().then((token) {
+      print("🎯 My FCM Token: $token");
+    });
     _fetchAndFilterFirebaseData(); // Memanggil fungsi baru yang juga memfilter
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAndShowLocationPopup();
@@ -378,6 +384,8 @@ class _HomePageState extends State<HomePage> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     SizedBox(height: Styles.xsSpacing),
+                    const CategoriesSection(),
+                    const SizedBox(height: Styles.smSpacing),
                     const HomeFeaturedBanner(),
                     const SizedBox(height: Styles.smSpacing),
                     const CategoriesSection(),
@@ -449,7 +457,6 @@ class _HomePageState extends State<HomePage> {
                         const SizedBox(height: Styles.smSpacing),
                       ],
                     ],
-                    // === END: Tampilan kondisional berdasarkan mode pencarian ===
 
                     const SizedBox(height: Styles.xlSpacing),
                   ],

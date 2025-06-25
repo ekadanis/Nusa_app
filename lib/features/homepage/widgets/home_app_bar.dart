@@ -1,3 +1,5 @@
+
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
@@ -6,6 +8,7 @@ import '../../../../core/app_colors.dart';
 import '../../../../core/styles.dart';
 import '../../../../models/models.dart';
 import '../../../../services/google_auth_service.dart';
+import '../../../routes/router.dart';
 
 class HomeAppBar extends StatefulWidget {
   const HomeAppBar({Key? key}) : super(key: key);
@@ -174,18 +177,24 @@ class _HomeAppBarState extends State<HomeAppBar> {
                           ],
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          shape: BoxShape.circle,
+                      GestureDetector(
+                        onTap: () {
+                          context.router.push(InboxRoute());
+                        },
+                        child:
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          padding: EdgeInsets.all(2.w),
+                          child: Icon(
+                            IconsaxPlusBold.notification,
+                            color: Colors.white,
+                            size: 6.w,
+                          ),
                         ),
-                        padding: EdgeInsets.all(2.w),
-                        child: Icon(
-                          IconsaxPlusBold.notification,
-                          color: Colors.white,
-                          size: 6.w,
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ),

@@ -1,11 +1,7 @@
-import 'dart:math';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/destination_model.dart';
 
 class LocationService {
-  static const double defaultRadius = 50.0; // Default radius in kilometers
 
   /// Check and request location permissions
   static Future<bool> requestLocationPermission() async {

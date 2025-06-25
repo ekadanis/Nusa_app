@@ -7,10 +7,12 @@ import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
 import '../features/homepage/widgets/search_result_page.dart';
+import 'package:nusa_app/features/auth/views/register_page.dart';
+import 'package:nusa_app/features/profile/views/profile_page.dart';
+import 'package:nusa_app/features/profile/views/edit_profile_page.dart';
 import '../features/pages.dart';
 import '../models/destination_model.dart';
 import '../models/forum_model.dart';
-import '../models/article_model.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -39,6 +41,11 @@ class AppRouter extends RootStackRouter {
         CustomRoute<void>(
           page: LoginRoute.page,
           path: '/login',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: RegisterRoute.page,
+          path: '/register',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(
@@ -73,11 +80,16 @@ class AppRouter extends RootStackRouter {
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
               CustomRoute<void>(
-                page: AccountRoute.page,
-                path: '-account',
+                page: ProfileRoute.page,
+                path: '-profile',
                 transitionsBuilder: TransitionsBuilders.fadeIn,
               ),
             ]),
+        CustomRoute<void>(
+          page: EditProfileRoute.page,
+          path: '/edit-profile',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
         CustomRoute<void>(
           page: ImageAnalyzerRoute.page,
           path: '/image-analyzer',
@@ -96,6 +108,11 @@ class AppRouter extends RootStackRouter {
         CustomRoute<void>(
           page: DetailRouteDestination.page,
           path: '/detail-destination',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: InboxRoute.page,
+          path: '/inbox',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
       ];

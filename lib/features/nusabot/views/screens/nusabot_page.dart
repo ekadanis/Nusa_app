@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nusa_app/features/nusabot/services/chatbot_service.dart';
-import 'package:nusa_app/features/nusabot/views/widgets/chat_typing_indicator.dart';
 import 'package:nusa_app/features/nusabot/views/widgets/common_app_bar.dart';
 import 'package:sizer/sizer.dart';
 import '../../data/chat_message.dart';
@@ -20,26 +19,33 @@ class NusaBotPage extends StatefulWidget {
 class _NusaBotPageState extends State<NusaBotPage> {
   final _controller = TextEditingController();
   final _service = ChatbotService();
+  final _scrollController = ScrollController();
+
+  // @override
+  // void deactivate() {
+  //   _service.stopTts(); //stop suara waktu user keluar dari tab nusabot
+  //   super.deactivate();
+  //   print("[TTS] Stopped due to screen change");
+  // }
 
   @override
   void initState() {
     super.initState();
-    _addWelcomeMessage();
+    _service.addWelcomeMessage();
   }
 
-  void _addWelcomeMessage() {
-    _service.messages.add(
-      ChatMessage(
-        text: 'Hello Nusa friend , I am here to help you! 😊',
-        isUser: false,
-      ),
-    );
-    setState(() {}); // biar langsung kelihatan di UI
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _service.stopTts();
     super.dispose();
   }
 
@@ -47,9 +53,10 @@ class _NusaBotPageState extends State<NusaBotPage> {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
     _controller.clear();
-    setState(() {});
+    // setState(() {});
     await _service.sendMessage(text);
     setState(() {});
+    _scrollToBottom();
   }
 
   void _sendVoiceMessage() async {
@@ -73,16 +80,10 @@ class _NusaBotPageState extends State<NusaBotPage> {
         children: [
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               padding: const EdgeInsets.all(16),
-              // SEBELUM:
-              // itemCount: _service.messages.length + (_service.isLoading ? 1 : 0),
-
-              // SESUDAH (hilangkan +1):
-              itemCount: _service.messages.length,
+              itemCount: _service.messages.length.clamp(0, 50),
               itemBuilder: (context, index) {
-                // if (index == _service.messages.length && _service.isLoading) {
-                //   return const ChatTypingIndicator();
-                // }
                 final msg = _service.messages[index];
                 return Column(
                   crossAxisAlignment: msg.isUser
@@ -95,7 +96,7 @@ class _NusaBotPageState extends State<NusaBotPage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('h:mm a').format(DateTime.now()),
+                      DateFormat('h:mm a').format(msg.timestamp),
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.grey,
@@ -107,19 +108,13 @@ class _NusaBotPageState extends State<NusaBotPage> {
               },
             ),
           ),
-          AnimatedPadding(
-            duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom == 0 ? 56 : 0,
-            ),
-            child: InputField(
+          InputField(
               controller: _controller,
               onSend: _sendTextMessage,
               onVoice: _sendVoiceMessage,
               onCancelVoice: _stopVoiceRecording,
               isRecording: _service.isRecording,
             ),
-          ),
         ],
       ),
     );
@@ -131,7 +126,7 @@ class _NusaBotPageState extends State<NusaBotPage> {
       child: CommonAppBar(
         username: "NusaBot",
         subtitle: "Online",
-        avatarPath: "assets/images/nusabot_logo.png",
+        avatarPath: "assets/images/nusabot_logo-2.png",
         onNotificationTap: () {}, // Kosongkan atau isi sesuai kebutuhan
       ),
     );

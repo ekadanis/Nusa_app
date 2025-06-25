@@ -359,13 +359,13 @@ class _ArticleTabState extends State<ArticleTab> {
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary30 : Colors.grey.shade200,
+        color: isSelected ? AppColors.primary20 : Colors.grey.shade200,
         borderRadius: BorderRadius.circular(20),
-        border: isSelected ? Border.all(color: AppColors.primary30, width: 1) : null,
+        border: isSelected ? Border.all(color: AppColors.primary20, width: 1) : null,
         boxShadow: isSelected
             ? [
           BoxShadow(
-            color: AppColors.primary30.withOpacity(0.3),
+            color: AppColors.primary20.withOpacity(0.3),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
