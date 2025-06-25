@@ -28,19 +28,43 @@ class FeedService {
 
       final docData = doc.data();
       final fcmToken = docData['fcmToken'];
+      final title = '📝 New Post!';
+      final message = 'New Feed from @$currentUserName! on the forum!';
 
       if (fcmToken != null && fcmToken.toString().isNotEmpty) {
         await FCMService.sendNotification(
           deviceToken: fcmToken,
-          title: '📝 New Post!',
-          body:
-              'New Feed from @$currentUserName! on the forum!',
+          title: title,
+          body: message,
           data: {
             'type': 'new_post',
             'post_id': docRef.id,
           },
         );
       }
+
+      await FirebaseFirestore.instance
+          .collection('inbox_notification')
+          .doc(doc.id) // user id
+          .collection('items') // isi notifikasinya
+          .add({
+        'title': title,
+        'message': message,
+        'postId': docRef.id,
+        'type': 'new_post',
+        'updateAt': FieldValue.serverTimestamp(),
+      });
     }
+  }
+
+  static Future<ForumModel?> getForumById(String postId) async {
+    final doc =
+        await FirebaseFirestore.instance.collection('feeds').doc(postId).get();
+
+    if (doc.exists) {
+      return ForumModel.fromFirestore(doc);
+    }
+
+    return null;
   }
 }

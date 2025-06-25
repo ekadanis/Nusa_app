@@ -6,6 +6,7 @@ class NotificationItem {
   final String date;
   final IconData iconData;
   final Color iconColor;
+  final String? postId;
 
   NotificationItem({
     required this.title,
@@ -13,6 +14,7 @@ class NotificationItem {
     required this.date,
     required this.iconData,
     required this.iconColor,
+    this.postId,
   });
 
   factory NotificationItem.fromJson(Map<String, dynamic> json) {

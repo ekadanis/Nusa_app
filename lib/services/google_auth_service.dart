@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nusa_app/features/inbox_notification/services/inbox_notification_services.dart';
+import 'package:nusa_app/features/inbox/services/inbox_notification_services.dart';
 import '../models/user_model.dart';
 
 class GoogleAuthService {

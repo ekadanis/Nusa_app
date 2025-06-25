@@ -1,4 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:nusa_app/features/feeds/services/feed_service.dart';
+import 'package:nusa_app/routes/router.dart';
 
 class NotificationTile extends StatelessWidget {
   final String title;
@@ -6,6 +9,8 @@ class NotificationTile extends StatelessWidget {
   final String date;
   final IconData iconData;
   final Color iconColor;
+  final String? postId;
+  final VoidCallback? onTap;
 
   const NotificationTile({
     super.key,
@@ -14,6 +19,8 @@ class NotificationTile extends StatelessWidget {
     required this.date,
     required this.iconData,
     required this.iconColor,
+    this.postId,
+    this.onTap,
   });
 
   @override
@@ -21,52 +28,57 @@ class NotificationTile extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: iconColor,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            iconData,
-            color: Colors.white,
-            size: 24,
-          ),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Text(
-            message,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-              height: 1.3,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          leading: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: iconColor,
+              shape: BoxShape.circle,
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+            child: Icon(
+              iconData,
+              color: Colors.white,
+              size: 24,
+            ),
           ),
-        ),
-        trailing: Text(
-          date,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[500],
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
           ),
-        ),
-        onTap: () {
-          // Handle tap
-        },
-      ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              message,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+                height: 1.3,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          trailing: Text(
+            date,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[500],
+            ),
+          ),
+          onTap: () async {
+            if (postId != null) {
+              final forum = await FeedService.getForumById(postId!);
+              if (forum != null && context.mounted) {
+                context.pushRoute(ForumDetailRoute(forumPost: forum));
+              }
+            }
+          }),
     );
   }
 }

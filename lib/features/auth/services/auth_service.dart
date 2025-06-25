@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // Tambahkan ini
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:nusa_app/features/inbox_notification/services/inbox_notification_services.dart';
+import 'package:nusa_app/features/inbox/services/inbox_notification_services.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
