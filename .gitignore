@@ -57,3 +57,6 @@ windows/.dart_tool/
 # Symbolic links
 symlinks/
 
+# O
+assets/firebase/nusa-app-ef74e-7ac2b1ada31f.json
+assets/firebase/.env
