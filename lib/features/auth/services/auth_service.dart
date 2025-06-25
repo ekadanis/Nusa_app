@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // Tambahkan ini
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:nusa_app/features/inbox_notification/services/inbox_notification_services.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -10,6 +11,8 @@ class AuthService {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       await _saveFcmToken(_auth.currentUser!.uid);
+      await  InboxNotificationServices.upsertWelcomeMessage();
+
       return null;
     } on FirebaseAuthException catch (e) {
       print("FirebaseAuthException code: ${e.code}");
@@ -44,6 +47,7 @@ class AuthService {
       });
 
       await _saveFcmToken(uid!);
+      await InboxNotificationServices.upsertWelcomeMessage();
 
       return null;
     } on FirebaseAuthException catch (e) {
