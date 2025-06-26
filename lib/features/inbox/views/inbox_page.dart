@@ -3,7 +3,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/features/inbox/services/inbox_notification_services.dart';
-import 'package:nusa_app/routes/router.dart';
 import '../model/notification_item.dart';
 import '../widget/notification_tile.dart';
 
