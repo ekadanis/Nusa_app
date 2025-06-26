@@ -53,7 +53,7 @@ Future<void> commentService({
         );
         print("ceeeek");
         // Inbox Notification (Firestore)
-        final notifcomment = await FirebaseFirestore.instance
+        final notifComment = await FirebaseFirestore.instance
             .collection('inbox_notification')
             .doc(postOwner.id)
             .collection('items')
@@ -65,7 +65,7 @@ Future<void> commentService({
           'updateAt': FieldValue.serverTimestamp(),
         });
 
-        print('ID Notifikasi: ${notifcomment.id}');
+        print('ID Notifikasi: ${notifComment.id}');
       }
     }
 

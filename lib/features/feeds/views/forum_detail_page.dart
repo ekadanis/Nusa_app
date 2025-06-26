@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:nusa_app/features/feeds/services/comment_service.dart';
 import '../../../models/models.dart';
@@ -97,20 +99,39 @@ class _ForumDetailPageState extends State<ForumDetailPage> {
         print(' Current User ID: ${currentUser.uid}');
         print(' FCM Token: $fcmToken');
 
+        final title = '❤️ New Like!';
+        final message =
+            '${currentUser.displayName ?? "Someone"} like your feed.';
+
         if (postOwnerId != null &&
             postOwnerId != currentUser.uid &&
             fcmToken != null &&
             fcmToken.isNotEmpty) {
           await FCMService.sendNotification(
             deviceToken: fcmToken,
-            title: '❤️ Your post got a like!',
-            body: '${currentUser.displayName ?? "Someone"} like your feed.',
+            title: title,
+            body: message,
             data: {
               'type': 'like',
               'post_id': widget.forumPost.id!,
             },
           );
-          print('Notifikasi like berhasil dikirim ke $postOwnerId');
+
+          print('Notifikasi FCM like berhasil dikirim ke $postOwnerId');
+
+          final likeComment = await FirebaseFirestore.instance
+              .collection('inbox_notification')
+              .doc(postOwnerId)
+              .collection('items')
+              .add({
+            'title': title,
+            'message': message,
+            'postId': widget.forumPost.id!,
+            'type': 'comment',
+            'updateAt': FieldValue.serverTimestamp(),
+          });
+          print(
+              'INBOX Notifikasi like berhasil dikirim ke $postOwnerId, dengan like comment id $likeComment');
         } else {
           print(
               ' Notifikasi like TIDAK dikirim. Penyebab mungkin: token kosong, sama user, atau null');

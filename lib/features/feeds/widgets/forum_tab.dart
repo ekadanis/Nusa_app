@@ -50,6 +50,9 @@ class ForumTab extends StatelessWidget {
       // Toggle like
       await FirestoreService.toggleForumLike(currentUserId, forumPost.id!);
 
+      final title = '❤️ New Like!';
+      final message = '${currentUser.displayName ?? "Someone"} like your feed.';
+
       // Jika baru saja di-LIKE, kirim notifikasi
       if (!isLiked) {
         final postOwner = await FirestoreService.getUserById(forumPost.userId);
@@ -62,9 +65,8 @@ class ForumTab extends StatelessWidget {
             fcmToken.isNotEmpty) {
           await FCMService.sendNotification(
             deviceToken: fcmToken,
-            title: '❤️ Your post got a like!',
-            body:
-                '${currentUser.displayName ?? "Someone"} like your feed.',
+            title: title,
+            body: message,
             data: {
               'type': 'like',
               'post_id': forumPost.id!,
@@ -72,6 +74,21 @@ class ForumTab extends StatelessWidget {
           );
           print(
               '[✅] Notifikasi like dari ForumTab berhasil dikirim ke $postOwnerId');
+
+          final likeComment = await FirebaseFirestore.instance
+              .collection('inbox_notification')
+              .doc(postOwnerId)
+              .collection('items')
+              .add({
+            'title': title,
+            'message': message,
+            'postId': forumPost.id!,
+            'type': 'comment',
+            'updateAt': FieldValue.serverTimestamp(),
+          });
+
+          print(
+              'INBOX Notifikasi like berhasil dikirim ke $postOwnerId, dengan like comment id $likeComment');
         } else {
           print('[⚠️] Notifikasi TIDAK dikirim (token kosong atau user sama)');
         }
