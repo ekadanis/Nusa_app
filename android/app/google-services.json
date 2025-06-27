@@ -23,6 +23,22 @@
           }
         },
         {
+          "client_id": "957354119100-dnssnqf94hnf9ft77sa2uv1keve5glhp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gsc.nusa_app",
+            "certificate_hash": "2292a62a27b958aafc80c04f9fdc0e754c29e724"
+          }
+        },
+        {
+          "client_id": "957354119100-upgm9a8rsco9begsnecbb1o4istrbtap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gsc.nusa_app",
+            "certificate_hash": "7009fdbdf564dc68e6dd9a4cfbae49e9f9c6eb12"
+          }
+        },
+        {
           "client_id": "957354119100-9b3g2fhfc37cv1b39t0cf2gm0jbj2p3o.apps.googleusercontent.com",
           "client_type": 3
         }

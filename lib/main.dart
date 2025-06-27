@@ -19,14 +19,22 @@ Future<void> setup() async {
   print("Start initializing");
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/firebase/.env");
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-  print("Firebase Messaging Background Handler Initialized");
+  
+  // Initialize Firebase first
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await SharedPreferencesService.init();
   print("Firebase Initialized");
+
+  // Initialize Firebase Messaging with error handling
+  try {
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    print("Firebase Messaging Background Handler Initialized");
+  } catch (e) {
+    print("Firebase Messaging initialization failed: $e");
+  }
+
+  await SharedPreferencesService.init();
 
   // Initialize Google Sign-In
   await GoogleAuthService.initialize();
@@ -41,9 +49,15 @@ Future<void> setup() async {
   // Comment out this line after first run to avoid recreating data
   // await FirestoreService.initializeDatabase();
 
-  //initialize local notifications and fcm listener
-  await FCMService.init();
-  await FCMService.setupOnMessageOpenedAppListener();
-  print("Local Notifications Initialized");
-
+  // Initialize local notifications and fcm listener with error handling
+  try {
+    // Add delay to ensure Firebase services are fully ready
+    await Future.delayed(const Duration(milliseconds: 1500));
+    await FCMService.init();
+    await FCMService.setupOnMessageOpenedAppListener();
+    print("Local Notifications Initialized");
+  } catch (e) {
+    print("FCM Service initialization failed: $e");
+    // Continue without FCM if it fails - app should still work
+  }
 }

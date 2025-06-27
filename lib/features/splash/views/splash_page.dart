@@ -5,6 +5,7 @@ import 'package:nusa_app/core/styles.dart';
 import 'package:nusa_app/database/shared_preferences_service.dart';
 import 'package:nusa_app/l10n/l10n.dart';
 import 'package:nusa_app/routes/router.dart';
+import 'package:nusa_app/services/google_auth_service.dart';
 import 'package:nusa_app/util/extensions.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,12 +28,22 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void navigateToNextPage() async {
+    // Cek status authentication terlebih dahulu
+    final isAuthenticated = GoogleAuthService.isSignedIn;
+    
+    if (isAuthenticated) {
+      // Jika sudah login, langsung ke dashboard
+      context.router.replace(const DashboardRoute());
+      return;
+    }
+    
+    // Jika belum login, cek apakah first time
     final isFirstTime = await SharedPreferencesService.getIsFirstTime();
 
     if (isFirstTime) {
       context.router.replace(const OnboardingRoute());
     } else {
-      context.router.replace(const DashboardRoute()); // langsung ke beranda
+      context.router.replace(const LoginRoute()); // ke halaman login
     }
   }
 

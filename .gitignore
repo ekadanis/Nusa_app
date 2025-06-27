@@ -60,3 +60,9 @@ symlinks/
 # O
 assets/firebase/nusa-app-ef74e-7ac2b1ada31f.json
 assets/firebase/.env
+
+# Gradle
+.gradle/
+**/build/
+android/.gradle/
+android/app/.cxx/

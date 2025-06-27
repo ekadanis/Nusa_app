@@ -80,13 +80,32 @@ class GoogleAuthService {
   }
 
   static Future<void> saveFcmToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    final uid = FirebaseAuth.instance.currentUser?.uid;
+    try {
+      // Add retry mechanism for FCM token
+      String? token;
+      for (int i = 0; i < 3; i++) {
+        try {
+          token = await FirebaseMessaging.instance.getToken();
+          if (token != null) break;
+        } catch (e) {
+          print("FCM token retrieval attempt ${i + 1} failed: $e");
+          if (i < 2) await Future.delayed(Duration(seconds: 1));
+        }
+      }
+      
+      final uid = FirebaseAuth.instance.currentUser?.uid;
 
-    if (token != null && uid != null) {
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        'fcm_token': token,
-      });
+      if (token != null && uid != null) {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          'fcm_token': token,
+        });
+        print("FCM token saved successfully");
+      } else {
+        print("FCM token or user ID is null - skipping FCM token save");
+      }
+    } catch (e) {
+      print("Failed to save FCM token: $e");
+      // Don't throw - FCM token is not critical for sign-in
     }
   }
   // static Future<User?> signInSilently() async {
