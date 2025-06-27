@@ -26,6 +26,7 @@ class _ArticleTabState extends State<ArticleTab> {
   bool _isLoading = true;
   String? _error;
   String _selectedCategory = "Discover";
+  bool _isArticlesLoading = false;
 
   final Map<String, String> _categoryMap = {
     "Discover": "",
@@ -40,8 +41,23 @@ class _ArticleTabState extends State<ArticleTab> {
   @override
   void initState() {
     super.initState();
-    _fetchArticles();
-    _fetchFeaturedArticles();
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    try {
+      await _fetchFeaturedArticles();
+      print("✅ Loaded ${_featuredArticles.length} featured articles");
+      await _fetchArticles();
+      print("✅ Loaded ${_articles.length} articles");
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      setState(() {
+        _isLoading = false; // <- ini penting agar layar loading hilang
+        print("✅ Data loaded");
+      });
+    }
   }
 
   @override
@@ -73,12 +89,17 @@ class _ArticleTabState extends State<ArticleTab> {
         slivers: [
           SliverToBoxAdapter(child: _buildFeaturedCardsSection(context)),
           SliverToBoxAdapter(child: _buildCategoryChipsSection()),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-                  (context, index) => _buildArticleItem(context, _articles[index]),
-              childCount: _articles.length,
+          SliverToBoxAdapter(
+            child: _isArticlesLoading
+                ? const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(child: CircularProgressIndicator()),
+            )
+                : Column(
+              children: _articles.map((article) => _buildArticleItem(context, article)).toList(),
             ),
           ),
+
         ],
       ),
     );
@@ -145,29 +166,26 @@ class _ArticleTabState extends State<ArticleTab> {
 
   Future<void> _fetchArticles({String? categoryId}) async {
     setState(() {
-      _isLoading = true;
+      _isArticlesLoading = true;
       _error = null;
     });
 
     try {
       final query = categoryId?.isNotEmpty == true ? categoryId! : 'indonesia culture';
-      print("\n\n<<<QUERY: ${query}\n\n");
       final articles = await fetchIndonesianCultureNews(query: query);
 
       setState(() {
         _articles = articles;
-        _isLoading = false;
+        _isArticlesLoading = false;
       });
-
-      debugPrint('✅ Loaded ${articles.length} articles for $query');
     } catch (e) {
-      debugPrint('❌ Error fetching articles: $e');
       setState(() {
         _error = "Failed to load articles: $e";
-        _isLoading = false;
+        _isArticlesLoading = false;
       });
     }
   }
+
 
 
   Future<void> _fetchFeaturedArticles() async {
@@ -359,13 +377,12 @@ class _ArticleTabState extends State<ArticleTab> {
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary20 : Colors.grey.shade200,
+        color: isSelected ? AppColors.primary50.withOpacity(0.4) : AppColors.grey40.withOpacity(0.4),
         borderRadius: BorderRadius.circular(20),
-        border: isSelected ? Border.all(color: AppColors.primary20, width: 1) : null,
         boxShadow: isSelected
             ? [
           BoxShadow(
-            color: AppColors.primary20.withOpacity(0.3),
+            color: AppColors.primary20.withOpacity(0.4),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -376,8 +393,8 @@ class _ArticleTabState extends State<ArticleTab> {
         label,
         style: TextStyle(
           fontSize: 13,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-          color: isSelected ? AppColors.primary50 : Colors.black87,
+          fontWeight: FontWeight.w400,
+          color: isSelected ? AppColors.primary60 : Colors.black87,
         ),
       ),
     );

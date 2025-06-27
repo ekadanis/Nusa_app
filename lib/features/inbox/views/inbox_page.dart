@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/features/inbox/services/inbox_notification_services.dart';
+import 'package:nusa_app/util/extensions.dart';
 import '../model/notification_item.dart';
 import '../widget/notification_tile.dart';
 
@@ -83,13 +84,12 @@ class _InboxPageState extends State<InboxPage>
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Inbox',
-          style: TextStyle(
+          style: context.textTheme.headlineMedium?.copyWith(
             color: Colors.black,
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-          ),
+            fontWeight: FontWeight.bold,
+          )
         ),
         centerTitle: true,
       ),
@@ -121,7 +121,6 @@ class _InboxPageState extends State<InboxPage>
           date: notification.date,
           iconData: notification.iconData,
           iconColor: notification.iconColor,
-          
         );
       },
     );

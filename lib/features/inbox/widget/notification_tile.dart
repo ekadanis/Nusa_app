@@ -1,7 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nusa_app/features/feeds/services/feed_service.dart';
 import 'package:nusa_app/routes/router.dart';
+import 'package:nusa_app/util/extensions.dart';
+
+import '../../../core/app_colors.dart';
 
 class NotificationTile extends StatelessWidget {
   final String title;
@@ -29,8 +33,8 @@ class NotificationTile extends StatelessWidget {
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           leading: Container(
-            width: 50,
-            height: 50,
+            width: 40,
+            height: 40,
             decoration: BoxDecoration(
               color: iconColor,
               shape: BoxShape.circle,
@@ -43,27 +47,23 @@ class NotificationTile extends StatelessWidget {
           ),
           title: Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
+            style: context.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            )
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               message,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-                height: 1.3,
+              style: context.textTheme.bodyMedium?.copyWith(
+                color: AppColors.grey50,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
           ),
           trailing: Text(
-            date,
+            _formatDate(date),
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey[500],
@@ -81,5 +81,16 @@ class NotificationTile extends StatelessWidget {
             }
           }),
     );
+  }
+}
+
+String _formatDate(String date) {
+  try {
+    final inputFormat = DateFormat('dd-MM-yyyy');
+    final outputFormat = DateFormat('d MMMM yyyy');
+    final parsedDate = inputFormat.parse(date);
+    return outputFormat.format(parsedDate);
+  } catch (e) {
+    return date; // fallback jika format tidak valid
   }
 }

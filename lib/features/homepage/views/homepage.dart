@@ -384,8 +384,6 @@ class _HomePageState extends State<HomePage> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     SizedBox(height: Styles.xsSpacing),
-                    const CategoriesSection(),
-                    const SizedBox(height: Styles.smSpacing),
                     const HomeFeaturedBanner(),
                     const SizedBox(height: Styles.smSpacing),
                     const CategoriesSection(),

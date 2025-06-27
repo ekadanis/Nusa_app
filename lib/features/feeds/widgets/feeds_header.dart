@@ -34,6 +34,7 @@ class FeedsHeader extends StatelessWidget {
               children: [
                 // Icon for Cultural Feeds
                 Container(
+                  height: 14.w,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2),
                     shape: BoxShape.circle,
@@ -42,7 +43,7 @@ class FeedsHeader extends StatelessWidget {
                   child: Icon(
                     Icons.forum,
                     color: Colors.white,
-                    size: 8.w,
+                    // size: 8.w,
                   ),
                 ),
                 SizedBox(width: 4.w),
@@ -56,7 +57,7 @@ class FeedsHeader extends StatelessWidget {
                         'Cultural Feeds',
                         style: Theme.of(context)
                             .textTheme
-                            .headlineMedium
+                            .titleLarge
                             ?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -68,7 +69,7 @@ class FeedsHeader extends StatelessWidget {
                         "Share & Discover Indonesian Culture",
                         style: Theme.of(context)
                             .textTheme
-                            .bodyMedium
+                            .bodySmall
                             ?.copyWith(
                               color: Colors.white.withOpacity(0.8),
                             ),

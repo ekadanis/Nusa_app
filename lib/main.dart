@@ -16,21 +16,25 @@ void main() async {
 }
 
 Future<void> setup() async {
+  print("Start initializing");
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/firebase/.env");
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  // Initialize Firebase
+  print("Firebase Messaging Background Handler Initialized");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await SharedPreferencesService.init();
+  print("Firebase Initialized");
 
   // Initialize Google Sign-In
   await GoogleAuthService.initialize();
+  print("Google Sign-In Initialized");
 
   // Initialize Network Service
   await NetworkService().initialize();
+  print("Network Service Initialized");
 
   // Initialize Firestore database with comprehensive seeding
   // This includes: Users, Categories, Destinations, Articles, and Forum posts
@@ -40,4 +44,6 @@ Future<void> setup() async {
   //initialize local notifications and fcm listener
   await FCMService.init();
   await FCMService.setupOnMessageOpenedAppListener();
+  print("Local Notifications Initialized");
+
 }

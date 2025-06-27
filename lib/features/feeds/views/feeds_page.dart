@@ -41,8 +41,7 @@ class _FeedsPageState extends State<FeedsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: SafeArea(
-        child: Column(
+      body: Column(
           children: [
             FeedsAppBar(tabController: _tabController),
             Expanded(
@@ -56,7 +55,6 @@ class _FeedsPageState extends State<FeedsPage>
             ),
           ],
         ),
-      ),
       floatingActionButton: FeedsFloatingActionButton(
         showFAB: _currentIndex == 0,
       ),
