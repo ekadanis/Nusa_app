@@ -38,14 +38,14 @@ class SignInSuccessDialog extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.nusa90,
+                    color: AppColors.primary50,
                   ),
                 ),
                 const Text(
                   "Successful",
                   style: TextStyle(
                     fontSize: 18,
-                    color: AppColors.nusa90,
+                    color: AppColors.primary50,
                   ),
                 ),
                 SizedBox(height: 2.h),

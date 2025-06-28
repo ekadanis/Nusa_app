@@ -25,7 +25,7 @@ class _NusaPasswordFieldState extends State<NusaPasswordField> {
         filled: true,
         fillColor: Colors.grey[100],
         hintText: "Enter Password",
-        hintStyle: const TextStyle(color: Colors.grey),
+        hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
         prefixIcon: Icon(Icons.lock_outline, color: Colors.grey[400]),
         suffixIcon: IconButton(
           icon: Icon(

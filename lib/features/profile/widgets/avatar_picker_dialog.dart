@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
+import '../../../core/app_colors.dart';
 
 class AvatarPickerDialog extends StatelessWidget {
   final void Function(String selectedAvatarPath) onAvatarSelected;
@@ -10,12 +12,12 @@ class AvatarPickerDialog extends StatelessWidget {
 
 
   static const List<String> avatarList = [
-    'assets/avatar/avatar-1.png',
-    'assets/avatar/avatar-2.png',
-    'assets/avatar/avatar-3.png',
-    'assets/avatar/avatar-4.png',
-    'assets/avatar/avatar-5.png',
-    'assets/avatar/avatar-6.png',
+    'assets/avatar/avatar-1.jpg',
+    'assets/avatar/avatar-2.jpg',
+    'assets/avatar/avatar-3.jpg',
+    'assets/avatar/avatar-4.jpg',
+    'assets/avatar/avatar-5.jpg',
+    'assets/avatar/avatar-6.jpg',
   ];
 
   @override
@@ -29,11 +31,10 @@ class AvatarPickerDialog extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
+                Text(
                   "Choose Avatar",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppColors.primary50,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -67,7 +68,8 @@ class AvatarPickerDialog extends StatelessWidget {
             top: 4,
             right: 4,
             child: IconButton(
-              icon: const Icon(Icons.close),
+              icon: const Icon(IconsaxPlusLinear.close_circle),
+              color: AppColors.grey40,
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),

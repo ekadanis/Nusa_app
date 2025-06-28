@@ -55,7 +55,7 @@ class _ImageConfirmationPageState extends State<ImageConfirmationPage>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('objek tidak valid'),
+            content: Text('invalid object'),
             backgroundColor: Colors.red,
             duration: Duration(milliseconds: 500),
           ),

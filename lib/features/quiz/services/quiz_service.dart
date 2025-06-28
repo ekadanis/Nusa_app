@@ -4,7 +4,7 @@ import '../../../models/achievement_model.dart';
 import '../../../core/app_colors.dart';
 import 'gemini_service.dart';
 import 'quiz_firebase_service.dart';
-import '../../account/services/achievement_service.dart';
+import '../../profile/services/achievement_service.dart';
 
 class QuizService {
   static List<QuizCategory> getCategories() {

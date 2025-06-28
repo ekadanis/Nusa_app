@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../models/quiz_models.dart';
 import '../../../services/tracking_service.dart';
-import '../../account/services/achievement_service.dart';
+import '../../profile/services/achievement_service.dart';
 
 class QuizFirebaseService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -595,5 +595,106 @@ class QuizFirebaseService {
       print('Error getting categories played: $e');
       return <String>{};
     }
+  }
+
+  // Method to get any user's stats by user ID
+  static Future<UserStats?> getUserStatsByUserId(String userId) async {
+    try {
+      // First try to get from user_stats collection
+      final statsDoc = await _firestore.collection('user_stats').doc(userId).get();
+      
+      if (statsDoc.exists) {
+        final data = statsDoc.data()!;
+        return UserStats(
+          name: data['name'] ?? 'User',
+          email: data['email'] ?? '',
+          photoUrl: data['photoUrl'],
+          level: data['level'] ?? 1,
+          levelTitle: data['levelTitle'] ?? _getLevelTitle(1),
+          currentXP: data['currentXP'] ?? 0,
+          nextLevelXP: data['nextLevelXP'] ?? 100,
+          totalXP: data['totalXP'] ?? 0,
+          quizzesCompleted: data['quizzesCompleted'] ?? 0,
+          articlesRead: data['articlesRead'] ?? 0,
+          dayStreak: data['dayStreak'] ?? 0,
+          accuracy: (data['accuracy'] ?? 0.0).toDouble(),
+        );
+      } else {
+        // Fallback to users collection if user_stats doesn't exist
+        final userDoc = await _firestore.collection('users').doc(userId).get();
+        if (userDoc.exists) {
+          final userData = userDoc.data()!;
+          return UserStats(
+            name: userData['name'] ?? 'User',
+            email: userData['email'] ?? '',
+            photoUrl: userData['photoURL'], // Note: different field name in users collection
+            level: 1,
+            levelTitle: _getLevelTitle(1),
+            currentXP: 0,
+            nextLevelXP: 100,
+            totalXP: 0,
+            quizzesCompleted: 0,
+            articlesRead: 0,
+            dayStreak: 0,
+            accuracy: 0.0,
+          );
+        }
+      }
+      
+      return null;
+    } catch (e) {
+      print('Error getting user stats by user ID: $e');
+      return null;
+    }
+  }
+  
+  // Method to get stream of any user's stats by user ID
+  static Stream<UserStats?> getUserStatsStreamByUserId(String userId) {
+    // First try user_stats collection
+    return _firestore.collection('user_stats').doc(userId).snapshots().asyncMap((statsDoc) async {
+      if (statsDoc.exists) {
+        final data = statsDoc.data()!;
+        return UserStats(
+          name: data['name'] ?? 'User',
+          email: data['email'] ?? '',
+          photoUrl: data['photoUrl'],
+          level: data['level'] ?? 1,
+          levelTitle: data['levelTitle'] ?? _getLevelTitle(1),
+          currentXP: data['currentXP'] ?? 0,
+          nextLevelXP: data['nextLevelXP'] ?? 100,
+          totalXP: data['totalXP'] ?? 0,
+          quizzesCompleted: data['quizzesCompleted'] ?? 0,
+          articlesRead: data['articlesRead'] ?? 0,
+          dayStreak: data['dayStreak'] ?? 0,
+          accuracy: (data['accuracy'] ?? 0.0).toDouble(),
+        );
+      } else {
+        // Fallback to users collection
+        try {
+          final userDoc = await _firestore.collection('users').doc(userId).get();
+          if (userDoc.exists) {
+            final userData = userDoc.data()!;
+            return UserStats(
+              name: userData['name'] ?? 'User',
+              email: userData['email'] ?? '',
+              photoUrl: userData['photoURL'], // Note: different field name in users collection
+              level: 1,
+              levelTitle: _getLevelTitle(1),
+              currentXP: 0,
+              nextLevelXP: 100,
+              totalXP: 0,
+              quizzesCompleted: 0,
+              articlesRead: 0,
+              dayStreak: 0,
+              accuracy: 0.0,
+            );
+          }
+        } catch (e) {
+          print('Error getting user from users collection: $e');
+        }
+        
+        return null;
+      }
+    });
   }
 }

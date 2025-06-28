@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:nusa_app/features/feeds/services/comment_service.dart';
 import '../../../models/models.dart';

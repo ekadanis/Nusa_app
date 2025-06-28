@@ -25,12 +25,14 @@ class FilterChipsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 5.h,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 4.w),
-        children: [
+    return Padding(
+      padding: EdgeInsets.only(top: 1.h), // Added top padding to give space from search bar
+      child: SizedBox(
+        height: 5.h,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: 4.w),
+          children: [
           FilterChipWidget(
             label: "Discover",
             isSelected: selectedFilter == "Discover",
@@ -54,9 +56,15 @@ class FilterChipsRow extends StatelessWidget {
               margin: EdgeInsets.symmetric(horizontal: 1.w),
               decoration: BoxDecoration(
                 color: selectedFilter == "Nearby"
-                    ? AppColors.primary50
+                    ? AppColors.primary50.withOpacity(0.1)
                     : AppColors.grey10,
                 borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: selectedFilter == "Nearby" 
+                      ? AppColors.primary50 
+                      : AppColors.grey200,
+                  width: 1,
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -72,7 +80,7 @@ class FilterChipsRow extends StatelessWidget {
                       hasUserLocation ? Icons.location_on : Icons.location_off,
                       size: 16,
                       color: selectedFilter == "Nearby"
-                          ? Colors.white
+                          ? AppColors.primary50
                           : AppColors.grey70,
                     ),
                   SizedBox(width: 1.w),
@@ -82,8 +90,9 @@ class FilterChipsRow extends StatelessWidget {
                         : "Nearby",
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           color: selectedFilter == "Nearby"
-                              ? Colors.white
+                              ? AppColors.primary50
                               : AppColors.grey70,
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
                 ],
@@ -123,6 +132,7 @@ class FilterChipsRow extends StatelessWidget {
             ),
         ],
       ),
-    );
-  }
+      ),
+    ); // Close SizedBox
+  } // Close Padding
 }

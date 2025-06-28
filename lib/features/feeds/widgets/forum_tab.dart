@@ -5,22 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:nusa_app/core/app_colors.dart';
 import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:nusa_app/models/forum_model.dart';
-import 'package:nusa_app/models/user_model.dart';
 import 'package:nusa_app/routes/router.dart';
 import 'package:nusa_app/services/firestore_service.dart';
 import 'package:nusa_app/services/google_auth_service.dart';
+import 'realtime_avatar_by_user_id.dart';
+import 'realtime_user_name_by_user_id.dart';
 
 class ForumTab extends StatelessWidget {
   const ForumTab({super.key});
-
-  Future<UserModel?> _getUserData(String userId) async {
-    try {
-      return await FirestoreService.getUserById(userId);
-    } catch (e) {
-      print('Error fetching user data: $e');
-      return null;
-    }
-  }
 
   // Future<void> _handleLike(ForumModel forumPost) async {
   //   if (forumPost.id == null) return;
@@ -185,17 +177,27 @@ class ForumTab extends StatelessWidget {
 
     return InkWell(
       onTap: () => context.router.push(ForumDetailRoute(forumPost: forumPost)),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        elevation: 2,
-        shape: RoundedRectangleBorder(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.1),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.25),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
               // Header: Avatar & Author & Date
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -203,129 +205,23 @@ class ForumTab extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        FutureBuilder<UserModel?>(
-                          future: _getUserData(forumPost.userId),
-                          builder: (context, userSnapshot) {
-                            final userName =
-                                userSnapshot.data?.name ?? 'Anonymous';
-                            final userInitial = userName.isNotEmpty
-                                ? userName[0].toUpperCase()
-                                : 'A';
-
-                            // Check if this is the current user to get their Google photo
-                            final currentUserId =
-                                GoogleAuthService.currentUserId;
-                            final isCurrentUser =
-                                currentUserId == forumPost.userId;
-
-                            Widget avatarWidget;
-
-                            if (isCurrentUser) {
-                              // For current user, get photo from GoogleAuthService
-                              final userInfo = GoogleAuthService.getUserInfo();
-                              final photoURL = userInfo['photoURL'];
-
-                              if (photoURL != null && photoURL.isNotEmpty) {
-                                avatarWidget = CircleAvatar(
-                                  backgroundColor: AppColors.primary50,
-                                  radius: 20,
-                                  backgroundImage: NetworkImage(photoURL),
-                                  onBackgroundImageError: (_, __) {
-                                    // Fallback to initial if image fails to load
-                                  },
-                                  child: photoURL.isEmpty
-                                      ? Text(
-                                          userInitial,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : null,
-                                );
-                              } else {
-                                avatarWidget = CircleAvatar(
-                                  backgroundColor: AppColors.primary50,
-                                  radius: 20,
-                                  child: Text(
-                                    userInitial,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              }
-                            } else {
-                              // For other users, use their stored photoURL if available
-                              final photoURL = userSnapshot.data?.photoURL;
-
-                              if (photoURL != null && photoURL.isNotEmpty) {
-                                avatarWidget = CircleAvatar(
-                                  backgroundColor: AppColors.primary50,
-                                  radius: 20,
-                                  backgroundImage: NetworkImage(photoURL),
-                                  onBackgroundImageError: (_, __) {
-                                    // Fallback to initial if image fails to load
-                                  },
-                                  child: photoURL.isEmpty
-                                      ? Text(
-                                          userInitial,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : null,
-                                );
-                              } else {
-                                avatarWidget = CircleAvatar(
-                                  backgroundColor: AppColors.primary50,
-                                  radius: 20,
-                                  child: Text(
-                                    userInitial,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              }
-                            }
-
-                            return avatarWidget;
-                          },
+                        // Use real-time avatar widget for any user
+                        RealTimeAvatarByUserId(
+                          userId: forumPost.userId,
+                          radius: 20,
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              FutureBuilder<UserModel?>(
-                                future: _getUserData(forumPost.userId),
-                                builder: (context, userSnapshot) {
-                                  if (userSnapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Text(
-                                      'Loading...',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 14,
-                                      ),
-                                    );
-                                  }
-
-                                  final userName = userSnapshot.data?.name ??
-                                      'Anonymous User';
-                                  return Text(
-                                    userName,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  );
-                                },
+                              // Use real-time user name widget for any user
+                              RealTimeUserNameByUserId(
+                                userId: forumPost.userId,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
                               ),
                               Text(
                                 dateStr,
@@ -441,7 +337,6 @@ class ForumTab extends StatelessWidget {
                 ],
               ),
             ],
-          ),
         ),
       ),
     );

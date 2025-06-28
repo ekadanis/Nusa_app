@@ -14,6 +14,7 @@ class ProductGridSection extends StatefulWidget {
   final List<String>? customFilters;
   final String? userId;
   final String selectedCategory;
+  final String? categoryColor;
 
   const ProductGridSection({
     Key? key,
@@ -22,6 +23,7 @@ class ProductGridSection extends StatefulWidget {
     this.customFilters,
     this.userId,
     required this.selectedCategory,
+    this.categoryColor,
   }) : super(key: key);
 
   @override
@@ -172,6 +174,7 @@ class _ProductGridSectionState extends State<ProductGridSection> {
                   isSelected: _selectedFilterIndex == index,
                   onTap: () => _filterProducts(index, filters[index]),
                   selectedCategory: widget.selectedCategory,
+                  categoryColor: widget.categoryColor,
                 ),
               );
             },

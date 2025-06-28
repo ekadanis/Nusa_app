@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nusa_app/core/styles.dart';
 import '../../../../core/app_colors.dart';
 
 class FilterChipWidget extends StatelessWidget {
@@ -7,32 +6,52 @@ class FilterChipWidget extends StatelessWidget {
   final bool isSelected;
   final VoidCallback? onTap;
   final String? selectedCategory;
+  final String? categoryColor;
 
   const FilterChipWidget({
     Key? key,
     required this.label,
     this.isSelected = false,
     this.onTap,
-    this.selectedCategory
+    this.selectedCategory,
+    this.categoryColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Convert hex color to Color object
+    Color categoryColorObj = AppColors.primary50; // default
+    if (categoryColor != null && categoryColor!.isNotEmpty) {
+      try {
+        final buffer = StringBuffer();
+        if (categoryColor!.length == 6) buffer.write('ff');
+        buffer.write(categoryColor!.replaceFirst('#', ''));
+        categoryColorObj = Color(int.parse(buffer.toString(), radix: 16));
+      } catch (e) {
+        categoryColorObj = AppColors.primary50; // fallback to default
+      }
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: isSelected ? chipsColorPicker(selectedCategory) : AppColors.grey10,
-          borderRadius: BorderRadius.circular(Styles.lgRadius),
+          color: isSelected 
+              ? categoryColorObj.withOpacity(0.15) 
+              : AppColors.grey10,
+          borderRadius: BorderRadius.circular(20),
+          border: isSelected 
+              ? Border.all(color: categoryColorObj, width: 1.5)
+              : Border.all(color: AppColors.grey200, width: 1),
         ),
         child: Center(
           child: Text(
             label,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: isSelected ? labelColorPicker(selectedCategory) : AppColors.grey70,
-                  fontWeight: FontWeight.w800,
+                  color: isSelected ? categoryColorObj : AppColors.grey70,
+                  fontWeight: FontWeight.w600,
                 ),
             textAlign: TextAlign.center,
           ),
@@ -41,27 +60,4 @@ class FilterChipWidget extends StatelessWidget {
     );
   }
 
-  Color chipsColorPicker(String? title) {
-    switch (title) {
-      case '7hdL7T5MpYY2SUqf0AC7' : return AppColors.purple50.withOpacity(0.4);
-      case 'DhonyYdgjgC4TwXzbcGC' : return AppColors.success50.withOpacity(0.4);
-      case 'PnzLyTwHbsC3ojAHjW3j' : return AppColors.yellow50.withOpacity(0.4);
-      case 'PvuucOStwQrVUHhXBKDi' : return AppColors.warning50.withOpacity(0.4);
-      case 'kQzkUbWuBC6Zrad0mVs2' : return AppColors.danger50.withOpacity(0.4);
-      case 'nFpGFc2Rkxg2F9zjIx2x' : return AppColors.primary50.withOpacity(0.4);
-      default: return AppColors.primary50.withOpacity(0.4); // Menggunakan warna abu-abu default untuk hasil pencarian
-    }
-  }
-
-  Color labelColorPicker (String? title) {
-    switch (title) {
-      case '7hdL7T5MpYY2SUqf0AC7' : return AppColors.purple50;
-      case 'DhonyYdgjgC4TwXzbcGC' : return AppColors.success50;
-      case 'PnzLyTwHbsC3ojAHjW3j' : return AppColors.yellow50;
-      case 'PvuucOStwQrVUHhXBKDi' : return AppColors.warning50;
-      case 'kQzkUbWuBC6Zrad0mVs2' : return AppColors.danger50;
-      case 'nFpGFc2Rkxg2F9zjIx2x' : return AppColors.primary50;
-      default: return AppColors.primary50; // Menggunakan warna abu-abu default untuk hasil pencarian
-    }
-  }
 }

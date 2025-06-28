@@ -115,5 +115,25 @@ class AppRouter extends RootStackRouter {
           path: '/inbox',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
+        CustomRoute<void>(
+   page: HomeRouteQuiz.page,
+          path: '/quiz-home',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizHistoryRoute.page,
+          path: '/quiz-history',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizRoute.page,
+          path: '/quiz/:categoryId',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizResultRoute.page,
+          path: '/quiz-result',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
       ];
 }

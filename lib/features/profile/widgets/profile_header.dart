@@ -1,55 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:nusa_app/core/app_colors.dart';
-import 'package:nusa_app/features/profile/widgets/avatar_display.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:sizer/sizer.dart';
+import '../../../core/app_colors.dart';
+import '../../../services/user_profile_service.dart';
 
 class ProfileHeader extends StatelessWidget {
-  final String name;
-  final String email;
-  final String? selectedAvatar;
-  final void Function(String) onAvatarSelected;
-  final bool showEditIcon;
-  // final VoidCallback? onEditProfile;
+  final UserProfileData userProfile;
+  final VoidCallback? onEditPressed;
 
   const ProfileHeader({
     super.key,
-    required this.name,
-    required this.email,
-    required this.selectedAvatar,
-    required this.onAvatarSelected,
-    required this.showEditIcon,
-    // this.onEditProfile,
+    required this.userProfile,
+    this.onEditPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: AppColors.nusa90,
-      padding: const EdgeInsets.symmetric(vertical: 20),
+    return Padding(
+      padding: EdgeInsets.all(4.w),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AvatarDisplay(
-            selectedAvatar: selectedAvatar,
-            onAvatarSelected: onAvatarSelected,
-            showEditIcon: false,
+          // Profile Avatar
+          Stack(
+            children: [
+              CircleAvatar(
+                radius: 15.w,
+                backgroundColor: Colors.white.withOpacity(0.3),
+                backgroundImage: userProfile.photoUrl != null
+                    ? (userProfile.photoUrl!.startsWith('assets/') 
+                        ? AssetImage(userProfile.photoUrl!) as ImageProvider
+                        : NetworkImage(userProfile.photoUrl!))
+                    : null,
+                child: userProfile.photoUrl == null
+                    ? Text(
+                        userProfile.name.isNotEmpty
+                            ? userProfile.name.substring(0, 1).toUpperCase()
+                            : 'U',
+                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
+                      )
+                    : null,
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: GestureDetector(
+                  onTap: onEditPressed,
+                  child: Container(
+                    padding: EdgeInsets.all(1.w),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      IconsaxPlusLinear.edit,
+                      size: 4.w,
+                      color: AppColors.grey50,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 16),
+
+          SizedBox(height: 2.h),
+
+          // User Info
           Text(
-            name,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            userProfile.name.isNotEmpty ? userProfile.name : 'User',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
           ),
-          const SizedBox(height: 4),
           Text(
-            email,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.white70,
-            ),
+            userProfile.email.isNotEmpty ? userProfile.email : 'No email',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Colors.white.withOpacity(0.8),
+                ),
           ),
         ],
       ),

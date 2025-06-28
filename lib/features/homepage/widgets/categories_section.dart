@@ -78,6 +78,7 @@ class _CategoriesSectionState extends State<CategoriesSection> {
                 duration: const Duration(milliseconds: 400),
                 child: KatalogProdukPage(
                   categoryName: category["title"] as String,
+                  categoryColor: category["colorHex"] as String,
                 ),
                 childCurrent: widget,
                 curve: Curves.easeInOut,

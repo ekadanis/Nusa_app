@@ -169,6 +169,7 @@ class _ImageResultPageState extends State<ImageResultPage> {
                             Text(
                               budaya.deskripsiSingkat,
                               style: context.textTheme.bodyMedium,
+                              textAlign: TextAlign.justify,
                             ),
                             SizedBox(height: 12),
                             ExpandableCard(

@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.nusa90,
+      backgroundColor: AppColors.primary50,
       body: SafeArea(
         child: AuthWrapper(
           child: AuthForm(

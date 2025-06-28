@@ -1,15 +1,11 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:nusa_app/core/app_colors.dart';
-import 'package:nusa_app/features/feeds/widgets/build_category_name.dart';
 import 'package:nusa_app/models/article_model.dart';
-import 'package:nusa_app/routes/router.dart';
-import 'package:nusa_app/services/firestore_service.dart';
-import 'package:nusa_app/util/extensions.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../services/google_auth_service.dart';
 
 import '../services/fetch_news.dart';
 
@@ -111,55 +107,63 @@ class _ArticleTabState extends State<ArticleTab> {
   }
 
   Future<void> _showOpenLinkConfirmation(BuildContext context, String url) async {
-    final shouldOpen = await showDialog<bool>(
+    QuickAlert.show(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Open Article"),
-        content: const Text("Do you want to visit the original page?"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text("Cancel", style: context.textTheme.labelLarge?.copyWith(
-    color: AppColors.primary50,
-    fontWeight: FontWeight.bold,
-    ))
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.primary50,
-              borderRadius: BorderRadius.circular(15)
-            ),
-            child:
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text("Visit", style: context.textTheme.labelLarge?.copyWith(
-                color: AppColors.white,
-                fontWeight: FontWeight.bold,
-              )),
-            ),
-          )
-        ],
+      type: QuickAlertType.confirm,
+      title: 'Open Article',
+      text: 'Do you want to visit the original page?',
+      confirmBtnText: 'Visit',
+      cancelBtnText: 'Cancel',
+      confirmBtnColor: AppColors.success,
+      titleColor: Theme.of(context).textTheme.headlineSmall?.color ?? Colors.black87,
+      textColor: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black54,
+      widget: Text(
+        'This will open the article in your browser',
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          fontFamily: 'Plus Jakarta Sans',
+          color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black54,
+        ),
+        textAlign: TextAlign.center,
       ),
+      onConfirmBtnTap: () async {
+        Navigator.of(context).pop();
+        await _openArticleLink(context, url);
+      },
     );
+  }
 
-    if (shouldOpen == true) {
-      try {
-        print("\n\nLINK ARTICLE: <<<${url}\n\n");
-        if (await canLaunchUrl(Uri.parse(url))) {
-          final launched = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication); // Added mode
-          if (!launched) {
-            throw 'Could not launch $url'; // This should now provide a more specific error
-          }
-        } else {
-          throw 'Invalid URL: $url or no app to handle it.'; // More detailed message
+  Future<void> _openArticleLink(BuildContext context, String url) async {
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        final launched = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+        if (!launched) {
+          throw 'Could not launch $url';
         }
-      } catch (e) {
-        debugPrint('Error launching URL: $e'); // Use debugPrint for development
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Tidak bisa membuka link artikel: $e")), // Show the error in the SnackBar
-          );
-        }
+        
+        // Track article read for user profile
+        await _trackArticleRead();
+      } else {
+        throw 'Invalid URL: $url or no app to handle it.';
+      }
+    } catch (e) {
+      debugPrint('Error launching URL: $e');
+      if (context.mounted) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'Could not open article link',
+          confirmBtnColor: AppColors.error,
+          titleColor: Theme.of(context).textTheme.headlineSmall?.color ?? Colors.black87,
+          widget: Text(
+            'Please try again later',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontFamily: 'Plus Jakarta Sans',
+              color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black54,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        );
       }
     }
   }
@@ -223,7 +227,7 @@ class _ArticleTabState extends State<ArticleTab> {
   Widget _buildFeaturedCardsSection(BuildContext context) {
     return Container(
       height: 160,
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.fromLTRB(0, 24, 0, 16), // Added top margin
       child: _featuredArticles.isEmpty
           ? Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -271,7 +275,7 @@ class _ArticleTabState extends State<ArticleTab> {
 
 
     return InkWell(
-      onTap: () => _showOpenLinkConfirmation(context, article.url!),
+      onTap: () => _showOpenLinkConfirmation(context, article.url),
       borderRadius: BorderRadius.circular(12),
       child: Container(
         width: 200,
@@ -351,7 +355,7 @@ class _ArticleTabState extends State<ArticleTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    article.title ?? '-',
+                    article.title,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -377,24 +381,20 @@ class _ArticleTabState extends State<ArticleTab> {
       margin: const EdgeInsets.only(right: 12),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primary50.withOpacity(0.4) : AppColors.grey40.withOpacity(0.4),
+        color: isSelected 
+            ? AppColors.primary50.withOpacity(0.1) 
+            : AppColors.grey10,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: isSelected
-            ? [
-          BoxShadow(
-            color: AppColors.primary20.withOpacity(0.4),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ]
-            : null,
+        border: Border.all(
+          color: isSelected ? AppColors.primary50 : AppColors.grey200,
+          width: 1,
+        ),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w400,
-          color: isSelected ? AppColors.primary60 : Colors.black87,
+        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: isSelected ? AppColors.primary50 : AppColors.grey70,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -403,17 +403,21 @@ class _ArticleTabState extends State<ArticleTab> {
   Widget _buildArticleItem(BuildContext context, NewsArticle article) {
 
     return InkWell(
-      onTap: () => _showOpenLinkConfirmation(context, article.url!),
+      onTap: () => _showOpenLinkConfirmation(context, article.url),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.grey.withOpacity(0.1),
+            width: 1,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 4,
+              color: Colors.grey.withOpacity(0.25),
+              blurRadius: 6,
               offset: const Offset(0, 2),
             ),
           ],
@@ -457,7 +461,7 @@ class _ArticleTabState extends State<ArticleTab> {
                 children: [
                   const SizedBox(height: 8),
                   Text(
-                    article.title ?? '-',
+                    article.title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -477,9 +481,7 @@ class _ArticleTabState extends State<ArticleTab> {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          article.publishedAt != null
-                              ? DateFormat('dd MMMM yyyy').format(article.publishedAt!)
-                              : '-',
+                          DateFormat('dd MMMM yyyy').format(article.publishedAt),
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 12,
@@ -497,5 +499,62 @@ class _ArticleTabState extends State<ArticleTab> {
         ),
       ),
     );
+  }
+
+  // Track article read for user profile
+  Future<void> _trackArticleRead() async {
+    try {
+      final user = GoogleAuthService.currentUser;
+      if (user == null) {
+        print('❌ No user logged in');
+        return;
+      }
+
+      final userStatsRef = FirebaseFirestore.instance
+          .collection('user_stats')
+          .doc(user.uid);
+
+      // Check if document exists first
+      final docSnapshot = await userStatsRef.get();
+      
+      if (docSnapshot.exists) {
+        // Document exists, just increment
+        await userStatsRef.update({
+          'articlesRead': FieldValue.increment(1),
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+        print('✅ Article read count incremented for user: ${user.uid}');
+      } else {
+        // Document doesn't exist, create it with initial data
+        await userStatsRef.set({
+          'name': user.displayName ?? 'User',
+          'email': user.email ?? '',
+          'photoUrl': user.photoURL,
+          'level': 1,
+          'levelTitle': 'Cultural Newbie',
+          'currentXP': 0,
+          'nextLevelXP': 100,
+          'totalXP': 0,
+          'quizzesCompleted': 0,
+          'articlesRead': 1, // Set to 1 for first article read
+          'dayStreak': 0,
+          'accuracy': 0.0,
+          'createdAt': FieldValue.serverTimestamp(),
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+        print('✅ Created user_stats document and tracked first article read for user: ${user.uid}');
+      }
+    } catch (e) {
+      print('❌ Error tracking article read: $e');
+      // Show user-friendly error if needed
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to track article reading progress'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
+    }
   }
 }

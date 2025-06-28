@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../models/models.dart';
-import '../../../services/firestore_service.dart';
-import '../../../services/google_auth_service.dart';
-import 'user_avatar_widget.dart';
+import 'realtime_avatar.dart';
 
 class CommentInput extends StatelessWidget {
   final TextEditingController controller;
@@ -32,19 +29,9 @@ class CommentInput extends StatelessWidget {
         ],
       ),
       child: Row(
-        children: [          FutureBuilder<UserModel?>(
-            future: GoogleAuthService.currentUser != null
-                ? FirestoreService.getUserById(GoogleAuthService.currentUser!.uid)
-                : Future.value(null),
-            builder: (context, snapshot) {
-              final user = snapshot.data;
-              return UserAvatarWidget(
-                user: user, 
-                radius: 16,
-                userId: GoogleAuthService.currentUserId,
-              );
-            },
-          ),
+        children: [
+          // Use RealTimeAvatar for current user instead of FutureBuilder
+          const RealTimeAvatar(radius: 16),
           const SizedBox(width: 10),
           Expanded(
             child: Container(

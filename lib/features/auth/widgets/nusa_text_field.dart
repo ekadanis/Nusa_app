@@ -30,7 +30,7 @@ class NusaTextField extends StatelessWidget {
         filled: true,
         fillColor: Colors.grey[100], // Background light grey
         hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.grey),
+        hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
         prefixIcon: Icon(icon, color: Colors.grey[400]),
         suffixIcon: suffixIcon != null
             ? Icon(suffixIcon, color: Colors.grey[400], size: 18)

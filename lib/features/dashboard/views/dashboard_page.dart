@@ -18,10 +18,10 @@ class FixedCenterDockedFABLocation extends FloatingActionButtonLocation {
             scaffoldGeometry.floatingActionButtonSize.width) /
         2.0;
 
-    // Posisi Y menggunakan Sizer untuk konsistensi
+    // Posisi Y menggunakan Sizer untuk konsistensi - diturunkan agar tidak mepet dengan text
     final double fabY = scaffoldGeometry.scaffoldSize.height -
         scaffoldGeometry.floatingActionButtonSize.height -
-        (8.h);
+        (4.h);
 
     return Offset(fabX, fabY);
   }
@@ -73,7 +73,18 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             decoration: BoxDecoration(
               color: AppColors.white,
-              boxShadow: Styles.defaultShadow,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary50.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -2),
+                ),
+                BoxShadow(
+                  color: AppColors.primary50.withOpacity(0.05),
+                  blurRadius: 20,
+                  offset: const Offset(0, -4),
+                ),
+              ],
             ),
             child: NavigationBar(
               selectedIndex: tabsRouter.activeIndex,
@@ -83,7 +94,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   padding: EdgeInsets.only(right: 2.w),
                   child: const NavigationDestination(
                     icon: Icon(IconsaxPlusBold.home),
-                    label: 'HomePage',
+                    label: 'Home',
                   ),
                 ),
                 Padding(
@@ -104,7 +115,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   padding: EdgeInsets.only(left: 2.w),
                   child: const NavigationDestination(
                     icon: Icon(IconsaxPlusBold.profile_circle),
-                    label: 'Profil',
+                    label: 'Profile',
                   ),
                 ),
               ],
@@ -114,19 +125,36 @@ class _DashboardPageState extends State<DashboardPage> {
       },
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom > 0
           ? null
-          : FloatingActionButton(
-              shape: RoundedRectangleBorder(
+          : Container(
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.w),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary50.withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                  BoxShadow(
+                    color: AppColors.primary50.withOpacity(0.15),
+                    blurRadius: 24,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
-              elevation: 8,
-              backgroundColor: AppColors.primary50,
-              onPressed: () {
-                context.router.push(const ImageAnalyzerRoute());
-              },
-              child: Icon(
-                IconsaxPlusBold.scan,
-                color: Colors.white,
-                size: 6.w,
+              child: FloatingActionButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.w),
+                ),
+                elevation: 0,
+                backgroundColor: AppColors.primary50,
+                onPressed: () {
+                  context.router.push(const ImageAnalyzerRoute());
+                },
+                child: Icon(
+                  IconsaxPlusBold.scan,
+                  color: Colors.white,
+                  size: 6.w,
+                ),
               ),
             ),
       floatingActionButtonLocation: const FixedCenterDockedFABLocation(),

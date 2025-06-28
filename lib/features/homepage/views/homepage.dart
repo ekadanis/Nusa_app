@@ -1,12 +1,13 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:nusa_app/features/homepage/widgets/play_button.dart';
+import 'package:nusa_app/features/homepage/widgets/quiz_card.dart';
 import 'package:nusa_app/util/extensions.dart';
 import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:sizer/sizer.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:geolocator/geolocator.dart'; // Import for Position
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 import '../../../core/styles.dart';
 import '../../../core/app_colors.dart';
@@ -34,7 +35,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
-  final Map<String, GlobalKey<GenericSectionState>> _sectionKeys = {};
 
   List<CategoryModel> _categoriesData = [];
   Map<String, List<DestinationModel>> _destinationsByCategory = {};
@@ -307,7 +307,29 @@ class _HomePageState extends State<HomePage> {
 
   List<Map<String, String>> _getCategories() {
     if (_categoriesData.isNotEmpty) {
-      return _categoriesData
+      // Definisikan urutan yang diinginkan
+      final categoryOrder = [
+        "Cultural Sites",
+        "Arts & Culture", 
+        "Folk Instruments",
+        "Traditional Wear",
+        "Crafts & Artifacts",
+        "Local Foods",
+      ];
+      
+      // Urutkan categories berdasarkan categoryOrder
+      final sortedCategories = <CategoryModel>[];
+      for (String categoryName in categoryOrder) {
+        final category = _categoriesData.firstWhere(
+          (cat) => cat.categoryName == categoryName,
+          orElse: () => CategoryModel(categoryName: categoryName),
+        );
+        if (category.categoryName.isNotEmpty) {
+          sortedCategories.add(category);
+        }
+      }
+      
+      return sortedCategories
           .map((category) => {
         "title": category.categoryName,
         "categoryName": category.categoryName,
@@ -374,89 +396,114 @@ class _HomePageState extends State<HomePage> {
         bottom: false,
         child: Column(
           children: [
-            SizedBox(height: Styles.lgSpacing),
+            // Removed SizedBox spacing to connect with home app bar
             Expanded(
               child: RefreshIndicator(
                 onRefresh: _fetchAndFilterFirebaseData, // Refresh akan memuat dan memfilter ulang
                 color: AppColors.primary50,
-                child: ListView(
-                  padding: const EdgeInsets.only(bottom: 24),
+                child: CustomScrollView(
                   physics: const BouncingScrollPhysics(),
-                  children: [
-                    SizedBox(height: Styles.xsSpacing),
-                    const HomeFeaturedBanner(),
-                    const SizedBox(height: Styles.smSpacing),
-                    const CategoriesSection(),
-                    const SizedBox(height: Styles.smSpacing),
-                    PlayButton(),
-                    const SizedBox(height: Styles.smSpacing),
-
-                    // === START: Global Filter Chips Row (Hanya muncul sekali) ===
-                    // Hanya tampilkan filter chips jika tidak dalam mode pencarian
-                    if (!_isSearching)
-                      FilterChipsRow(
-                        selectedFilter: _globalSelectedFilter,
-                        isLoadingLocation: _globalIsLoadingLocation,
-                        hasUserLocation: _globalUserLocation != null,
-                        selectedRadius: _globalSelectedRadius,
-                        onFilterSelected: _onGlobalFilterSelected,
-                        onNearbyTapped: _onGlobalNearbyTapped,
-                        onRadiusTapped: _showGlobalRadiusBottomSheet,
+                  slivers: [
+                    // Content sebelum filter chips (tidak sticky)
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          // Removed top spacing to connect seamlessly with home app bar
+                          const HomeFeaturedBanner(),
+                          const SizedBox(height: Styles.smSpacing),
+                          const CategoriesSection(),
+                          const SizedBox(height: Styles.smSpacing),
+                          QuizCard(),
+                          const SizedBox(height: Styles.smSpacing),
+                        ],
                       ),
-                    SizedBox(height: _isSearching ? 0 : 2.h), // Atur spasi berdasarkan mode pencarian
-                    // === END: Global Filter Chips Row ===
-
-
-                    // === START: Tampilan kondisional berdasarkan mode pencarian ===
-                    if (_isSearching) ...[
-                      if (_searchResults.isNotEmpty)
-                        GenericSection(
-                          key: ValueKey('searchResultsSection_${_searchController.text}'),
-                          title: "Hasil Pencarian untuk '${_searchController.text}'",
-                          categoryName: 'SearchResults',
-                          items: _searchResults,
-                          userId: GoogleAuthService.getAuthenticatedUserId(),
-                          locationIcon: Icon(
-                            IconsaxPlusBold.location,
-                            color: AppColors.success50,
-                            size: 16,
-                          ),
-                          // Tidak perlu lagi filter-related props di GenericSection
-                          // karena filter sudah dikelola di HomePage
-                        )
-                      else
-                        Padding(
-                          padding: EdgeInsets.all(Styles.mdPadding),
-                          child: Center(
-                            child: Text(
-                              "Tidak ada destinasi ditemukan untuk '${_searchController.text}'",
-                              style: context.textTheme.bodyLarge?.copyWith(color: AppColors.black),
-                              textAlign: TextAlign.center,
-                            ),
+                    ),
+                    
+                    // Sticky Header dengan Filter Chips
+                    if (!_isSearching)
+                      SliverStickyHeader(
+                        header: Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 1.h), // Increased height from 1.h to 2.h
+                          child: FilterChipsRow(
+                            selectedFilter: _globalSelectedFilter,
+                            isLoadingLocation: _globalIsLoadingLocation,
+                            hasUserLocation: _globalUserLocation != null,
+                            selectedRadius: _globalSelectedRadius,
+                            onFilterSelected: _onGlobalFilterSelected,
+                            onNearbyTapped: _onGlobalNearbyTapped,
+                            onRadiusTapped: _showGlobalRadiusBottomSheet,
                           ),
                         ),
-                      const SizedBox(height: Styles.smSpacing),
-                    ] else ...[
-                      // Tampilkan kategori normal jika tidak dalam mode pencarian
-                      for (var category in categories) ...[
-                        GenericSection(
-                          key: ValueKey('categorySection_${category["categoryName"]!}_$_globalSelectedFilter'), // Key untuk memastikan rebuild saat filter berubah
-                          title: category["title"]!,
-                          categoryName: category["categoryName"]!,
-                          items: _getDestinationsForSection(category["categoryName"]!), // Item sudah difilter
-                          userId: GoogleAuthService.getAuthenticatedUserId(),
-                          locationIcon: Icon(
-                            IconsaxPlusBold.location,
-                            color: AppColors.success50,
-                            size: 16,
+                        sliver: SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 1.h),
+                              
+                              // Tampilkan kategori normal jika tidak dalam mode pencarian
+                              for (var category in categories) ...[
+                                GenericSection(
+                                  key: ValueKey('categorySection_${category["categoryName"]!}_$_globalSelectedFilter'),
+                                  title: category["title"]!,
+                                  categoryName: category["categoryName"]!,
+                                  items: _getDestinationsForSection(category["categoryName"]!),
+                                  userId: GoogleAuthService.getAuthenticatedUserId(),
+                                  locationIcon: Icon(
+                                    IconsaxPlusBold.location,
+                                    color: AppColors.success50,
+                                    size: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: Styles.smSpacing),
+                              ],
+                              
+                              const SizedBox(height: Styles.xlSpacing),
+                              // Extra bottom padding untuk floating action button
+                              const SizedBox(height: 80),
+                            ],
                           ),
-                          // Tidak perlu lagi filter-related props di GenericSection
                         ),
-                        const SizedBox(height: Styles.smSpacing),
-                      ],
-                    ],
-
-                    const SizedBox(height: Styles.xlSpacing),
+                      ),
+                    
+                    // Content untuk mode pencarian (tanpa sticky header)
+                    if (_isSearching)
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 1.h),
+                            
+                            if (_searchResults.isNotEmpty)
+                              GenericSection(
+                                key: ValueKey('searchResultsSection_${_searchController.text}'),
+                                title: "Search Results for '${_searchController.text}'",
+                                categoryName: 'SearchResults',
+                                items: _searchResults,
+                                userId: GoogleAuthService.getAuthenticatedUserId(),
+                                locationIcon: Icon(
+                                  IconsaxPlusBold.location,
+                                  color: AppColors.success50,
+                                  size: 16,
+                                ),
+                              )
+                            else
+                              Padding(
+                                padding: EdgeInsets.all(Styles.mdPadding),
+                                child: Center(
+                                  child: Text(
+                                    "No destinations found for'${_searchController.text}'",
+                                    style: context.textTheme.bodyLarge?.copyWith(color: AppColors.black),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            
+                            const SizedBox(height: Styles.smSpacing),
+                            const SizedBox(height: Styles.xlSpacing),
+                            // Extra bottom padding untuk floating action button
+                            const SizedBox(height: 80),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),

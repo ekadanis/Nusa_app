@@ -61,6 +61,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
             child: Text(
               widget.content,
               style: context.textTheme.bodySmall,
+              textAlign: TextAlign.justify,
             ),
           )
               : const SizedBox.shrink(),

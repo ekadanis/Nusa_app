@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
@@ -5,9 +6,10 @@ import 'package:nusa_app/core/app_colors.dart';
 import 'package:nusa_app/util/extensions.dart';
 
 import '../../../core/styles.dart';
+import '../../../routes/router.dart';
 
-class PlayButton extends StatelessWidget {
-  const PlayButton({super.key});
+class QuizCard extends StatelessWidget {
+  const QuizCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,9 @@ class PlayButton extends StatelessWidget {
               ],
             )
           ],),
-          ElevatedButton(onPressed: () {}, 
+          ElevatedButton(onPressed: () {
+            context.router.navigate(const HomeRouteQuiz());
+          }, 
               child: Container(
                 alignment: Alignment(0, 0),
                 width: 120,

@@ -44,7 +44,7 @@ class _ImageAnalyzerPageState extends State<ImageAnalyzerPage> {
 
       if (cameras.isEmpty) {
         setState(() {
-          _errorMessage = 'Tidak ada kamera yang tersedia';
+          _errorMessage = 'No cameras available';
           _isInitializing = false;
         });
         return;

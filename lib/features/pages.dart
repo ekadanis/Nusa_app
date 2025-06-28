@@ -8,4 +8,6 @@ export 'nusabot/nusabot.dart';
 export 'katalog_destination/katalog_destination.dart';
 export 'detail_screen_destination/detail_screen_destination.dart';
 export 'inbox/inbox.dart';
+export 'quiz/quiz.dart';
+
 

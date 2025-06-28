@@ -85,7 +85,7 @@ class _InboxPageState extends State<InboxPage>
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Inbox',
+          'Notifications',
           style: context.textTheme.headlineMedium?.copyWith(
             color: Colors.black,
             fontWeight: FontWeight.bold,

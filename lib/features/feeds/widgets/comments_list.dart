@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../../models/models.dart';
-import '../../../services/firestore_service.dart';
-import 'user_avatar_widget.dart';
+import 'realtime_avatar_by_user_id.dart';
+import 'realtime_user_name_by_user_id.dart';
 
 class CommentsList extends StatelessWidget {
   final String? forumId;
@@ -75,16 +75,11 @@ class CommentItem extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [          FutureBuilder<UserModel?>(
-            future: FirestoreService.getUserById(comment.userId),
-            builder: (context, snapshot) {
-              final user = snapshot.data;
-              return UserAvatarWidget(
-                user: user, 
-                radius: 16,
-                userId: comment.userId,
-              );
-            },
+        children: [
+          // Use real-time avatar for any user
+          RealTimeAvatarByUserId(
+            userId: comment.userId,
+            radius: 16,
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -93,18 +88,13 @@ class CommentItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    FutureBuilder<UserModel?>(
-                      future: FirestoreService.getUserById(comment.userId),
-                      builder: (context, snapshot) {
-                        final user = snapshot.data;
-                        return Text(
-                          user?.name ?? 'Unknown User',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        );
-                      },
+                    // Use real-time user name for any user
+                    RealTimeUserNameByUserId(
+                      userId: comment.userId,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
                     ),
                     const Spacer(),
                     Text(

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:nusa_app/core/app_colors.dart';
 import 'package:nusa_app/features/auth/widgets/nusa_text_field.dart';
 import 'package:nusa_app/features/auth/widgets/submit_button.dart';
@@ -134,7 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   controller: nameController,
                   hintText: "Name",
                   icon: Icons.person,
-                  suffixIcon: Icons.edit,
+                  suffixIcon: IconsaxPlusLinear.edit,
                 ),
                 const SizedBox(height: 24),
                 NusaTextField(

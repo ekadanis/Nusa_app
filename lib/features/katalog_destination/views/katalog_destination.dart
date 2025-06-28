@@ -15,8 +15,9 @@ import 'dart:async';
 @RoutePage()
 class KatalogProdukPage extends StatefulWidget {
   final String? categoryName;
+  final String? categoryColor;
 
-  const KatalogProdukPage({Key? key, this.categoryName}) : super(key: key);
+  const KatalogProdukPage({Key? key, this.categoryName, this.categoryColor}) : super(key: key);
 
   @override
   State<KatalogProdukPage> createState() => _KatalogProdukPageState();
@@ -327,6 +328,7 @@ class _KatalogProdukPageState extends State<KatalogProdukPage> {
                       customFilters: _subcategories,
                       userId: GoogleAuthService.getAuthenticatedUserId(),
                       selectedCategory: _selectedCategory!.id!,
+                      categoryColor: widget.categoryColor,
                     ),
                   ],
                 ),

@@ -21,6 +21,19 @@ class AppColors {
     colors: [primary40, primary60],
   );
 
+    // Status Colors
+  static const Color success = Color(0xFF4CAF50);
+  static const Color error = Color(0xFFF44336);
+  static const Color warning = Color(0xFFFF9800);
+    // Quiz Colors - Updated with new category colors
+  static const Color quizBlue = Color(0xFF4286EF);     // Cultural Sites
+  static const Color quizOrange = Color(0xFFFF6629);   // Arts & Culture (Batik)
+  static const Color quizGreen = Color(0xFF48BB78);    // Folk Instruments
+  static const Color quizYellow = Color(0xFFECC94B);   // Traditional Wear
+  static const Color quizRed = Color(0xFFF73131);      // Crafts & Artifacts
+  static const Color quizPurple = Color(0xFF8A4FFF);   // Local Foods
+  
+
   static const grey90 = Color(0xFF131414);
   static const grey80 = Color(0xFF262728);
   static const grey70 = Color(0xFF393B3D);
