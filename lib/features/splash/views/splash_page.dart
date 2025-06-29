@@ -66,7 +66,7 @@ class _SplashPageState extends State<SplashPage> {
             Text(
               'nusa',
               style: TextStyle(
-                fontSize: 13.sp,
+                fontSize: 30.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 2,

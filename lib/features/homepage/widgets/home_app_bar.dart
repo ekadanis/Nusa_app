@@ -168,7 +168,10 @@ class HomeAppBar extends StatelessWidget {
 
         if (snapshot.hasData && snapshot.data!.exists) {
           final data = snapshot.data!.data() as Map<String, dynamic>?;
-          final unreadCount = data?['unreadCount'] ?? 0;
+          // Cek jika field unreadCount ada dan bertipe int
+          final unreadCount = (data != null && data['unreadCount'] is int)
+              ? data['unreadCount'] as int
+              : 0;
           hasUnreadNotifications = unreadCount > 0;
         }
 
@@ -227,7 +230,7 @@ class HomeAppBar extends StatelessWidget {
           .collection('notifications')
           .doc(userId)
           .update({
-        'unreadCount': 0,
+        'unreadCount': 0, // Set ke 0 saat sudah dibaca
         'lastReadTime': FieldValue.serverTimestamp(),
       });
     } catch (e) {

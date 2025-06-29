@@ -51,6 +51,7 @@ class AuthForm extends StatelessWidget {
             controller: nameController!,
             hintText: "Enter Your Name",
             icon: Icons.person_outline,
+            maxLength: 20, // Enforce 20 character limit
           ),
           SizedBox(height: 2.h),
         ],

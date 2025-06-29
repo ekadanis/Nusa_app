@@ -48,8 +48,13 @@ class FCMService {
             android: AndroidNotificationDetails(
               'fcm_channel',
               'FCM Notifications',
+              icon:
+                  '@mipmap/ic_launcher', // gunakan icon notifikasi custom di sini
               importance: Importance.high,
               priority: Priority.high,
+              playSound: true, // pastikan playSound true
+              sound: RawResourceAndroidNotificationSound(
+                  'notif_sound'), // gunakan suara default
             ),
           ),
         );

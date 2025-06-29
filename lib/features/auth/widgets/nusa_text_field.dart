@@ -6,6 +6,7 @@ class NusaTextField extends StatelessWidget {
   final IconData icon;
   final bool readOnly;
   final IconData? suffixIcon;
+  final int? maxLength; // Add maxLength parameter
 
   const NusaTextField({
     super.key,
@@ -14,6 +15,7 @@ class NusaTextField extends StatelessWidget {
     required this.icon,
     this.readOnly = false,
     this.suffixIcon,
+    this.maxLength, // Add to constructor
   });
 
   @override
@@ -26,11 +28,13 @@ class NusaTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       readOnly: readOnly,
+      maxLength: maxLength, // Pass to TextField
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey[100], // Background light grey
         hintText: hintText,
-        hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+        hintStyle:
+            Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
         prefixIcon: Icon(icon, color: Colors.grey[400]),
         suffixIcon: suffixIcon != null
             ? Icon(suffixIcon, color: Colors.grey[400], size: 18)

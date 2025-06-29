@@ -156,7 +156,7 @@ class _RadiusBottomSheetState extends State<RadiusBottomSheet> {
                                 size: 16,
                               ),
                             ),
-                            SizedBox(width: 1.w),
+                            // SizedBox(width: 1.w),
                             Text(
                               _isRefreshingLocation ? 'Updating...' : 'Refresh',
                               style: TextStyle(
@@ -199,7 +199,7 @@ class _RadiusBottomSheetState extends State<RadiusBottomSheet> {
               });
             },
           ),
-          SizedBox(height: 2.h),
+          //SizedBox(height: 2.h),
 
           // Quick preset buttons
           Text(
@@ -208,7 +208,7 @@ class _RadiusBottomSheetState extends State<RadiusBottomSheet> {
               color: AppColors.grey60,
             ),
           ),
-          SizedBox(height: 1.h),
+          //SizedBox(height: 1.h),
 
           // Preset chips
           Wrap(
@@ -253,7 +253,7 @@ class _RadiusBottomSheetState extends State<RadiusBottomSheet> {
                   ),
                 ),
               ),
-              SizedBox(width: 2.w),
+              // SizedBox(width: 1.w),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {

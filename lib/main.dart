@@ -19,7 +19,7 @@ Future<void> setup() async {
   print("Start initializing");
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/firebase/.env");
-  
+
   // Initialize Firebase first
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -54,6 +54,7 @@ Future<void> setup() async {
     // Add delay to ensure Firebase services are fully ready
     await Future.delayed(const Duration(milliseconds: 1500));
     await FCMService.init();
+    FCMService.setupOnMessageListener(); // Pastikan listener foreground aktif
     await FCMService.setupOnMessageOpenedAppListener();
     print("Local Notifications Initialized");
   } catch (e) {

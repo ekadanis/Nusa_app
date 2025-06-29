@@ -20,26 +20,21 @@ class AuthWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 1.h),
-        
-        if (showBackButton)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
-          ),
-
+        // SizedBox(height: 1.h),
+        // if (showBackButton)
+        //   Align(
+        //     alignment: Alignment.centerLeft,
+        //     child: IconButton(
+        //       icon: const Icon(Icons.arrow_back, color: Colors.white),
+        //       onPressed: () => Navigator.pop(context),
+        //     ),
+        //   ),
+        SizedBox(height: 2.h),
         Column(
           children: [
             SvgPicture.asset(
               'assets/core/logo.svg',
               width: 20.w,
-              color: Colors.white,
             ),
             SizedBox(height: 2.h),
             Padding(
@@ -50,7 +45,7 @@ class AuthWrapper extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title, 
+                      title,
                       style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
@@ -59,7 +54,7 @@ class AuthWrapper extends StatelessWidget {
                     ),
                     SizedBox(height: 1.h),
                     Text(
-                      subtitle, 
+                      subtitle,
                       style: TextStyle(
                         fontSize: 18.sp,
                         color: Colors.white70,
@@ -71,16 +66,15 @@ class AuthWrapper extends StatelessWidget {
             ),
           ],
         ),
-
         SizedBox(height: 2.h),
-
         Expanded(
           child: Container(
             width: double.infinity,
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
-            padding: EdgeInsets.only(left: 6.w, right: 6.w, bottom: 3.h, top:1.h),
+            padding:
+                EdgeInsets.only(left: 6.w, right: 6.w, bottom: 3.h, top: 1.h),
             child: SingleChildScrollView(child: child),
           ),
         ),

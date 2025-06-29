@@ -22,7 +22,6 @@ import '../../../models/models.dart';
 import '../../../services/firestore_service.dart';
 import '../../../services/google_auth_service.dart';
 import '../../../services/location_service.dart';
-import '../widgets/location_permission_dialog.dart';
 import '../widgets/generic_section/generic_section_controller.dart';
 
 @RoutePage()
@@ -67,7 +66,7 @@ class _HomePageState extends State<HomePage> {
     bool isLocationEnabled = await _checkLocationStatus();
 
     if (!isLocationEnabled && mounted) {
-      _showLocationPermissionDialog();
+      // _showLocationPermissionDialog();
     }
 
     _hasShownLocationPopup = true;
@@ -77,20 +76,20 @@ class _HomePageState extends State<HomePage> {
     return false;
   }
 
-  void _showLocationPermissionDialog() {
-    LocationPermissionDialog.show(
-      context,
-      onEnablePressed: _onLocationEnabled,
-      onMaybeLaterPressed: () {
-        // Handle maybe later action if needed
-      },
-      barrierDismissible: false,
-    );
-  }
+  // void _showLocationPermissionDialog() {
+  //   LocationPermissionDialog.show(
+  //     context,
+  //     onEnablePressed: _onLocationEnabled,
+  //     onMaybeLaterPressed: () {
+  //       // Handle maybe later action if needed
+  //     },
+  //     barrierDismissible: false,
+  //   );
+  // }
 
-  void _onLocationEnabled() {
-    _loadGlobalUserLocation();
-  }
+  // void _onLocationEnabled() {
+  //   _loadGlobalUserLocation();
+  // }
 
   Future<void> _fetchAndFilterFirebaseData() async {
     try {
