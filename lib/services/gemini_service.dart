@@ -9,48 +9,24 @@ class GeminiService {
       final model = GenerativeModel(
         model: Constants.geminiModelId,
         apiKey: Constants.geminiApiKey,
-      );      final prompts = {
-        'overview': '''
-Buatlah pengantar menarik tentang "${destinationName}" yang terletak di ${location}. 
-${subcategory} yang megah ini termasuk dalam kategori warisan ${category}. 
-Tulis dalam bahasa Indonesia, maksimal 100 kata. 
-Jelaskan keunikan destinasi ini, pentingnya secara budaya, dan mengapa wisatawan harus mengunjunginya. Sertakan pengalaman yang bisa didapat wisatawan seperti tur, pertunjukan budaya, atau aktivitas interaktif.
-''',
-        'history': '''
-Tuliskan sejarah dan perkembangan "${destinationName}" di ${location}. 
-Tulis dalam bahasa Indonesia, maksimal 100 kata.
-Jelaskan era berdirinya, tokoh penting, periode signifikan, dan peristiwa besar yang membentuk warisan ini. Fokus pada bagaimana wisatawan bisa mempelajari sejarah ini melalui tur, museum, atau pameran interaktif.
-''',
-        'cultural_significance': '''
-Jelaskan fungsi budaya dan pentingnya upacara "${destinationName}" sebagai ${subcategory}. 
-Tulis dalam bahasa Indonesia, maksimal 100 kata.
-Deskripsikan perannya dalam tradisi lokal, praktik spiritual, upacara komunitas, dan identitas budaya. Jelaskan bagaimana wisatawan bisa mengalami fungsi budaya ini melalui upacara tradisional, workshop, pertunjukan, atau festival budaya.
-''',
-        'architecture': '''
-Deskripsikan asal daerah dan pengaruh arsitektur regional "${destinationName}". 
-Tulis dalam bahasa Indonesia, maksimal 100 kata.
-Jelaskan dari wilayah/budaya mana asalnya, gaya arsitektur yang mempengaruhi desainnya, dan bagaimana mencerminkan asal daerahnya. Sertakan cara wisatawan bisa menjelajahi arsitektur melalui tur, fotografi, atau workshop.
-''',
-        'visitor_info': '''
-Jelaskan filosofi simbolik dan makna mendalam "${destinationName}" di ${location}. 
-Tulis dalam bahasa Indonesia, maksimal 100 kata.
-Jelaskan simbol spiritual, konsep filosofis, atau kepercayaan budaya yang terwakili dalam desain dan tujuannya. Detail bagaimana wisatawan bisa memahami aspek filosofis ini melalui sesi meditasi, tur spiritual, atau program edukatif.
-''',
-        'conservation': '''
-Jelaskan material tradisional dan elemen konstruksi utama "${destinationName}". 
-Tulis dalam bahasa Indonesia, maksimal 100 kata.
-Identifikasi material utama (kayu, batu, tanah liat, logam), teknik konstruksi tradisional, dan kerajinan lokal yang terlibat. Jelaskan bagaimana wisatawan bisa belajar tentang material ini melalui workshop, observasi pengrajin, atau aktivitas konservasi.
-''',
-        'modern_development': '''
-Deskripsikan perkembangan modern dan peningkatan kontemporer di "${destinationName}". 
-Tulis dalam bahasa Indonesia, maksimal 100 kata.
-Jelaskan renovasi terbaru, penambahan teknologi, peningkatan aksesibilitas, fasilitas baru, dan program edukasi sambil mempertahankan keaslian budaya. Sertakan manfaat perkembangan modern untuk wisatawan seperti aplikasi mobile atau fasilitas yang lebih baik.
-''',
-        'visitor_guide': '''
-Berikan informasi praktis lengkap untuk mengunjungi "${destinationName}" di ${location}.
-Tulis dalam bahasa Indonesia, maksimal 100 kata.
-Sertakan detail penting: cara ke sana, jam buka, tiket masuk, fasilitas (parkir, toilet, kafe, toko suvenir), aksesibilitas, apa yang dibawa, aturan berpakaian, aturan foto, jadwal tur, waktu terbaik berkunjung, dan tips penting lainnya.
-'''
+      );
+      final prompts = {
+        'overview':
+            'Write an engaging introduction about "${destinationName}" located in ${location}. This magnificent ${subcategory} belongs to the ${category} heritage category. Write in English, maximum 100 words. Describe the uniqueness of this destination, its cultural importance, and why tourists should visit. Include experiences visitors can have such as tours, cultural performances, or interactive activities.',
+        'history':
+            'Write the history and development of "${destinationName}" in ${location}. Write in English, maximum 100 words. Describe its founding era, key figures, significant periods, and major events that shaped this heritage. Focus on how visitors can learn about this history through tours, museums, or interactive exhibits.',
+        'cultural_significance':
+            'Explain the cultural function and ceremonial importance of "${destinationName}" as a ${subcategory}. Write in English, maximum 100 words. Describe its role in local traditions, spiritual practices, community ceremonies, and cultural identity. Explain how visitors can experience this cultural function through traditional ceremonies, workshops, performances, or cultural festivals.',
+        'architecture':
+            'Describe the regional origin and architectural influences of "${destinationName}". Write in English, maximum 100 words. Explain which region/culture it comes from, the architectural styles that influence its design, and how it reflects its origin. Include how visitors can explore the architecture through tours, photography, or workshops.',
+        'visitor_info':
+            'Explain the symbolic philosophy and deep meaning of "${destinationName}" in ${location}. Write in English, maximum 100 words. Describe spiritual symbols, philosophical concepts, or cultural beliefs represented in its design and purpose. Detail how visitors can understand these philosophical aspects through meditation sessions, spiritual tours, or educational programs.',
+        'conservation':
+            'Describe the traditional materials and main construction elements of "${destinationName}". Write in English, maximum 100 words. Identify the main materials (wood, stone, clay, metal), traditional construction techniques, and local craftsmanship involved. Explain how visitors can learn about these materials through workshops, observing artisans, or conservation activities.',
+        'modern_development':
+            'Describe modern developments and contemporary enhancements at "${destinationName}". Write in English, maximum 100 words. Explain recent renovations, technology additions, improved accessibility, new facilities, and educational programs while maintaining cultural authenticity. Include the benefits of modern developments for visitors such as mobile apps or better facilities.',
+        'visitor_guide':
+            'Provide complete practical information for visiting "${destinationName}" in ${location}. Write in English, maximum 100 words. Include essential details: how to get there, opening hours, entrance fees, facilities (parking, toilets, cafes, souvenir shops), accessibility, what to bring, dress code, photo rules, tour schedules, best visiting times, and other important tips.'
       };
 
       Map<String, String> results = {};
@@ -59,9 +35,17 @@ Sertakan detail penting: cara ke sana, jam buka, tiket masuk, fasilitas (parkir,
         final response =
             await model.generateContent([Content.text(prompts[key]!)]);
 
-        if (response.text != null) {
-          results[key] = response.text!.trim();
-          print('Generated $key: ${response.text!.substring(0, 50)}...');
+        String? text = response.text;
+        if (text != null) {
+          // Remove leading/trailing whitespace and any leading/trailing asterisks or bullet points
+          text = text
+              .trim()
+              .replaceAll(RegExp(r'^[*•\s]+', multiLine: true), '')
+              .replaceAll(RegExp(r'^[*•\s]+', multiLine: false), '');
+          // Remove all asterisks and bullet points in the text
+          text = text.replaceAll('*', '').replaceAll('•', '');
+          results[key] = text;
+          print('Generated $key: \\${text.substring(0, 50)}...');
         } else {
           results[key] = 'Content cannot be generated for this section.';
         }
@@ -72,26 +56,25 @@ Sertakan detail penting: cara ke sana, jam buka, tiket masuk, fasilitas (parkir,
 
       return results;
     } catch (e) {
-      print('Error generating destination content: $e');      // Return default content if generation fails
+      print(
+          'Error generating destination content: $e'); // Return default content if generation fails
       return {
         'overview':
-            'Informasi detail tentang ${destinationName} sedang dipersiapkan...',
-        'history':
-            'Sejarah ${destinationName} sedang disusun...',
+            'Detailed information about ${destinationName} is being prepared...',
+        'history': 'The history of ${destinationName} is being compiled...',
         'cultural_significance':
-            'Makna budaya ${destinationName} sedang didokumentasikan...',
+            'The cultural significance of ${destinationName} is being documented...',
         'architecture':
-            'Analisis arsitektur ${destinationName} sedang diproses...',
+            'The architectural analysis of ${destinationName} is being processed...',
         'visitor_info':
-            'Filosofi simbolik ${destinationName} sedang diteliti...',
+            'The symbolic philosophy of ${destinationName} is being researched...',
         'conservation':
-            'Material tradisional ${destinationName} sedang dikatalogkan...',
+            'Traditional materials of ${destinationName} are being catalogued...',
         'modern_development':
-            'Perkembangan kontemporer ${destinationName} sedang ditinjau...',
+            'Contemporary developments of ${destinationName} are being reviewed...',
         'visitor_guide':
-            'Informasi praktis pengunjung ${destinationName} sedang disusun...',
+            'Practical visitor information for ${destinationName} is being compiled...',
       };
     }
   }
-
 }

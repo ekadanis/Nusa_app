@@ -64,6 +64,7 @@ class _DestinationExpandableCardState extends State<DestinationExpandableCard> {
                     color: AppColors.grey60,
                     height: 1.5,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
               ),
       ),

@@ -27,7 +27,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         clipBehavior: Clip.none,
         children: [
           Positioned.fill(
-            bottom: 4.h,
+            bottom: 0, // Extend the background down to cover rounded corners
             child: Image.asset(
               bannerImage,
               fit: BoxFit.cover,
@@ -48,7 +48,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               },
             ),
           ),
-          
+
           // Overlay with blue tint
           Container(
             height: 20.h,
@@ -57,7 +57,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               color: categoryColorPicker(categoryName?.toLowerCase()),
             ),
           ),
-          
+
           // Content container with padding (including back button)
           Container(
             height: 20.h,
@@ -65,7 +65,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             padding: EdgeInsets.symmetric(
               horizontal: Styles.mdPadding,
               vertical: 2.h,
-            ),            child: Column(
+            ),
+            child: Column(
               children: [
                 Expanded(
                   child: Row(
@@ -131,26 +132,39 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   static bannerPicker(String? categoryName) {
     print("\n\n<<<<<CATEGORY NAME:${categoryName}\n\n");
     switch (categoryName) {
-      case "local foods": return "assets/banner/banner_local_food.jpg";
-      case "folk instruments": return "assets/banner/banner_folk_instrument.jpg";
-      case "traditional wear": return "assets/banner/banner_traditional_wear.jpg";
-      case "arts & culture": return "assets/banner/banner_arts_culture.jpg";
-      case "crafts & artifacts": return "assets/banner/banner_craft_artifacts.jpeg";
-      case "cultural sites": return "assets/banner/banner_cultural_sites.jpg";
-      default: return "assets/banner/banner.png";
+      case "local foods":
+        return "assets/banner/banner_local_food.jpg";
+      case "folk instruments":
+        return "assets/banner/banner_folk_instrument.jpg";
+      case "traditional wear":
+        return "assets/banner/banner_traditional_wear.jpg";
+      case "arts & culture":
+        return "assets/banner/banner_arts_culture.jpg";
+      case "crafts & artifacts":
+        return "assets/banner/banner_craft_artifacts.jpeg";
+      case "cultural sites":
+        return "assets/banner/banner_cultural_sites.jpg";
+      default:
+        return "assets/banner/banner.png";
     }
   }
 
   static categoryColorPicker(String? categoryName) {
     switch (categoryName) {
-      case 'local foods' : return AppColors.purple50.withOpacity(0.6);
-      case 'folk instruments' : return AppColors.success50.withOpacity(0.6);
-      case 'traditional wear' : return AppColors.yellow50.withOpacity(0.6);
-      case'arts & culture' : return AppColors.warning50.withOpacity(0.6);
-      case'crafts & artifacts' : return AppColors.danger50.withOpacity(0.6);
-      case'cultural sites' : return AppColors.primary50.withOpacity(0.6);
-      default: return AppColors.grey50.withOpacity(0.6);
+      case 'local foods':
+        return AppColors.purple50.withOpacity(0.4);
+      case 'folk instruments':
+        return AppColors.success50.withOpacity(0.4);
+      case 'traditional wear':
+        return AppColors.yellow50.withOpacity(0.4);
+      case 'arts & culture':
+        return AppColors.warning50.withOpacity(0.4);
+      case 'crafts & artifacts':
+        return AppColors.danger50.withOpacity(0.4);
+      case 'cultural sites':
+        return AppColors.primary50.withOpacity(0.4);
+      default:
+        return AppColors.grey50.withOpacity(0.6);
     }
   }
 }
-

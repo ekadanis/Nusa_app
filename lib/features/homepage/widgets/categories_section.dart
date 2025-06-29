@@ -30,7 +30,7 @@ class _CategoriesSectionState extends State<CategoriesSection> {
             padding: const EdgeInsets.all(Styles.mdPadding),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(Styles.mdRadius),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.grey20.withOpacity(0.8),
@@ -78,7 +78,7 @@ class _CategoriesSectionState extends State<CategoriesSection> {
                 duration: const Duration(milliseconds: 400),
                 child: KatalogProdukPage(
                   categoryName: category["title"] as String,
-                  categoryColor: category["colorHex"] as String,
+                  // categoryColor: category["colorHex"] as String,
                 ),
                 childCurrent: widget,
                 curve: Curves.easeInOut,

@@ -6,6 +6,7 @@ import '../../../models/quiz_models.dart';
 import '../../../routes/router.dart';
 import '../widgets/result_stat_item.dart';
 import '../widgets/motivation_section.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 
 class ResultCard extends StatelessWidget {
   final QuizResult result;
@@ -29,6 +30,7 @@ class ResultCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(6.w),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Score
             Text(
@@ -36,15 +38,20 @@ class ResultCard extends StatelessWidget {
               style: Theme.of(context).textTheme.displayLarge?.copyWith(
                     color: AppColors.primary50,
                     fontWeight: FontWeight.w700,
-                    fontSize: 48,
+                    fontSize: 24.sp,
                   ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
 
             Text(
               'Final Score',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: AppColors.grey50,
+                    fontSize: 15.sp,
                   ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
 
             SizedBox(height: 4.h),
@@ -79,13 +86,20 @@ class ResultCard extends StatelessWidget {
               children: [
                 Text(
                   'Progress',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: 15.sp,
+                      ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   '${result.correctAnswers}/${result.totalQuestions}',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: AppColors.grey50,
+                        fontSize: 15.sp,
                       ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -100,7 +114,17 @@ class ResultCard extends StatelessWidget {
                   // Navigate back to homepage (beranda quiz detail)
                   context.router.navigate(const HomeRouteQuiz());
                 },
-                label: const Text('Back to Study'),
+                icon: Icon(
+                  IconsaxPlusBold.arrow_left_2,
+                  color: Colors.white,
+                  size: 6.w,
+                ),
+                label: Text(
+                  'Back to Study',
+                  style:
+                      TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
+                  overflow: TextOverflow.ellipsis,
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary50,
                   foregroundColor: Colors.white,
@@ -108,6 +132,7 @@ class ResultCard extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  elevation: 2,
                 ),
               ),
             ),

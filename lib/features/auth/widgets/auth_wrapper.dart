@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 
 class AuthWrapper extends StatelessWidget {
@@ -35,8 +36,8 @@ class AuthWrapper extends StatelessWidget {
 
         Column(
           children: [
-            Image.asset(
-              'assets/core/logo.png',
+            SvgPicture.asset(
+              'assets/core/logo.svg',
               width: 20.w,
               color: Colors.white,
             ),
@@ -60,7 +61,7 @@ class AuthWrapper extends StatelessWidget {
                     Text(
                       subtitle, 
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 18.sp,
                         color: Colors.white70,
                       ),
                     ),

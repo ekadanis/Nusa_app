@@ -47,7 +47,7 @@ class LogoutSection extends StatelessWidget {
       context: context,
       type: QuickAlertType.error,
       title: 'Logout',
-      confirmBtnText: 'Yes, Logout',
+      confirmBtnText: 'Yes',
       cancelBtnText: 'Cancel',
       confirmBtnColor: AppColors.error,
       showCancelBtn: true,

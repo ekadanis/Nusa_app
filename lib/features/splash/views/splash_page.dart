@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nusa_app/core/app_colors.dart';
 import 'package:nusa_app/core/styles.dart';
 import 'package:nusa_app/database/shared_preferences_service.dart';
@@ -54,9 +55,24 @@ class _SplashPageState extends State<SplashPage> {
         body: Container(
       decoration: BoxDecoration(color: AppColors.primary50),
       child: Center(
-        child: Image.asset(
-          'assets/core/logo.png',
-          width: 138,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              'assets/core/logo.svg',
+              width: 138,
+            ),
+            SizedBox(height: 2.h),
+            Text(
+              'nusa',
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 2,
+              ),
+            ),
+          ],
         ),
       ),
     ));

@@ -19,29 +19,49 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        curve: Curves.easeOut,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.black.withOpacity(0.06), width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              spreadRadius: 0,
+              offset: const Offset(0, 1),
             ),
           ],
-        ),        child: Padding(
-          padding: EdgeInsets.all(3.w), // Menggunakan Sizer
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(3.w),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [// Icon
+            children: [
+              // Icon with gradient background
               Container(
                 width: 15.w,
                 height: 15.w,
                 decoration: BoxDecoration(
-                  color: category.color.withOpacity(0.1),
+                  gradient: LinearGradient(
+                    colors: [
+                      category.color.withOpacity(0.18),
+                      category.color.withOpacity(0.08),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                   borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: category.color.withOpacity(0.18),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Center(
                   child: SvgPicture.asset(
@@ -55,35 +75,35 @@ class CategoryCard extends StatelessWidget {
                   ),
                 ),
               ),
-
-              SizedBox(height: 2.h),              // Category Name
-              Text(
-                category.name,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 3.5.w, // Menggunakan Sizer
+              SizedBox(height: 2.h),
+              // Category Name
+              Flexible(
+                child: Text(
+                  category.name,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 3.7.w,
+                      ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2, // Maksimal 2 baris
-                overflow: TextOverflow.ellipsis,
               ),
-
               SizedBox(height: 0.5.h),
-
               // Description
-              Text(
-                category.description,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.grey50,
-                  fontSize: 2.5.w, // Menggunakan Sizer
+              Flexible(
+                child: Text(
+                  category.description,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.grey50,
+                        fontSize: 2.5.w,
+                      ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
-
-              SizedBox(height: 1.5.h),
-
+              SizedBox(height: 2.h),
               // Start Quiz Button
               SizedBox(
                 width: double.infinity,
@@ -92,11 +112,13 @@ class CategoryCard extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: category.color,
                     foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(vertical: 1.5.h),
+                    elevation: 0,
+                    padding: EdgeInsets.symmetric(vertical: 1.2.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                  ),                  child: Row(
+                  ),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -106,11 +128,15 @@ class CategoryCard extends StatelessWidget {
                         size: 4.w,
                       ),
                       SizedBox(width: 1.w),
-                      Text(
-                        'Start Quiz',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                      Flexible(
+                        child: Text(
+                          'Start Quiz',
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

@@ -41,7 +41,11 @@ class AuthForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (isRegister && nameController != null) ...[
-          Text("Name", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+          Text("Name",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.bold)),
           SizedBox(height: 1.h),
           NusaTextField(
             controller: nameController!,
@@ -50,8 +54,11 @@ class AuthForm extends StatelessWidget {
           ),
           SizedBox(height: 2.h),
         ],
-
-        Text("Email", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+        Text("Email",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold)),
         SizedBox(height: 1.h),
         NusaTextField(
           controller: emailController,
@@ -59,12 +66,14 @@ class AuthForm extends StatelessWidget {
           icon: Icons.email_outlined,
         ),
         SizedBox(height: 3.h),
-
-        Text("Password", style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+        Text("Password",
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold)),
         SizedBox(height: 1.h),
         NusaPasswordField(controller: passwordController),
         SizedBox(height: 2.h),
-
         if (!isRegister) // hanya untuk Login
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,7 +85,8 @@ class AuthForm extends StatelessWidget {
                     onChanged: onRememberChanged,
                     activeColor: AppColors.primary50,
                   ),
-                  Text("Remember Me", style: Theme.of(context).textTheme.bodySmall),
+                  Text("Remember Me",
+                      style: Theme.of(context).textTheme.bodySmall),
                 ],
               ),
               TextButton(
@@ -84,40 +94,43 @@ class AuthForm extends StatelessWidget {
                 child: Text(
                   "Forgot Password?",
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary50,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary50,
+                      ),
                 ),
               )
             ],
           ),
         if (!isRegister) SizedBox(height: 2.h),
-
         SubmitButton(
           isLoading: isLoading,
           onPressed: onSubmit,
           text: submitText,
         ),
         SizedBox(height: 2.h),
-
         extraButton,
         SizedBox(height: 2.5.h),
-
         Center(
           child: GestureDetector(
             onTap: onRegister,
             child: RichText(
               text: TextSpan(
-                text: isRegister ? "Already have an account? " : "Don't have an account? ",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.grey90),
+                text: isRegister
+                    ? "Already have an account? "
+                    : "Don't have an account? ",
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: AppColors.grey90,
+                      fontSize: 14.sp,
+                    ),
                 children: [
                   TextSpan(
                     text: isRegister ? "Login Now" : "Register Now",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.primary50,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                    ),
+                          color: AppColors.primary50,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          fontSize: 14.sp,
+                        ),
                   ),
                 ],
               ),

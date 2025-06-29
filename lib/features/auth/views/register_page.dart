@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.nusa90,
+      backgroundColor: AppColors.primary50,
       body: SafeArea(
         child: AuthWrapper(
           title: "Create A New Account",

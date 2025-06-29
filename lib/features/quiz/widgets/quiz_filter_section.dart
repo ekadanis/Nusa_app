@@ -29,30 +29,42 @@ class QuizFilterSection extends StatelessWidget {
             padding: EdgeInsets.only(right: 2.w),
             child: GestureDetector(
               onTap: () => onFilterSelected(filter),
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
                 padding: EdgeInsets.symmetric(
                   horizontal: 4.w,
                   vertical: 1.5.h,
                 ),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppColors.primary50
+                      ? AppColors.primary50.withOpacity(0.15)
                       : Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isSelected
-                        ? AppColors.primary50
-                        : Colors.grey.shade300,
-                    width: 1,
+                    color:
+                        isSelected ? AppColors.primary50 : Colors.grey.shade300,
+                    width: isSelected ? 1.5 : 1,
                   ),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppColors.primary50.withOpacity(0.10),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          )
+                        ]
+                      : [],
                 ),
-                child: Text(
-                  filter,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : AppColors.grey70,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.normal,
-                    fontSize: 14,
+                child: Center(
+                  child: Text(
+                    filter,
+                    style: TextStyle(
+                      color:
+                          isSelected ? AppColors.primary50 : AppColors.grey70,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w600,
+                      fontSize: 14.sp,
+                    ),
                   ),
                 ),
               ),

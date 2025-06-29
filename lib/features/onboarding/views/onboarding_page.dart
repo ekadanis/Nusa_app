@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Tambahkan import ini
 import 'package:nusa_app/l10n/l10n.dart';
 import 'package:nusa_app/routes/router.dart';
 import 'package:nusa_app/util/extensions.dart';
@@ -24,12 +25,6 @@ class _OnboardingPageState extends State<OnboardingPage>
   PageController _pageController = PageController();
   int _currentPage = 0;
 
-  // Hapus animation controllers yang menyebabkan refresh effect
-  // late AnimationController _fadeController;
-  // late AnimationController _slideController;
-  // late Animation<double> _fadeAnimation;
-  // late Animation<Offset> _slideAnimation;
-
   @override
   void initState() {
     super.initState();
@@ -37,8 +32,6 @@ class _OnboardingPageState extends State<OnboardingPage>
 
   @override
   void dispose() {
-    // _fadeController.dispose();
-    // _slideController.dispose();
     _pageController.dispose();
     super.dispose();
   }
@@ -47,15 +40,6 @@ class _OnboardingPageState extends State<OnboardingPage>
     setState(() {
       _currentPage = page;
     });
-
-    // Hapus restart animations yang menyebabkan refresh effect
-    /*
-    // Restart animations when page changes
-    _fadeController.reset();
-    _slideController.reset();
-    _fadeController.forward();
-    _slideController.forward();
-    */
   }
 
   void _skipToLastPage() {
@@ -65,7 +49,6 @@ class _OnboardingPageState extends State<OnboardingPage>
       curve: Curves.easeInOut,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,34 +78,33 @@ class _OnboardingPageState extends State<OnboardingPage>
                   },
                   child: _currentPage != 2
                       ? TextButton(
-                    key: const ValueKey("skip"),
-                    onPressed: _skipToLastPage,
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppColors.primary50,
-                      foregroundColor: Colors.white,
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    child: const Text(
-                      'Skip',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  )
+                          key: const ValueKey("skip"),
+                          onPressed: _skipToLastPage,
+                          style: TextButton.styleFrom(
+                            backgroundColor: AppColors.primary50,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 5.w, vertical: 1.5.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.w),
+                            ),
+                          ),
+                          child: Text(
+                            'Skip',
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        )
                       : const SizedBox(
-                    key: ValueKey("skip-empty"),
-                    width: 1,
-                    height: 48,
-                  ),
+                          key: ValueKey("skip-empty"),
+                          width: 1,
+                          height: 48,
+                        ),
                 ),
               ),
             ),
-
 
             // Page content
             Expanded(
@@ -153,7 +135,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                         width: _currentPage == index ? 24 : 8,
                         decoration: BoxDecoration(
                           color: _currentPage == index
-                              ? Colors.blue
+                              ? AppColors.primary50
                               : Colors.grey[300],
                           borderRadius: BorderRadius.circular(4),
                         ),
@@ -171,7 +153,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                         opacity: animation,
                         child: SlideTransition(
                           position: Tween<Offset>(
-                            begin: Offset(0, 0.2), // geser sedikit dari bawah
+                            begin: Offset(0, 0.2),
                             end: Offset.zero,
                           ).animate(animation),
                           child: child,
@@ -180,36 +162,36 @@ class _OnboardingPageState extends State<OnboardingPage>
                     },
                     child: _currentPage == 2
                         ? SizedBox(
-                      key: ValueKey("button"), // penting agar animasi bekerja saat switch
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          SharedPreferencesService.setIsFirstTime(false);
-                          context.router.replace(const LoginRoute());
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          elevation: 2,
-                        ),
-                        child: Text(
-                          'Get Started',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    )
+                            key: ValueKey("button"),
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                SharedPreferencesService.setIsFirstTime(false);
+                                context.router.replace(const LoginRoute());
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary50,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                elevation: 2,
+                              ),
+                              child: Text(
+                                'Get Started',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          )
                         : SizedBox(
-                      key: ValueKey("empty"),
-                      width: double.infinity,
-                      height: 50,
-                    ),
+                            key: ValueKey("empty"),
+                            width: double.infinity,
+                            height: 50,
+                          ),
                   ),
                 ],
               ),
@@ -221,24 +203,28 @@ class _OnboardingPageState extends State<OnboardingPage>
   }
 
   Widget _buildPage1() {
-    // Hapus FadeTransition dan SlideTransition yang menyebabkan refresh effect
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Illustration
           Container(
-            height: 300,
-            width: double.infinity,
+            height: 35.h, // Responsive height pakai Sizer
+            width: 100.w, // Responsive width pakai Sizer
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/onboarding/onboarding1.png',
-                fit: BoxFit.fill,
+              child: SvgPicture.asset(
+                'assets/images/onboarding/onboarding1.svg',
+                fit: BoxFit.contain,
+                placeholderBuilder: (BuildContext context) => Container(
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               ),
             ),
           ),
@@ -249,30 +235,32 @@ class _OnboardingPageState extends State<OnboardingPage>
           Text(
             'Learn something',
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.blue[800],
+              color: AppColors.primary50,
             ),
           ),
 
           Text(
             'new every day.',
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.blue[800],
+              color: AppColors.primary50,
             ),
           ),
 
-          SizedBox(height: 20),
+          SizedBox(height: 2.h),
 
-          Text(
-            'Dive into Indonesia\'s traditions, history,\nand wisdom — made fun and easy to\nexplore!',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              height: 1.5,
+          Flexible(
+            child: Text(
+              'Dive into Indonesia\'s traditions, history,\nand wisdom — made fun and easy to\nexplore!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15.sp,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
             ),
           ),
         ],
@@ -287,41 +275,45 @@ class _OnboardingPageState extends State<OnboardingPage>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            height: 300,
-            width: double.infinity,
+            height: 35.h,
+            width: 100.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/onboarding/onboarding2.png',
-                fit: BoxFit.cover,
+              child: SvgPicture.asset(
+                'assets/images/onboarding/onboarding2.svg',
+                fit: BoxFit.contain,
+                placeholderBuilder: (BuildContext context) => Container(
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               ),
             ),
           ),
-
           SizedBox(height: 40),
-
           Text(
             'Discover Indonesian\nHeritage',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.primary50,
             ),
           ),
-
-          SizedBox(height: 20),
-
-          Text(
-            'Learn about the rich cultural diversity,\ntraditional arts, and historical landmarks\nthat make Indonesia unique.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              height: 1.5,
+          SizedBox(height: 2.h),
+          Flexible(
+            child: Text(
+              'Learn about the rich cultural diversity,\ntraditional arts, and historical landmarks\nthat make Indonesia unique.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15.sp,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
             ),
           ),
         ],
@@ -336,41 +328,45 @@ class _OnboardingPageState extends State<OnboardingPage>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            height: 300,
-            width: double.infinity,
+            height: 35.h,
+            width: 100.w,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/onboarding/onboarding3.png',
-                fit: BoxFit.cover,
+              child: SvgPicture.asset(
+                'assets/images/onboarding/onboarding3.svg',
+                fit: BoxFit.contain,
+                placeholderBuilder: (BuildContext context) => Container(
+                  color: Colors.grey[200],
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               ),
             ),
           ),
-
           SizedBox(height: 40),
-
           Text(
             'Start Your Learning\nJourney',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 28,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.primary50,
             ),
           ),
-
-          SizedBox(height: 20),
-
-          Text(
-            'Begin your adventure in understanding\nIndonesian wisdom, values, and\ntime-honored traditions.',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-              height: 1.5,
+          SizedBox(height: 2.h),
+          Flexible(
+            child: Text(
+              'Begin your adventure in understanding\nIndonesian wisdom, values, and\ntime-honored traditions.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 15.sp,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
             ),
           ),
         ],

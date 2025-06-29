@@ -19,49 +19,56 @@ class HomeAppBar extends StatelessWidget {
       builder: (context, snapshot) {
         final userProfile = snapshot.data;
         final isLoading = snapshot.connectionState == ConnectionState.waiting;
-        
+
         return Container(
-          height: 16.h, // Reduced to match new appbar height
+          height: 16.h,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              Container(
-                height: 16.h, // Reduced main container height
-                width: 100.w,
-                padding: EdgeInsets.symmetric(
-                  horizontal: Styles.mdPadding,
-                  vertical: 1.5.h, // Reduced vertical padding
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary50,
-                  image: DecorationImage(
-                    image: const AssetImage('assets/banner/banner.png'),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      AppColors.primary50,
-                      BlendMode.multiply,
+              // Background container with extended height
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom:
+                    -30, // Extend the background down to cover rounded corners
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.primary50,
+                    image: DecorationImage(
+                      image: const AssetImage('assets/banner/banner.png'),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        AppColors.primary50,
+                        BlendMode.multiply,
+                      ),
                     ),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _buildAvatar(userProfile),
-                          SizedBox(width: 3.w),
-                          Expanded(
-                            child: _buildUserInfo(context, userProfile, isLoading),
-                          ),                            _buildNotificationButton(context),
-                        ],
+              ),
+              // Content container
+              Container(
+                height: 16.h,
+                width: 100.w,
+                padding: EdgeInsets.symmetric(
+                  horizontal: Styles.mdPadding,
+                  vertical: 1.5.h,
+                ),
+                child: Align(
+                  alignment: Alignment(0, 0.3), // sedikit di atas bottom
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _buildAvatar(userProfile),
+                      SizedBox(width: 3.w),
+                      Expanded(
+                        child: _buildUserInfo(context, userProfile, isLoading),
                       ),
-                    ),
-                    SizedBox(height: 1.h), // Reduced bottom spacing
-                  ],
+                      _buildNotificationButton(context),
+                    ],
+                  ),
                 ),
               ),
-             
             ],
           ),
         );
@@ -103,7 +110,8 @@ class HomeAppBar extends StatelessWidget {
     );
   }
 
-  Widget _buildUserInfo(BuildContext context, UserProfileData? userProfile, bool isLoading) {
+  Widget _buildUserInfo(
+      BuildContext context, UserProfileData? userProfile, bool isLoading) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -120,10 +128,7 @@ class HomeAppBar extends StatelessWidget {
               )
             : Text(
                 "${userProfile?.name ?? 'User'} !",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
@@ -134,10 +139,7 @@ class HomeAppBar extends StatelessWidget {
           children: [
             Text(
               "Welcome Back",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Colors.white.withOpacity(0.8),
                   ),
               overflow: TextOverflow.ellipsis,
@@ -163,13 +165,13 @@ class HomeAppBar extends StatelessWidget {
           .snapshots(),
       builder: (context, snapshot) {
         bool hasUnreadNotifications = false;
-        
+
         if (snapshot.hasData && snapshot.data!.exists) {
           final data = snapshot.data!.data() as Map<String, dynamic>?;
           final unreadCount = data?['unreadCount'] ?? 0;
           hasUnreadNotifications = unreadCount > 0;
         }
-        
+
         return _buildNotificationIcon(context, hasUnreadNotifications);
       },
     );
@@ -186,7 +188,7 @@ class HomeAppBar extends StatelessWidget {
         onTap: () async {
           // Navigate to inbox
           await context.router.push(const InboxRoute());
-          
+
           // Mark notifications as read
           final currentUser = GoogleAuthService.currentUser;
           if (currentUser != null) {

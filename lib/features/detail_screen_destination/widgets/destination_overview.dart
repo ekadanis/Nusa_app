@@ -45,11 +45,12 @@ class DestinationOverview extends StatelessWidget {
           ],
         ),
         SizedBox(height: 1.5.h),
-        
+
         // Overview Content
         Text(
           overviewContent ?? 'Loading content...',
           style: context.textTheme.bodyMedium,
+          textAlign: TextAlign.justify,
         ),
         SizedBox(height: 1.5.h),
       ],

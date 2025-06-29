@@ -24,7 +24,7 @@ class AskNusaBotFloating extends StatelessWidget {
           width: 18.w,   // lebar tombol bulat
           height: 18.w,  // tinggi tombol = lebar agar bulat
           decoration: BoxDecoration(
-            color: AppColors.nusa90,
+            color: AppColors.primary50,
             shape: BoxShape.circle,
             boxShadow: const [
               BoxShadow(

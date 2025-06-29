@@ -21,10 +21,11 @@ class SubmitButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.nusa90, // Warna biru solid dari UI
+          backgroundColor: AppColors.primary50, // Warna biru solid dari UI
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Rounded sesuai gambar
+            borderRadius:
+                BorderRadius.circular(12), // Rounded 16 sesuai permintaan
           ),
         ),
         child: isLoading
@@ -39,9 +40,9 @@ class SubmitButton extends StatelessWidget {
             : Text(
                 text,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
               ),
       ),
     );
