@@ -22,6 +22,7 @@ class CategoryCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeOut,
+        height: 32.h, // Membesarkan tinggi card
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
@@ -96,14 +97,14 @@ class CategoryCard extends StatelessWidget {
                   category.description,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.grey50,
-                        fontSize: 2.5.w,
+                        fontSize: 2.2.w,
                       ),
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(height: 2.h),
+              SizedBox(height: 1.h),
               // Start Quiz Button
               SizedBox(
                 width: double.infinity,

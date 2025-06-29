@@ -39,22 +39,25 @@ class FCMService {
       final notification = message.notification;
       final android = notification?.android;
 
-      if (notification != null && android != null) {
+      // Fallback jika notification null, ambil dari data
+      final title =
+          notification?.title ?? message.data['title'] ?? 'Notifikasi';
+      final body = notification?.body ?? message.data['body'] ?? '';
+
+      if (android != null) {
         _localNotifications.show(
           notification.hashCode,
-          notification.title,
-          notification.body,
+          title,
+          body,
           const NotificationDetails(
             android: AndroidNotificationDetails(
               'fcm_channel',
               'FCM Notifications',
-              icon:
-                  '@mipmap/ic_launcher', // gunakan icon notifikasi custom di sini
+              icon: '@mipmap/ic_launcher',
               importance: Importance.high,
               priority: Priority.high,
-              playSound: true, // pastikan playSound true
-              sound: RawResourceAndroidNotificationSound(
-                  'notif_sound'), // gunakan suara default
+              playSound: true,
+              // sound: RawResourceAndroidNotificationSound('notif_sound'), // aktifkan jika file ada
             ),
           ),
         );
