@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nusa_app/core/services/fcm_service.dart';
 import 'package:nusa_app/firebase_options.dart';
+import 'package:nusa_app/services/firestore_service.dart';
 import 'app/view/app.dart';
 import 'bootstrap.dart';
 import 'database/shared_preferences_service.dart';
@@ -47,7 +48,7 @@ Future<void> setup() async {
   // Initialize Firestore database with comprehensive seeding
   // This includes: Users, Categories, Destinations, Articles, and Forum posts
   // Comment out this line after first run to avoid recreating data
-  // await FirestoreService.initializeDatabase();
+  await FirestoreService.initializeDatabase();
 
   // Initialize local notifications and fcm listener with error handling
   try {
