@@ -57,15 +57,16 @@ class _ExpandableCardState extends State<ExpandableCard> {
           curve: Curves.easeInOut,
           child: _isExpanded
               ? Padding(
-            padding: const EdgeInsets.only(top: Styles.mdPadding),
-            child: Text(
-              widget.content,
-              style: context.textTheme.bodySmall,
-              textAlign: TextAlign.justify,
-            ),
-          )
+                  padding: const EdgeInsets.only(top: Styles.mdPadding),
+                  child: Text(
+                    widget.content,
+                    style: context.textTheme.bodySmall,
+                    textAlign: TextAlign.justify,
+                  ),
+                )
               : const SizedBox.shrink(),
         ),
       ),
     );
-  }}
+  }
+}

@@ -12,6 +12,8 @@ import 'package:nusa_app/widgets/custom_button.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../widgets/loading_screen.dart';
+
 @RoutePage()
 class ImageConfirmationPage extends StatefulWidget {
   final File pickedImage;
@@ -55,7 +57,7 @@ class _ImageConfirmationPageState extends State<ImageConfirmationPage>
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('invalid object'),
+            content: Text('objek tidak valid'),
             backgroundColor: Colors.red,
             duration: Duration(milliseconds: 500),
           ),
@@ -134,9 +136,14 @@ class _ImageConfirmationPageState extends State<ImageConfirmationPage>
                             buttonText: 'Analyze Now',
                             suffixIcon: IconsaxPlusLinear.search_normal_1,
                             onPressed: () async {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => const LoadingScreen(),
+                              );
                               final result = await AutoRouter.of(context).push(
                                   ImageResultRoute(image: widget.pickedImage));
-
+                              Navigator.of(context, rootNavigator: true).pop();
                               // Handle result dari pop
                               if (result is Map &&
                                   result['isNotValid'] == true) {

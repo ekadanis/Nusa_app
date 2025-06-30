@@ -273,12 +273,14 @@ class ImageResultRoute extends PageRouteInfo<ImageResultRouteArgs> {
   ImageResultRoute({
     Key? key,
     required File image,
+
     List<PageRouteInfo>? children,
   }) : super(
           ImageResultRoute.name,
           args: ImageResultRouteArgs(
             key: key,
             image: image,
+  
           ),
           initialChildren: children,
         );
@@ -292,6 +294,7 @@ class ImageResultRoute extends PageRouteInfo<ImageResultRouteArgs> {
       return ImageResultPage(
         key: args.key,
         image: args.image,
+   
       );
     },
   );
@@ -301,11 +304,14 @@ class ImageResultRouteArgs {
   const ImageResultRouteArgs({
     this.key,
     required this.image,
+ 
   });
 
   final Key? key;
 
   final File image;
+
+ 
 
   @override
   String toString() {
@@ -338,12 +344,14 @@ class KatalogProdukRoute extends PageRouteInfo<KatalogProdukRouteArgs> {
   KatalogProdukRoute({
     Key? key,
     String? categoryName,
+    String? categoryColor,
     List<PageRouteInfo>? children,
   }) : super(
           KatalogProdukRoute.name,
           args: KatalogProdukRouteArgs(
             key: key,
             categoryName: categoryName,
+            categoryColor: categoryColor,
           ),
           initialChildren: children,
         );
@@ -358,6 +366,7 @@ class KatalogProdukRoute extends PageRouteInfo<KatalogProdukRouteArgs> {
       return KatalogProdukPage(
         key: args.key,
         categoryName: args.categoryName,
+        categoryColor: args.categoryColor,
       );
     },
   );
@@ -367,15 +376,18 @@ class KatalogProdukRouteArgs {
   const KatalogProdukRouteArgs({
     this.key,
     this.categoryName,
+    this.categoryColor,
   });
 
   final Key? key;
 
   final String? categoryName;
 
+  final String? categoryColor;
+
   @override
   String toString() {
-    return 'KatalogProdukRouteArgs{key: $key, categoryName: $categoryName}';
+    return 'KatalogProdukRouteArgs{key: $key, categoryName: $categoryName, categoryColor: $categoryColor}';
   }
 }
 

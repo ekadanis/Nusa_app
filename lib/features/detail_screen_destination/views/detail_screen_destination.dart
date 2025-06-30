@@ -40,10 +40,30 @@ class _DetailScreenDestinationState extends State<DetailScreenDestination> {
       _isGeneratingContent = true;
     });
 
+    // Mapping manual dari categoryId ke nama kategori
+    String mapCategoryIdToName(String? id) {
+      switch (id) {
+        case 'cultural-sites':
+          return 'Cultural Sites';
+        case 'arts-culture':
+          return 'Arts & Culture';
+        case 'folk-instruments':
+          return 'Folk Instruments';
+        case 'traditional-wear':
+          return 'Traditional Wear';
+        case 'crafts-artifacts':
+          return 'Crafts & Artifacts';
+        case 'local-foods':
+          return 'Local Foods';
+        default:
+          return 'Indonesian Culture';
+      }
+    }
+
     try {
       final content = await _geminiService.generateDestinationContent(
         widget.destination.title,
-        widget.destination.categoryId,
+        mapCategoryIdToName(widget.destination.categoryId),
         widget.destination.subcategory,
         widget.destination.address,
       );

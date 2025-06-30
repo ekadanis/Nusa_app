@@ -27,16 +27,17 @@ class _DestinationExpandableCardState extends State<DestinationExpandableCard> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomSection(
-      icon: widget.icon,
-      title: widget.title,
-      trailing: InkWell(
-        onTap: () {
-          setState(() {
-            _isExpanded = !_isExpanded;
-          });
-        },
-        child: Row(
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _isExpanded = !_isExpanded;
+        });
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: CustomSection(
+        icon: widget.icon,
+        title: widget.title,
+        trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
@@ -48,25 +49,25 @@ class _DestinationExpandableCardState extends State<DestinationExpandableCard> {
             ),
           ],
         ),
-      ),
-      hasSpacing: false,
-      child: AnimatedSize(
-        duration: const Duration(milliseconds: 300),
-        alignment: Alignment.topLeft,
-        curve: Curves.easeInOut,
-        child: !_isExpanded
-            ? const SizedBox.shrink()
-            : Padding(
-                padding: const EdgeInsets.only(top: Styles.mdPadding),
-                child: Text(
-                  widget.content,
-                  style: context.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.grey60,
-                    height: 1.5,
+        hasSpacing: false,
+        child: AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          alignment: Alignment.topLeft,
+          curve: Curves.easeInOut,
+          child: !_isExpanded
+              ? const SizedBox.shrink()
+              : Padding(
+                  padding: const EdgeInsets.only(top: Styles.mdPadding),
+                  child: Text(
+                    widget.content,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.grey60,
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.justify,
                   ),
-                  textAlign: TextAlign.justify,
                 ),
-              ),
+        ),
       ),
     );
   }

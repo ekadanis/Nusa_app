@@ -21,8 +21,8 @@ class AskNusaBotFloating extends StatelessWidget {
           );
         },
         child: Container(
-          width: 18.w,   // lebar tombol bulat
-          height: 18.w,  // tinggi tombol = lebar agar bulat
+          width: 15.w,   // lebar tombol bulat
+          height: 15.w,  // tinggi tombol = lebar agar bulat
           decoration: BoxDecoration(
             color: AppColors.primary50,
             shape: BoxShape.circle,
@@ -38,8 +38,8 @@ class AskNusaBotFloating extends StatelessWidget {
             padding: EdgeInsets.all(2.w), // padding agar gambar tidak mentok
             child: Image.asset(
               'assets/avatar/ask_nusabot.png',
-              width: 8.w,
-              height: 8.w,
+              width: 30.w,
+              height: 30.w,
               fit: BoxFit.contain,
             ),
           ),
