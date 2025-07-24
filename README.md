@@ -341,19 +341,6 @@ await FirestoreService.addComment(comment);
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team
-
-- **Development Team**: GSC Semester 4 Students
-- **Institution**: [Your Institution Name]
-- **Academic Year**: 2024/2025
-
-## 📞 Support
-
-For support and questions:
-- 📧 Email: [your-email@domain.com]
-- 📱 WhatsApp: [your-whatsapp-number]
-- 🐛 Issues: [GitHub Issues](repository-url/issues)
-
 ---
 
 <div align="center">
