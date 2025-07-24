@@ -64,10 +64,12 @@ class LocationBanner extends StatelessWidget {
                   color: Colors.white.withValues(alpha: 0.8),
                 ),
           ),
-          const SizedBox(height: Styles.mdSpacing),          ElevatedButton(
+          const SizedBox(height: Styles.mdSpacing),
+          ElevatedButton(
             onPressed: onTap,
             style: ElevatedButton.styleFrom(
-              backgroundColor: onTap != null ? Colors.white : Colors.grey.shade300,
+              backgroundColor:
+                  onTap != null ? Colors.white : Colors.grey.shade300,
               minimumSize: const Size(double.infinity, 44),
               elevation: onTap != null ? 2 : 0,
               shadowColor: Colors.black.withValues(alpha: 0.3),
@@ -84,7 +86,8 @@ class LocationBanner extends StatelessWidget {
                     height: 16,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4286EF)),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xFF4286EF)),
                     ),
                   ),
                   const SizedBox(width: 8),

@@ -3,7 +3,7 @@ import '../services/network_service.dart';
 import '../widgets/offline_screen.dart';
 
 
-enum NetworkUIType { fullScreen, banner, none }
+enum NetworkUIType { fullScreen, none }
 
 class NetworkWrapper extends StatefulWidget {
   final Widget child;
@@ -62,64 +62,64 @@ class _NetworkWrapperState extends State<NetworkWrapper> {
       case NetworkUIType.none:
         return widget.child;
       
-      case NetworkUIType.banner:
-        return Stack(
-          children: [
-            widget.child,
-            if (!_isConnected)
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: SafeArea(
-                  child: Container(
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.wifi_off,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                          child: Text(
-                            'No internet connection',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: _retryConnection,
-                          child: const Text(
-                            'Try Again',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        );
+      // case NetworkUIType.banner:
+      //   return Stack(
+      //     children: [
+      //       widget.child,
+      //       if (!_isConnected)
+      //         Positioned(
+      //           top: 0,
+      //           left: 0,
+      //           right: 0,
+      //           child: SafeArea(
+      //             child: Container(
+      //               margin: const EdgeInsets.all(8),
+      //               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      //               decoration: BoxDecoration(
+      //                 color: Colors.red,
+      //                 borderRadius: BorderRadius.circular(8),
+      //                 boxShadow: [
+      //                   BoxShadow(
+      //                     color: Colors.black.withOpacity(0.2),
+      //                     blurRadius: 4,
+      //                     offset: const Offset(0, 2),
+      //                   ),
+      //                 ],
+      //               ),
+      //               child: Row(
+      //                 children: [
+      //                   const Icon(
+      //                     Icons.wifi_off,
+      //                     color: Colors.white,
+      //                     size: 20,
+      //                   ),
+      //                   const SizedBox(width: 12),
+      //                   const Expanded(
+      //                     child: Text(
+      //                       'No internet connection',
+      //                       style: TextStyle(
+      //                         color: Colors.white,
+      //                         fontWeight: FontWeight.w500,
+      //                       ),
+      //                     ),
+      //                   ),
+      //                   TextButton(
+      //                     onPressed: _retryConnection,
+      //                     child: const Text(
+      //                       'Try Again',
+      //                       style: TextStyle(
+      //                         color: Colors.white,
+      //                         fontWeight: FontWeight.bold,
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //     ],
+      //   );
       
       case NetworkUIType.fullScreen:
       default:

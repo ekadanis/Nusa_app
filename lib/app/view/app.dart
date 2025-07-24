@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:nusa_app/l10n/arb/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../core/app_theme_data.dart';

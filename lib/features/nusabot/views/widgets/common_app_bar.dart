@@ -49,8 +49,8 @@ class CommonAppBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                   child: Image.asset(
                     avatarPath,
-                    width: 12.w,
-                    height: 12.w,
+                    width: 14.w,
+                    height: 14.w,
                     fit: BoxFit.cover,
                   ),
                 ),

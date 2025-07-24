@@ -1,17 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:auto_route/auto_route.dart';
-import 'package:camera/camera.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:nusa_app/core/app_colors.dart';
 import 'package:nusa_app/features/image_analyzer/service/image_service.dart';
-import 'package:nusa_app/features/image_analyzer/widgets/expendable_card.dart';
-import 'package:nusa_app/routes/router.dart';
 import 'package:nusa_app/util/extensions.dart';
-import 'package:iconsax_plus/iconsax_plus.dart';
-import 'package:nusa_app/widgets/back_button.dart';
+import 'package:nusa_app/widgets/loading_screen.dart';
 import '../model/image_object.dart';
+import '../widgets/image_result_header.dart';
+import '../widgets/image_result_overview.dart';
+import '../widgets/image_result_content.dart';
 
 @RoutePage()
 class ImageResultPage extends StatefulWidget {
@@ -54,122 +53,89 @@ class _ImageResultPageState extends State<ImageResultPage> {
 
     return null;
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: FutureBuilder<ImageObject?>(
-          future: _budaya,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
+    return FutureBuilder<ImageObject?>(
+      future: _budaya,
+      builder: (context, snapshot) {        // Show loading screen while analyzing
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingScreen();
+        }
 
-            if (snapshot.hasError || snapshot.data == null) {
-              return Center(child: Text('Gagal memuat data budaya.'));
-            }
-            final budaya = snapshot.data!;
-            return ListView(
-              children: [
-                ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(bottom: Radius.circular(12)),
-                  child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      width: MediaQuery.of(context).size.width,
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Image.file(
-                              File(widget.image.path),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                              top: 20,
-                              left: 20,
-                              child: CustomBackButton(
-                                backgroundColor:
-                                    AppColors.grey60.withOpacity(0.3),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                iconColor: AppColors.grey10,
-                              ))
-                        ],
-                      )),
+        // Show error if analysis failed or data is null
+        if (snapshot.hasError || snapshot.data == null) {
+          return Scaffold(
+            backgroundColor: AppColors.white,
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 20.w,
+                    color: AppColors.danger50,
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    'Failed to analyze image',
+                    style: context.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 1.h),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: Text(
+                      'The image could not be analyzed or the cultural object was not recognized.',
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.grey50,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        final budaya = snapshot.data!;
+        
+        return Scaffold(
+          backgroundColor: AppColors.white,
+          body: ListView(
+            children: [
+              // Header with image and culture name
+              ImageResultHeader(
+                image: widget.image,
+                cultureName: budaya.namaBudaya,
+              ),
+
+              SizedBox(height: 3.h),
+
+              // Overview section with description and origin badge
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: ImageResultOverview(
+                  description: budaya.deskripsiSingkat,
+                  origin: budaya.asalDaerah,
                 ),
-                SizedBox(height: 24),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          budaya.namaBudaya,
-                          style: context.textTheme.headlineSmall,
-                        ),
-                        SizedBox(height: 12),
-                        Text(
-                          budaya.deskripsiSingkat,
-                          style: context.textTheme.bodyMedium,
-                        ),
-                        SizedBox(height: 12),
-                        ExpandableCard(
-                          title: 'History',
-                          icon: IconsaxPlusBold.search_favorite,
-                          content: budaya.sejarah,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        ExpandableCard(
-                          title: 'Cultural Function',
-                          icon: IconsaxPlusBold.airdrop,
-                          content: budaya.fungsiBudaya,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        ExpandableCard(
-                          title: 'Place of Origin',
-                          icon: IconsaxPlusBold.map,
-                          content: budaya.asalDaerah,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        ExpandableCard(
-                          title: 'Symbolic Philosophy',
-                          icon: IconsaxPlusBold.status_up,
-                          content: budaya.filosofiSimbolik,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        ExpandableCard(
-                          title: 'Main Materials',
-                          icon: IconsaxPlusBold.route_square,
-                          content: budaya.materialUtama,
-                        ),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        ExpandableCard(
-                          title: 'Modern Development',
-                          icon: IconsaxPlusBold.flash,
-                          content: budaya.perkembanganKini,
-                        ),
-                        SizedBox(
-                          height: 24,
-                        )
-                      ],
-                    )),
-              ],
-            );
-          }),
+              ),
+
+              SizedBox(height: 3.h),
+
+              // All expandable content sections
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4.w),
+                child: ImageResultContent(imageObject: budaya),
+              ),
+
+              SizedBox(height: 3.h),
+            ],
+          ),
+        );
+      },
     );
   }
 }

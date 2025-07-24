@@ -5,6 +5,8 @@ import 'package:nusa_app/features/feeds/widgets/build_category_name.dart';
 import 'package:nusa_app/models/article_model.dart';
 import 'package:nusa_app/routes/router.dart';
 import 'package:nusa_app/services/firestore_service.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:nusa_app/helpers/user_action_tracker.dart';
 
 class ArticleTab extends StatefulWidget {
   const ArticleTab({super.key});
@@ -150,10 +152,13 @@ class _ArticleTabState extends State<ArticleTab> {
       ),
     );
   }
-
   Widget _buildFeaturedCard(BuildContext context, ArticleModel article) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        // Track article read for achievements
+        await UserActionTracker.trackArticleRead(article.id ?? '');
+        
+        // Navigate to article detail
         AutoRouter.of(context).push(ArticleRoute(article: article));
       },
       borderRadius: BorderRadius.circular(12),
@@ -260,13 +265,13 @@ class _ArticleTabState extends State<ArticleTab> {
                   Row(
                     children: [
                       Icon(
-                        Icons.favorite,
+                        IconsaxPlusBold.eye,
                         color: Colors.white.withOpacity(0.8),
                         size: 14,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${article.like ?? 0} likes',
+                        '${article.like ?? 0} views',
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.8),
                           fontSize: 12,
@@ -314,10 +319,13 @@ class _ArticleTabState extends State<ArticleTab> {
       ),
     );
   }
-
   Widget _buildArticleItem(BuildContext context, ArticleModel article) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
+        // Track article read for achievements
+        await UserActionTracker.trackArticleRead(article.id ?? '');
+        
+        // Navigate to article detail
         AutoRouter.of(context).push(ArticleRoute(article: article));
       },
       child: Container(

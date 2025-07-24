@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sizer/sizer.dart';
 import 'package:auto_route/auto_route.dart';
+import 'dart:async';
 import '../../../core/styles.dart';
 import '../../../models/destination_model.dart';
-import '../../../services/location_service.dart';
+import '../../../services/shared_location_service.dart';
 import '../../../routes/router.dart';
 import 'section_header.dart';
 import 'generic_section/radius_bottom_sheet.dart';
@@ -46,15 +47,7 @@ class GenericSectionState extends State<GenericSection> {
   Position? _userLocation;
   bool _isLoadingLocation = false;
   double _selectedRadius = GenericSectionController.defaultRadius;
-
-  @override
-  void initState() {
-    super.initState();
-    _filteredItems = List.from(widget.items);
-    _initializeLikeCounts();
-    _loadFavoriteStatus();
-  }
-
+  StreamSubscription<Position?>? _locationSubscription;
   void _initializeLikeCounts() {
     GenericSectionController.initializeLikeCounts(widget.items, _likeCount);
   }
@@ -76,6 +69,34 @@ class GenericSectionState extends State<GenericSection> {
       _likeCount,
       setState,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _filteredItems = List.from(widget.items);
+    _initializeLikeCounts();
+    _loadFavoriteStatus();
+    
+    // Listen to shared location updates
+    _locationSubscription = SharedLocationService().locationStream.listen((position) {
+      if (mounted) {
+        setState(() {
+          _userLocation = position;
+        });
+        
+        // If nearby filter is selected, refresh the list
+        if (_selectedFilter == "Nearby" && position != null) {
+          _filterItems("Nearby");
+        }
+      }
+    });
+    
+    // Check if location is already available
+    final existingLocation = SharedLocationService().currentLocation;
+    if (existingLocation != null) {
+      _userLocation = existingLocation;
+    }
   }
 
   @override
@@ -120,7 +141,6 @@ class GenericSectionState extends State<GenericSection> {
       _filteredItems = nearbyItems;
     });
   }
-
   Future<void> _loadUserLocation() async {
     debugPrint('_loadUserLocation called');
     setState(() {
@@ -128,7 +148,8 @@ class GenericSectionState extends State<GenericSection> {
     });
 
     try {
-      Position? position = await LocationService.getCurrentLocation();
+      // Use shared location service instead of direct LocationService call
+      Position? position = await SharedLocationService().loadLocation();
       debugPrint('Location result: $position');
       if (position != null && mounted) {
         setState(() {
@@ -174,13 +195,27 @@ class GenericSectionState extends State<GenericSection> {
       ),
     );
   }
-
   Future<void> _onNearbyTapped() async {
     debugPrint('Nearby chip tapped');
-    if (_userLocation == null) {
-      debugPrint('User location is null, loading location...');
+    
+    // Check if location is already available from shared service
+    final sharedLocation = SharedLocationService().currentLocation;
+    if (sharedLocation != null) {
+      debugPrint('Using existing location from shared service');
+      setState(() {
+        _userLocation = sharedLocation;
+      });
+      _filterItems("Nearby");
+      debugPrint('Filter Nearby terpilih pada ${widget.title}');
+      return;
+    }
+
+    // Location not available, try to load it
+    debugPrint('Location not available, trying to load...');
+    if (!SharedLocationService().isLocationLoading) {
       await _loadUserLocation();
     }
+    
     if (_userLocation != null) {
       debugPrint('User location available, filtering nearby items');
       _filterItems("Nearby");
@@ -189,10 +224,15 @@ class GenericSectionState extends State<GenericSection> {
       debugPrint('User location still null after loading');
     }
   }
-
   void _onFilterSelected(String filter) {
     _filterItems(filter);
     debugPrint('Filter $filter terpilih pada ${widget.title}');
+  }
+
+  @override
+  void dispose() {
+    _locationSubscription?.cancel();
+    super.dispose();
   }
 
   @override

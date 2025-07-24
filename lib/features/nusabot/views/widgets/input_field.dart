@@ -42,6 +42,17 @@ class _InputFieldState extends State<InputField>
   }
 
   @override
+  void didUpdateWidget(covariant InputField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.isRecording && !_animationController.isAnimating) {
+      _animationController.repeat(reverse: true);
+    } else if (!widget.isRecording && _animationController.isAnimating) {
+      _animationController.stop();
+    }
+  }
+
+  @override
   void dispose() {
     widget.controller.removeListener(_handleTextChange);
     _animationController.dispose();

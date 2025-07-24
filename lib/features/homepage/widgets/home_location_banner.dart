@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'location_banner.dart';
 import '../../../services/location_service.dart';
+import '../../../services/shared_location_service.dart';
 import '../../../util/extensions.dart';
 
 class HomeLocationBanner extends StatefulWidget {
@@ -18,7 +19,6 @@ class HomeLocationBanner extends StatefulWidget {
 
 class _HomeLocationBannerState extends State<HomeLocationBanner> {
   bool _isLoading = false;
-
   Future<void> _handleLocationTap() async {
     setState(() {
       _isLoading = true;
@@ -37,7 +37,8 @@ class _HomeLocationBannerState extends State<HomeLocationBanner> {
         return;
       }
 
-      Position? position = await LocationService.getCurrentLocation();
+      // Use shared location service
+      Position? position = await SharedLocationService().loadLocation();
       
       if (position != null && mounted) {
         context.showSnackBar(

@@ -6,7 +6,9 @@ import 'package:nusa_app/features/feeds/views/forum_detail_page.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import 'package:nusa_app/features/homepage/homepage.dart';
 import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
+import 'package:nusa_app/features/quiz/views/quiz_history_page.dart';
 import '../features/pages.dart';
+import '../models/quiz_models.dart';
 import '../models/destination_model.dart';
 import '../models/forum_model.dart';
 import '../models/article_model.dart';
@@ -96,10 +98,28 @@ class AppRouter extends RootStackRouter {
           page: DetailRouteDestination.page,
           path: '/detail-destination',
           transitionsBuilder: TransitionsBuilders.fadeIn,
-        ),
-        CustomRoute<void>(
+        ),        CustomRoute<void>(
           page: ArticleRoute.page,
           path: '/article',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),        CustomRoute<void>(
+          page: HomeRouteQuiz.page,
+          path: '/quiz-home',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizHistoryRoute.page,
+          path: '/quiz-history',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizRoute.page,
+          path: '/quiz/:categoryId',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizResultRoute.page,
+          path: '/quiz-result',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
       ];
