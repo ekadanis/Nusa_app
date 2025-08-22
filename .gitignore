@@ -43,3 +43,18 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android NDK/C++ build files
+android/app/.cxx/
+android/.gradle/
+android/local.properties
+
+# Flutter build files
+.dart_tool/package_config.json
+.flutter-plugins-dependencies
+
+# macOS build files
+macos/
+
+# Firebase config (optional - include if contains sensitive data)
+assets/firebase/
