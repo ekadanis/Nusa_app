@@ -1,17 +1,23 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:nusa_app/core/app_colors.dart';
+import 'package:nusa_app/features/image_analyzer/service/image_service.dart';
+import 'package:nusa_app/features/image_analyzer/views/image_result_page.dart';
 import 'package:nusa_app/routes/router.dart';
 import 'package:nusa_app/util/extensions.dart';
 import 'package:nusa_app/widgets/custom_button.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:http/http.dart' as http;
 
 @RoutePage()
 class ImageConfirmationPage extends StatefulWidget {
-  final XFile pickedImage;
-  const ImageConfirmationPage({super.key, required this.pickedImage});
+  final File pickedImage;
+  final bool? isNotValid;
+  const ImageConfirmationPage(
+      {super.key, required this.pickedImage, this.isNotValid});
 
   @override
   State<ImageConfirmationPage> createState() => _ImageConfirmationPageState();
@@ -26,7 +32,7 @@ class _ImageConfirmationPageState extends State<ImageConfirmationPage>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 200),
       vsync: this,
     );
 
@@ -39,6 +45,33 @@ class _ImageConfirmationPageState extends State<ImageConfirmationPage>
     ));
 
     _controller.forward();
+
+    // Check parameter dari constructor atau dari pop result
+    _checkValidation();
+  }
+
+  void _checkValidation() {
+    if (widget.isNotValid == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('objek tidak valid'),
+            backgroundColor: Colors.red,
+            duration: Duration(milliseconds: 500),
+          ),
+        );
+      });
+    }
+  }
+
+  void _showValidationError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('objek tidak valid'),
+        backgroundColor: Colors.red,
+        duration: Duration(milliseconds: 500),
+      ),
+    );
   }
 
   @override
@@ -100,9 +133,15 @@ class _ImageConfirmationPageState extends State<ImageConfirmationPage>
                           child: CustomButton(
                             buttonText: 'Analyze Now',
                             suffixIcon: IconsaxPlusLinear.search_normal_1,
-                            onPressed: () {
-                              AutoRouter.of(context).push(
+                            onPressed: () async {
+                              final result = await AutoRouter.of(context).push(
                                   ImageResultRoute(image: widget.pickedImage));
+
+                              // Handle result dari pop
+                              if (result is Map &&
+                                  result['isNotValid'] == true) {
+                                _showValidationError();
+                              }
                             },
                             backgroundColor: AppColors.primary50,
                           ),

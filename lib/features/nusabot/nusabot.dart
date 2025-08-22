@@ -1,1 +1,1 @@
-export 'views/nusabot_page.dart';
+export 'views/screens/nusabot_page.dart';

@@ -1,0 +1,2 @@
+/home/ekadanis/Documents/project/Nusa_app/android/app/.cxx/Debug/41154sm3/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/ekadanis/Documents/project/Nusa_app/android/app/.cxx/Debug/41154sm3/armeabi-v7a/CMakeFiles/rebuild_cache.dir

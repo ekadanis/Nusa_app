@@ -1,0 +1,1 @@
+export 'views/katalog_destination.dart';

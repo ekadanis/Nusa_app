@@ -1,11 +1,17 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:nusa_app/features/auth/views/login_page.dart';
+import 'package:nusa_app/features/feeds/views/forum_detail_page.dart';
 import 'package:nusa_app/features/onboarding/views/onboarding_page.dart';
 import 'package:nusa_app/features/homepage/homepage.dart';
-import 'package:nusa_app/features/katalog_produk/katalog_produk.dart';
+import 'package:nusa_app/features/katalog_destination/katalog_destination.dart';
+import 'package:nusa_app/features/quiz/views/quiz_history_page.dart';
 import '../features/pages.dart';
-import 'package:camera/camera.dart';
-import '../features/homepage/views/homepage_dynamic.dart';
+import '../models/quiz_models.dart';
+import '../models/destination_model.dart';
+import '../models/forum_model.dart';
+import '../models/article_model.dart';
 part 'router.gr.dart';
 
 @AutoRouterConfig(replaceInRouteName: 'Screen|Page,Route')
@@ -29,6 +35,16 @@ class AppRouter extends RootStackRouter {
         CustomRoute<void>(
           page: KatalogProdukRoute.page,
           path: '/katalog-produk',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: LoginRoute.page,
+          path: '/login',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: ForumDetailRoute.page,
+          path: '/forum-detail',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(
@@ -70,12 +86,40 @@ class AppRouter extends RootStackRouter {
         ),
         CustomRoute<void>(
           page: ImageConfirmationRoute.page,
-          path: '/iamge-confirmation',
+          path: '/image-confirmation',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
         CustomRoute<void>(
           page: ImageResultRoute.page,
           path: '/image-result',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: DetailRouteDestination.page,
+          path: '/detail-destination',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),        CustomRoute<void>(
+          page: ArticleRoute.page,
+          path: '/article',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),        CustomRoute<void>(
+          page: HomeRouteQuiz.page,
+          path: '/quiz-home',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizHistoryRoute.page,
+          path: '/quiz-history',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizRoute.page,
+          path: '/quiz/:categoryId',
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        ),
+        CustomRoute<void>(
+          page: QuizResultRoute.page,
+          path: '/quiz-result',
           transitionsBuilder: TransitionsBuilders.fadeIn,
         ),
       ];

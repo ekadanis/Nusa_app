@@ -68,20 +68,38 @@ class LocationBanner extends StatelessWidget {
           ElevatedButton(
             onPressed: onTap,
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+              backgroundColor:
+                  onTap != null ? Colors.white : Colors.grey.shade300,
               minimumSize: const Size(double.infinity, 44),
-              elevation: 2,
+              elevation: onTap != null ? 2 : 0,
               shadowColor: Colors.black.withValues(alpha: 0.3),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),
             ),
-            child: const Text(
-              "Turn On Location",
-              style: TextStyle(
-                color: Color(0xFF4286EF),
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (onTap == null) ...[
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xFF4286EF)),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                Text(
+                  onTap != null ? "Turn On Location" : "Getting Location...",
+                  style: TextStyle(
+                    color: const Color(0xFF4286EF),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
