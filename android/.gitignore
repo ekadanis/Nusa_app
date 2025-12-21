@@ -1,10 +1,23 @@
-gradle-wrapper.jar
-/.gradle
+/.gradle/
+.gradle/
+**/build/
 /captures/
-/gradlew
-/gradlew.bat
 /local.properties
 GeneratedPluginRegistrant.java
+
+# Build output
+*.apk
+*.ap_
+*.aab
+*.dex
+*.class
+
+# Ignore cache files
+.cxx/
+*.iml
+.externalNativeBuild
+.cxx
+local.properties
 
 # Remember to never publicly share your keystore.
 # See https://flutter.dev/to/reference-keystore
