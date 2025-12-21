@@ -6,7 +6,14 @@
 .pub/
 .pub-cache/
 build/
+
+# Generated files
 generated_plugin_registrant.dart
+.flutter-plugins
+.flutter-plugins-dependencies
+**/GeneratedPluginRegistrant.java
+**/GeneratedPluginRegistrant.h
+**/GeneratedPluginRegistrant.m
 
 # Lockfile (WAJIB commit untuk APP)
 # pubspec.lock  <-- JANGAN di-ignore untuk APP
