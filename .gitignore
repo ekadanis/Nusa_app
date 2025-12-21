@@ -1,60 +1,76 @@
-# Flutter/Dart/Pub related
+# ==============================
+# Dart / Flutter
+# ==============================
 .dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
 .packages
-.pub-cache/
 .pub/
+.pub-cache/
 build/
 generated_plugin_registrant.dart
 
-# IntelliJ related
+# Lockfile (WAJIB commit untuk APP)
+# pubspec.lock  <-- JANGAN di-ignore untuk APP
+
+# ==============================
+# IDE
+# ==============================
+.idea/
+.vscode/
 *.iml
 *.ipr
 *.iws
-.idea/
 
-# VS Code related
-.vscode/
-
-# MacOS related
+# ==============================
+# OS
+# ==============================
 .DS_Store
+Thumbs.db
 
-# Android related
+# ==============================
+# Android
+# ==============================
 android/local.properties
 android/.gradle/
 android/app/debug/
 android/app/profile/
 android/app/release/
 
-# iOS related
+# ==============================
+# iOS / macOS
+# ==============================
+ios/Pods/
+ios/.symlinks/
+ios/build/
 ios/Flutter/App.framework
 ios/Flutter/Flutter.framework
 ios/Flutter/Generated.xcconfig
 ios/Flutter/flutter_export_environment.sh
-ios/Pods/
 ios/Runner.xcworkspace/
-ios/build/
-ios/.symlinks/
-ios/.flutter-plugins
-ios/.flutter-plugins-dependencies
 
-# Web related
+# ==============================
+# Web
+# ==============================
 web/.dart_tool/
 web/build/
 
-# Linux related
+# ==============================
+# Linux
+# ==============================
 linux/flutter/ephemeral/
 linux/.dart_tool/
 
-# Windows related
+# ==============================
+# Windows
+# ==============================
 windows/flutter/ephemeral/
 windows/.dart_tool/
 
-# Fuchsia related
+# ==============================
+# Fuchsia
+# ==============================
 .fuchsia/
 
-# Symbolic links
-symlinks/
-
-# O
+# ==============================
+# Logs
+# ==============================
+*.log
